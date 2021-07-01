@@ -2,6 +2,7 @@ const express = require('express');
 
 const api = require('./src/index');
 const db = require('./databsaseConnection');
+const BadRequestError = require('./src/errors/badRequestError');
 
 const app = express();
 
@@ -12,10 +13,10 @@ app.use(express.json());
 db.connectDB();
 
 // Register api
-app.use('/src', api);
+app.use('/api', api);
 
 app.all('*', (req, res) => {
-  res.send('it works');
+  throw new BadRequestError();
 });
 
 module.exports = app;
