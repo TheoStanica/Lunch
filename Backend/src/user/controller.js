@@ -4,13 +4,18 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const User = require("./model");
+const { sendActivationEmail } = require("../utils/emailTemplates");
 
 const register = async (req, res, next) => {
   try {
+    const activationToken = jwt.sign({}, process.env.ACTIVATION_TOKEN_SECRET);
     req.body.password = bcrypt.hashSync(req.body.password);
 
     let user = new User(req.body);
+    user.activationToken = activationToken;
     use = await user.save();
+
+    sendActivationEmail(user);
 
     res.status(204).send();
   } catch (error) {
