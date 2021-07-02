@@ -17,5 +17,6 @@ router.post(
   validationResults,
   userController.register
 );
+router.post('/refresh', userController.refreshTokens);
 
 module.exports = router;

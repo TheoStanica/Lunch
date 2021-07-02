@@ -6,7 +6,6 @@ const bcrypt = require('bcryptjs');
 const User = require('./model');
 const { sendActivationEmail } = require('../utils/emailTemplates');
 const { accountStatus } = require('../utils/enums');
-const transporter = require('../utils/transporter');
 
 const register = async (req, res, next) => {
   try {
@@ -45,13 +44,21 @@ const login = async (req, res, next) => {
       return next(new BadRequestError('Invalid credentials'));
     }
 
-    const accesToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: process.env.ACCESS_TOKEN_LIFE,
-    });
+    const accesToken = jwt.sign(
+      { id: user.id },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: process.env.ACCESS_TOKEN_LIFE,
+      }
+    );
 
-    const refreshToken = jwt.sign({ user }, process.env.REFRESH_TOKEN_SECRET, {
-      expiresIn: process.env.REFRESH_TOKEN_LIFE,
-    });
+    const refreshToken = jwt.sign(
+      { id: user.id },
+      process.env.REFRESH_TOKEN_SECRET,
+      {
+        expiresIn: process.env.REFRESH_TOKEN_LIFE,
+      }
+    );
 
     res.send({ accesToken, refreshToken });
   } catch (error) {
@@ -74,8 +81,31 @@ const activateAccount = async (req, res, next) => {
 
     res.status(204).send();
   } catch (error) {
-    return nexT(error);
+    return next(error);
   }
 };
 
-module.exports = { login, register, activateAccount };
+const refreshTokens = async (req, res, next) => {
+  try {
+    const { refreshToken } = req.body,
+      payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+
+    if (!payload) {
+      return next(new BadRequestError('Invalid refresh token'));
+    }
+
+    const accesToken = jwt.sign(
+      { id: payload.id },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: process.env.ACCESS_TOKEN_LIFE,
+      }
+    );
+
+    res.send({ accesToken });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+module.exports = { login, register, activateAccount, refreshTokens };
