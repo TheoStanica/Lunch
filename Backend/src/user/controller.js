@@ -10,6 +10,7 @@ const {
   sendForgotPasswordEmail,
 } = require('../utils/emailTemplates');
 const { accountStatus } = require('../utils/enums');
+const NotFoundError = require('../errors/notFoundError');
 
 const register = async (req, res, next) => {
   try {
@@ -48,7 +49,7 @@ const login = async (req, res, next) => {
       return next(new BadRequestError('Invalid credentials'));
     }
 
-    const accesToken = jwt.sign(
+    const accessToken = jwt.sign(
       { id: user.id },
       process.env.ACCESS_TOKEN_SECRET,
       {
@@ -64,7 +65,7 @@ const login = async (req, res, next) => {
       }
     );
 
-    res.send({ accesToken, refreshToken });
+    res.send({ accessToken, refreshToken });
   } catch (error) {
     return next(error);
   }
@@ -151,10 +152,25 @@ const forgotPassword = async (req, res, next) => {
   }
 };
 
+const getUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return next(new NotFoundError('User not found'));
+    }
+
+    res.send({ user });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   login,
   register,
   activateAccount,
   refreshTokens,
   forgotPassword,
+  getUser,
 };
