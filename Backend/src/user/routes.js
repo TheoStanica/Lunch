@@ -1,14 +1,16 @@
-const router = require('express').Router();
+const router = require("express").Router();
 
+const { authValidation } = require("../middleware/authValidation");
 const {
   isUserValid,
   validationResults,
-} = require('../middleware/bodyValidation');
-const userController = require('./controller');
+} = require("../middleware/bodyValidation");
 
-router.post('/login', userController.login);
+const userController = require("./controller");
+
+router.post("/login", userController.login);
 router.post(
-  '/register',
+  "/register",
   isUserValid,
   validationResults,
   userController.register
