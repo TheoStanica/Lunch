@@ -4,7 +4,9 @@ class AccountNotActivatedError extends CustomError {
   statusCode = 403;
 
   constructor() {
-    super('Please activate your account');
+    super(
+      `Please activate your account. Check your email to activate your account`
+    );
     Object.setPrototypeOf(this, AccountNotActivatedError.prototype);
   }
 

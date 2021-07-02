@@ -6,9 +6,14 @@ const bcrypt = require('bcryptjs');
 const User = require('./model');
 const { sendActivationEmail } = require('../utils/emailTemplates');
 const { accountStatus } = require('../utils/enums');
+const transporter = require('../utils/transporter');
 
 const register = async (req, res, next) => {
   try {
+    if (await User.findOne({ email: req.body.email })) {
+      return next(new BadRequestError('Email in use'));
+    }
+
     const activationToken = jwt.sign({}, process.env.ACTIVATION_TOKEN_SECRET);
     req.body.password = bcrypt.hashSync(req.body.password);
 
@@ -33,6 +38,7 @@ const login = async (req, res, next) => {
       return next(new BadRequestError('Invalid credentials'));
     }
     if (user.status === 'pending') {
+      sendActivationEmail(user);
       return next(new AccountNotActivatedError());
     }
     if (!bcrypt.compareSync(password, user.password)) {
