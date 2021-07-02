@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import store from './src/redux/store';
-import AppNavigtorRoutes from './src/navigation/tabNavigationRoutes';
+import AppNavigatorRoutes from './src/navigation/stackNavigationRoutes';
 
 import {SafeAreaView, StyleSheet} from 'react-native';
 import {Provider} from 'react-redux';
@@ -12,7 +12,7 @@ const App = () => {
     <SafeAreaView style={styles.container}>
       <Provider store={store}>
         <NavigationContainer>
-          <AppNavigtorRoutes />
+          <AppNavigatorRoutes />
         </NavigationContainer>
       </Provider>
     </SafeAreaView>

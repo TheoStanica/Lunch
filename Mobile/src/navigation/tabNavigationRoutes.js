@@ -4,7 +4,7 @@ import HomeScreen from '../screens/homeScreen';
 
 const Tab = createBottomTabNavigator();
 
-const AppNavigtorRoutes = () => {
+const TabNavigatorRoutes = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen name="HomeScreen" component={HomeScreen} />
@@ -13,4 +13,4 @@ const AppNavigtorRoutes = () => {
   );
 };
 
-export default AppNavigtorRoutes;
+export default TabNavigatorRoutes;
