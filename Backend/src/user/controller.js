@@ -1,10 +1,10 @@
-const AccountNotActivatedError = require("../errors/accountNotActivatedError");
-const BadRequestError = require("../errors/badRequestError");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+const AccountNotActivatedError = require('../errors/accountNotActivatedError');
+const BadRequestError = require('../errors/badRequestError');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
-const User = require("./model");
-const { sendActivationEmail } = require("../utils/emailTemplates");
+const User = require('./model');
+const { sendActivationEmail } = require('../utils/emailTemplates');
 
 const register = async (req, res, next) => {
   try {
@@ -29,13 +29,13 @@ const login = async (req, res, next) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-      return next(new BadRequestError("Invalid credentials"));
+      return next(new BadRequestError('Invalid credentials'));
     }
-    if (user.status === "pending") {
+    if (user.status === 'pending') {
       return next(new AccountNotActivatedError());
     }
     if (!bcrypt.compareSync(password, user.password)) {
-      return next(new BadRequestError("Invalid credentials"));
+      return next(new BadRequestError('Invalid credentials'));
     }
 
     const accesToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {

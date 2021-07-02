@@ -1,10 +1,10 @@
-const CustomError = require("./customError");
+const CustomError = require('./customError');
 
 class ForbiddenError extends CustomError {
   statusCode = 403;
 
   constructor() {
-    super("Forbidden");
+    super('Forbidden');
     Object.setPrototypeOf(this, ForbiddenError.prototype);
   }
 

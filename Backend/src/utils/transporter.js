@@ -1,9 +1,9 @@
-const nodemailer = require("nodemailer");
+const nodemailer = require('nodemailer');
 
 class Transporter {
   constructor() {
     this.transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
+      host: 'smtp.gmail.com',
       auth: {
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_PASS,
