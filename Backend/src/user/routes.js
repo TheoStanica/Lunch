@@ -3,6 +3,7 @@ const router = require('express').Router();
 const { authValidation } = require('../middleware/authValidation');
 const {
   isUserValid,
+  isPasswordValid,
   validationResults,
 } = require('../middleware/bodyValidation');
 
@@ -18,5 +19,11 @@ router.post(
   userController.register
 );
 router.post('/refresh', userController.refreshTokens);
+router.post(
+  '/forgotpassword/:_token?',
+  isPasswordValid,
+  validationResults,
+  userController.forgotPassword
+);
 
 module.exports = router;

@@ -2,9 +2,13 @@ const AccountNotActivatedError = require('../errors/accountNotActivatedError');
 const BadRequestError = require('../errors/badRequestError');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 
 const User = require('./model');
-const { sendActivationEmail } = require('../utils/emailTemplates');
+const {
+  sendActivationEmail,
+  sendForgotPasswordEmail,
+} = require('../utils/emailTemplates');
 const { accountStatus } = require('../utils/enums');
 
 const register = async (req, res, next) => {
@@ -22,7 +26,7 @@ const register = async (req, res, next) => {
 
     sendActivationEmail(user);
 
-    res.status(204).send();
+    res.status(201).send();
   } catch (error) {
     return next(error);
   }
@@ -108,4 +112,49 @@ const refreshTokens = async (req, res, next) => {
   }
 };
 
-module.exports = { login, register, activateAccount, refreshTokens };
+const forgotPassword = async (req, res, next) => {
+  const forgotPasswordToken = req.params._token;
+  const { email, password } = req.body;
+
+  try {
+    if (!forgotPasswordToken) {
+      let user = await User.findOne({ email });
+
+      if (!user) {
+        return next(new BadRequestError('Invalid email'));
+      }
+
+      user.forgotPasswordToken = crypto.randomBytes(20).toString('hex');
+      user.forgotPasswordTokenExp = new Date(new Date() + 10 * 60 * 1000);
+      user = await user.save();
+
+      sendForgotPasswordEmail(user);
+
+      res.status(204).send();
+    } else {
+      let user = await User.findOne({ forgotPasswordToken });
+
+      if (!user) {
+        return next(new BadRequestError('Invalid forgot password token'));
+      }
+      if (user.forgotPasswordTokenExp > new Date()) {
+        return next(new BadRequestError('Expired forgot password token'));
+      }
+
+      user.password = bcrypt.hashSync(password);
+      user = await user.save();
+
+      res.status(204).send();
+    }
+  } catch (error) {
+    return next(error);
+  }
+};
+
+module.exports = {
+  login,
+  register,
+  activateAccount,
+  refreshTokens,
+  forgotPassword,
+};
