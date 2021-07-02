@@ -7,7 +7,7 @@ const sendActivationEmail = (user) => {
     subject: 'Account Activation',
     html: `<h2>Hello ${user.fullname}</h2>
       <p>Please confirm your email by clicking on the following link</p>
-      <a href=http://192.168.100.2:3000/api/user/confirm/${user.activationToken}>Click here</a>
+      <a href=http://localhost:3000/api/user/activate/${user.activationToken}>Click here</a>
       </div>`,
   });
 };

@@ -8,6 +8,8 @@ const {
 
 const userController = require('./controller');
 
+router.get('/activate/:_activationToken', userController.activateAccount);
+
 router.post('/login', userController.login);
 router.post(
   '/register',

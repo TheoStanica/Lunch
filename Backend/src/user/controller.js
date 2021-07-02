@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 
 const User = require('./model');
 const { sendActivationEmail } = require('../utils/emailTemplates');
+const { accountStatus } = require('../utils/enums');
 
 const register = async (req, res, next) => {
   try {
@@ -52,4 +53,23 @@ const login = async (req, res, next) => {
   }
 };
 
-module.exports = { login, register };
+const activateAccount = async (req, res, next) => {
+  try {
+    let user = await User.findOne({
+      activationToken: req.params._activationToken,
+    });
+
+    if (!user) {
+      return next(new BadRequestError('Invalid activation token'));
+    }
+
+    user.status = accountStatus.active;
+    user = await user.save();
+
+    res.status(204).send();
+  } catch (error) {
+    return nexT(error);
+  }
+};
+
+module.exports = { login, register, activateAccount };
