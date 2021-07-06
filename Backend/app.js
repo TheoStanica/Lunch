@@ -3,6 +3,7 @@ const express = require('express');
 const api = require('./src/index');
 const db = require('./databsaseConnection');
 const BadRequestError = require('./src/errors/badRequestError');
+const errorHandler = require('./src/middleware/errorHandler');
 
 const app = express();
 
@@ -18,5 +19,7 @@ app.use('/api', api);
 app.all('*', (req, res) => {
   throw new BadRequestError();
 });
+
+app.use(errorHandler);
 
 module.exports = app;
