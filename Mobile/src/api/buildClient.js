@@ -9,7 +9,7 @@ const setAuthHeaderValue = () => {
 };
 
 const axiosInstance = axios.create(
-  {baseURL: 'http://10.0.2.2:3000/api'},
+  {baseURL: 'https://lunchapplication.herokuapp.com/api'},
   {
     headers: {
       'Content-Type': 'Application/json',
