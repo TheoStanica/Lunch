@@ -92,7 +92,7 @@ const activateAccount = async (req, res, next) => {
 
 const refreshTokens = async (req, res, next) => {
   try {
-    const { refreshToken } = req.body,
+    let { refreshToken } = req.body,
       payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
     if (!payload) {
@@ -106,8 +106,15 @@ const refreshTokens = async (req, res, next) => {
         expiresIn: process.env.ACCESS_TOKEN_LIFE,
       }
     );
+    refreshToken = jwt.sign(
+      { id: payload.id },
+      process.env.REFRESH_TOKEN_SECRET,
+      {
+        expiresIn: process.env.REFRESH_TOKEN_LIFE,
+      }
+    );
 
-    res.send({ accesToken });
+    res.send({ accesToken, refreshToken });
   } catch (error) {
     return next(error);
   }
