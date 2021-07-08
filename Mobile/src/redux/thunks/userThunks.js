@@ -1,5 +1,5 @@
 import {loginRequest, registerRequest} from './httpRequests';
-import {setUser} from '../actions/userActions';
+import {resetUser, setUser} from '../actions/userActions';
 
 export const loginUser =
   ({email, password}) =>
@@ -27,3 +27,7 @@ export const registerUser =
       console.log(error?.response?.data);
     }
   };
+
+export const logoutUser = () => dispatch => {
+  dispatch(resetUser());
+};
