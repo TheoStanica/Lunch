@@ -28,8 +28,7 @@ const LoginScreen = ({navigation}) => {
   });
 
   return (
-    <View style={styles.text}>
-      <Text>Login</Text>
+    <View style={styles.container}>
       <Formik
         validationSchema={loginValidationSchema}
         initialValues={{
@@ -56,9 +55,7 @@ const LoginScreen = ({navigation}) => {
               onBlur={() => setFieldTouched('email')}
             />
             {touched.email && errors.email && (
-              <Text style={{fontSize: 12, color: '#FF0D10'}}>
-                {errors.email}
-              </Text>
+              <Text style={styles.error}>{errors.email}</Text>
             )}
             <TextInput
               label="Password"
@@ -66,11 +63,10 @@ const LoginScreen = ({navigation}) => {
               value={values.password}
               onChangeText={handleChange('password')}
               onBlur={() => setFieldTouched('password')}
+              secureTextEntry={true}
             />
             {touched.password && errors.password && (
-              <Text style={{fontSize: 12, color: '#FF0D10'}}>
-                {errors.password}
-              </Text>
+              <Text style={styles.error}>{errors.password}</Text>
             )}
             <Button mode="outlined" disabled={!isValid} onPress={handleSubmit}>
               Login
@@ -78,12 +74,6 @@ const LoginScreen = ({navigation}) => {
           </>
         )}
       </Formik>
-
-      <Button
-        mode="outlined"
-        onPress={() => navigation.navigate('RegisterScreen')}>
-        Register
-      </Button>
       <Button mode="outlined" onPress={() => {}}>
         Forgot Password
       </Button>
@@ -92,8 +82,12 @@ const LoginScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  text: {
+  container: {
     flex: 1,
+  },
+  error: {
+    fontSize: 12,
+    color: '#FF0D10',
   },
 });
 
