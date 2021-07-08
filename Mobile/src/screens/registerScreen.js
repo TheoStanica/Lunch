@@ -6,6 +6,8 @@ import {registerUser} from '../redux/thunks/userThunks';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 
+import TextInputField from '../components/textInputField';
+
 const RegisterScreen = () => {
   const dispatch = useDispatch();
 
@@ -56,38 +58,36 @@ const RegisterScreen = () => {
         }>
         {({values, handleChange, errors, isValid, handleSubmit}) => (
           <>
-            <TextInput
+            <TextInputField
               label="Email"
               value={values.email}
-              onChangeText={handleChange('email')}
+              errors={errors.email}
+              handleChange={handleChange}
+              field="email"
             />
-            {errors.email && <Text style={styles.error}>{errors.email}</Text>}
-            <TextInput
+            <TextInputField
               label="Password"
               value={values.password}
-              onChangeText={handleChange('password')}
+              errors={errors.password}
+              handleChange={handleChange}
               secureTextEntry={true}
+              field="password"
             />
-            {errors.password && (
-              <Text style={styles.error}>{errors.password}</Text>
-            )}
-            <TextInput
+            <TextInputField
               label="Retype Password"
               value={values.retypePassword}
-              onChangeText={handleChange('retypePassword')}
+              errors={errors.retypePassword}
+              handleChange={handleChange}
               secureTextEntry={true}
+              field="retypePassword"
             />
-            {errors.retypePassword && (
-              <Text style={styles.error}>{errors.retypePassword}</Text>
-            )}
-            <TextInput
-              label="Full name"
+            <TextInputField
+              label="Full Name"
               value={values.fullname}
-              onChangeText={handleChange('fullname')}
+              errors={errors.fullname}
+              handleChange={handleChange}
+              field="fullname"
             />
-            {errors.fullname && (
-              <Text style={styles.error}>{errors.fullname}</Text>
-            )}
             <Button mode="outlined" disabled={!isValid} onPress={handleSubmit}>
               Register
             </Button>

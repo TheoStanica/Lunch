@@ -1,10 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {TextInput, Button} from 'react-native-paper';
+import {View, StyleSheet} from 'react-native';
+import {Button} from 'react-native-paper';
 import {useDispatch} from 'react-redux';
 import {loginUser} from '../redux/thunks/userThunks';
 import {Formik} from 'formik';
 import * as yup from 'yup';
+
+import TextInputField from '../components/textInputField';
 
 const LoginScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -40,22 +42,21 @@ const LoginScreen = ({navigation}) => {
         }>
         {({values, handleChange, errors, isValid, handleSubmit}) => (
           <>
-            <TextInput
+            <TextInputField
               label="Email"
               value={values.email}
-              onChangeText={handleChange('email')}
+              errors={errors.email}
+              handleChange={handleChange}
+              field="email"
             />
-            {errors.email && <Text style={styles.error}>{errors.email}</Text>}
-            <TextInput
+            <TextInputField
               label="Password"
-              type="password"
               value={values.password}
-              onChangeText={handleChange('password')}
+              errors={errors.password}
+              handleChange={handleChange}
               secureTextEntry={true}
+              field="password"
             />
-            {errors.password && (
-              <Text style={styles.error}>{errors.password}</Text>
-            )}
             <Button mode="outlined" disabled={!isValid} onPress={handleSubmit}>
               Login
             </Button>
