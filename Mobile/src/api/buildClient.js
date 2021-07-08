@@ -1,8 +1,6 @@
 import axios from 'axios';
 import {setUser} from '../redux/actions/userActions';
-// import { logoutUser, setUserTokens } from '../redux/actions/userActions';
-import store from '../redux/store';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {store} from '../redux/store';
 
 const setAuthHeaderValue = () => {
   return `Bearer ${store.getState().userReducer.accessToken}`;
@@ -69,15 +67,24 @@ axiosInstance.interceptors.response.use(
             refreshToken: store.getState().userReducer.refreshToken,
           })
           .then(async ({data}) => {
-            await AsyncStorage.setItem('accessToken', data.accessToken);
+            await store.dispatch(
+              setUser({
+                accessToken: data.accessToken,
+                refreshToken: data.refreshToken,
+              }),
+            );
             originalRequest.headers['Authorization'] =
               'Bearer ' + data.accessToken;
             processQueue(null, data.refreshToken);
             resolve(axiosInstance(originalRequest));
           })
           .catch(async err => {
-            await AsyncStorage.removeItem('accessToken');
-            await AsyncStorage.removeItem('refreshToken');
+            await store.dispatch(
+              setUser({
+                accessToken: '',
+                refreshToken: '',
+              }),
+            );
             processQueue(err, null);
             reject(err);
           })

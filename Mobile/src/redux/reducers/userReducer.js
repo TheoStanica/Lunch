@@ -6,6 +6,8 @@ const initialState = {
   email: '',
   role: '',
   status: '',
+  accessToken: '',
+  refreshToken: '',
 };
 
 const userReducer = (state = initialState, action) => {

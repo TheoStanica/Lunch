@@ -1,14 +1,18 @@
 import {loginRequest, registerRequest} from './httpRequests';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {setUser} from '../actions/userActions';
 
 export const loginUser =
   ({email, password}) =>
-  async () => {
+  async dispatch => {
     try {
       const response = await loginRequest({email, password});
 
-      await AsyncStorage.setItem('accessToken', response.data.accessToken);
-      await AsyncStorage.setItem('refreshToken', response.data.refreshToken);
+      dispatch(
+        setUser({
+          accessToken: response.data.accessToken,
+          refreshToken: response.data.refreshToken,
+        }),
+      );
     } catch (error) {
       console.log(error?.response?.data);
     }
@@ -20,6 +24,6 @@ export const registerUser =
     try {
       await registerRequest({email, password, fullname});
     } catch (error) {
-      console.log(error);
+      console.log(error?.response?.data);
     }
   };
