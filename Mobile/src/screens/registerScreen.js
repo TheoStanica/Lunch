@@ -54,52 +54,38 @@ const RegisterScreen = () => {
             }),
           )
         }>
-        {({
-          values,
-          handleChange,
-          errors,
-          setFieldTouched,
-          touched,
-          isValid,
-          handleSubmit,
-        }) => (
+        {({values, handleChange, errors, isValid, handleSubmit}) => (
           <>
             <TextInput
               label="Email"
               value={values.email}
               onChangeText={handleChange('email')}
-              onBlur={() => setFieldTouched('email')}
             />
-            {touched.email && errors.email && (
-              <Text style={styles.error}>{errors.email}</Text>
-            )}
+            {errors.email && <Text style={styles.error}>{errors.email}</Text>}
             <TextInput
               label="Password"
               value={values.password}
               onChangeText={handleChange('password')}
-              onBlur={() => setFieldTouched('password')}
               secureTextEntry={true}
             />
-            {touched.password && errors.password && (
+            {errors.password && (
               <Text style={styles.error}>{errors.password}</Text>
             )}
             <TextInput
               label="Retype Password"
               value={values.retypePassword}
               onChangeText={handleChange('retypePassword')}
-              onBlur={() => setFieldTouched('retypePassword')}
               secureTextEntry={true}
             />
-            {touched.retypePassword && errors.retypePassword && (
+            {errors.retypePassword && (
               <Text style={styles.error}>{errors.retypePassword}</Text>
             )}
             <TextInput
               label="Full name"
               value={values.fullname}
               onChangeText={handleChange('fullname')}
-              onBlur={() => setFieldTouched('fullname')}
             />
-            {touched.fullname && errors.fullname && (
+            {errors.fullname && (
               <Text style={styles.error}>{errors.fullname}</Text>
             )}
             <Button mode="outlined" disabled={!isValid} onPress={handleSubmit}>

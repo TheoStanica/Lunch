@@ -38,34 +38,22 @@ const LoginScreen = ({navigation}) => {
         onSubmit={values =>
           dispatch(loginUser({email: values.email, password: values.password}))
         }>
-        {({
-          values,
-          handleChange,
-          errors,
-          setFieldTouched,
-          touched,
-          isValid,
-          handleSubmit,
-        }) => (
+        {({values, handleChange, errors, isValid, handleSubmit}) => (
           <>
             <TextInput
               label="Email"
               value={values.email}
               onChangeText={handleChange('email')}
-              onBlur={() => setFieldTouched('email')}
             />
-            {touched.email && errors.email && (
-              <Text style={styles.error}>{errors.email}</Text>
-            )}
+            {errors.email && <Text style={styles.error}>{errors.email}</Text>}
             <TextInput
               label="Password"
               type="password"
               value={values.password}
               onChangeText={handleChange('password')}
-              onBlur={() => setFieldTouched('password')}
               secureTextEntry={true}
             />
-            {touched.password && errors.password && (
+            {errors.password && (
               <Text style={styles.error}>{errors.password}</Text>
             )}
             <Button mode="outlined" disabled={!isValid} onPress={handleSubmit}>
