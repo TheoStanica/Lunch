@@ -1,6 +1,6 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {TextInput, Button} from 'react-native-paper';
+import {SafeAreaView, StyleSheet} from 'react-native';
+import {Button} from 'react-native-paper';
 import {useDispatch} from 'react-redux';
 import {registerUser} from '../redux/thunks/userThunks';
 import {Formik} from 'formik';
@@ -38,7 +38,7 @@ const RegisterScreen = () => {
   });
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Formik
         validationSchema={registerValidationSchema}
         initialValues={{
@@ -94,7 +94,7 @@ const RegisterScreen = () => {
           </>
         )}
       </Formik>
-    </View>
+    </SafeAreaView>
   );
 };
 

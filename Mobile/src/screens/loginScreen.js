@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {StyleSheet, SafeAreaView} from 'react-native';
 import {Button} from 'react-native-paper';
 import {useDispatch} from 'react-redux';
 import {loginUser} from '../redux/thunks/userThunks';
@@ -30,7 +30,7 @@ const LoginScreen = ({navigation}) => {
   });
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Formik
         validationSchema={loginValidationSchema}
         initialValues={{
@@ -66,7 +66,7 @@ const LoginScreen = ({navigation}) => {
       <Button mode="outlined" onPress={() => {}}>
         Forgot Password
       </Button>
-    </View>
+    </SafeAreaView>
   );
 };
 
