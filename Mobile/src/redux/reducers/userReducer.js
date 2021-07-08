@@ -1,4 +1,4 @@
-import {SET_USER} from '../types';
+import {SET_USER, RESET_USER} from '../types';
 
 const initialState = {
   id: '',
@@ -18,6 +18,11 @@ const userReducer = (state = initialState, action) => {
         ...action.payload,
       };
     }
+
+    case RESET_USER: {
+      return {...initialState};
+    }
+
     default:
       return state;
   }
