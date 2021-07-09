@@ -6,14 +6,25 @@ import {Provider} from 'react-redux';
 import {NavigationContainer} from '@react-navigation/native';
 import {PersistGate} from 'redux-persist/integration/react';
 import LoadingScreen from './src/screens/loadingScreen';
+import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
+
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#FBBC00',
+  },
+};
 
 const App = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={<LoadingScreen />} persistor={persistor}>
-        <NavigationContainer>
-          <AppNavigatorRoutes />
-        </NavigationContainer>
+        <PaperProvider theme={theme}>
+          <NavigationContainer>
+            <AppNavigatorRoutes />
+          </NavigationContainer>
+        </PaperProvider>
       </PersistGate>
     </Provider>
   );
