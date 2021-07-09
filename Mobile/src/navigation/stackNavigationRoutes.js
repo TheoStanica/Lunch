@@ -2,6 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import LoginScreen from '../screens/loginScreen';
 import RegisterScreen from '../screens/registerScreen';
+import ForgotPasswordScreen from '../screens/forgotPasswordScreen';
 import TabNavigatorRoutes from './tabNavigationRoutes';
 import {useSelector} from 'react-redux';
 import AuthScreen from '../screens/authScreen';
@@ -15,7 +16,7 @@ const Auth = () => {
   };
 
   return (
-    <Stack.Navigator screenOptions={{}} initialRouteName="AuthScreen">
+    <Stack.Navigator initialRouteName="AuthScreen">
       <Stack.Screen
         name="AuthScreen"
         component={AuthScreen}
@@ -30,6 +31,14 @@ const Auth = () => {
         options={{
           ...authScreensOptions,
           title: 'Login',
+        }}
+      />
+      <Stack.Screen
+        name="ForgotPasswordScreen"
+        component={ForgotPasswordScreen}
+        options={{
+          ...authScreensOptions,
+          title: 'Forgot Password',
         }}
       />
       <Stack.Screen

@@ -66,7 +66,10 @@ const LoginScreen = ({navigation, theme}) => {
               )}
             </Formik>
             <SafeAreaView>
-              <Button onPress={() => {}}>
+              <Button
+                onPress={() => {
+                  navigation.navigate('ForgotPasswordScreen');
+                }}>
                 <Text style={styles.buttonText}>Forgot Password</Text>
               </Button>
             </SafeAreaView>
