@@ -1,6 +1,5 @@
 import React from 'react';
-import {TextInput} from 'react-native-paper';
-import {Text, StyleSheet} from 'react-native';
+import {TextInput, HelperText} from 'react-native-paper';
 
 const TextInputField = ({
   label,
@@ -8,7 +7,7 @@ const TextInputField = ({
   errors,
   handleChange,
   field,
-  secureTextEntry = false,
+  ...rest
 }) => {
   return (
     <>
@@ -16,18 +15,17 @@ const TextInputField = ({
         label={label}
         value={value}
         onChangeText={handleChange(field)}
-        secureTextEntry={secureTextEntry}
+        secureTextEntry={false}
+        style={{backgroundColor: 'transparent'}}
+        underlineColor="#0008"
+        theme={{colors: {primary: 'black'}}}
+        {...rest}
       />
-      {errors && <Text style={styles.error}>{errors}</Text>}
+      <HelperText type="error" visible={errors ? true : false}>
+        {errors}
+      </HelperText>
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  error: {
-    fontSize: 12,
-    color: '#FF0D10',
-  },
-});
 
 export default TextInputField;
