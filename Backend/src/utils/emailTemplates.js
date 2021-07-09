@@ -17,7 +17,7 @@ const sendForgotPasswordEmail = (user) => {
     to: user.email,
     subject: 'Lunch App Forgot Password',
     html: `<h2>Hello ${user.fullname}</h2>
-          <p>Please enter the following ${user.forgotPasswordToken} into the application to reset your password.</p>
+          <p>Please reset your password by clicking on the following link</p>
           <a href=lunchapp://forgotpassword/${user.forgotPasswordToken}>Click here </a>
           `,
   });

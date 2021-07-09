@@ -11,3 +11,15 @@ export const registerRequest = async ({email, password, fullname}) => {
     fullname,
   });
 };
+
+export const forgotPassword = async ({email, password, token}) => {
+  if (email) {
+    return await axiosInstance.post('/user/forgotpassword', {
+      email,
+    });
+  } else {
+    return await axiosInstance.post(`/user/forgotpassword/${token}`, {
+      password,
+    });
+  }
+};

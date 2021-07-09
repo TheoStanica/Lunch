@@ -1,4 +1,4 @@
-import {loginRequest, registerRequest} from './httpRequests';
+import {loginRequest, registerRequest, forgotPassword} from './httpRequests';
 import {resetUser, setUser} from '../actions/userActions';
 import {handleError} from './errorThunks';
 
@@ -28,6 +28,28 @@ export const registerUser =
         setUser({
           message:
             'Account created! Please check your email to activate your account.',
+        }),
+      );
+      setTimeout(() => {
+        dispatch(
+          setUser({
+            message: '',
+          }),
+        );
+      }, 10000);
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+
+export const forgotPasswordUser =
+  ({email, password, token}) =>
+  async dispatch => {
+    try {
+      await forgotPassword({email, password, token});
+      dispatch(
+        setUser({
+          message: 'Password was reseted.',
         }),
       );
       setTimeout(() => {
