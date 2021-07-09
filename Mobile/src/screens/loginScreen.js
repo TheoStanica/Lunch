@@ -12,30 +12,12 @@ import {Button, withTheme} from 'react-native-paper';
 import {useDispatch} from 'react-redux';
 import {loginUser} from '../redux/thunks/userThunks';
 import {Formik} from 'formik';
-import * as yup from 'yup';
+import {loginValidationSchema} from '../assets/bodyValidation/userValidation';
 
 import TextInputField from '../components/textInputField';
 
 const LoginScreen = ({navigation, theme}) => {
   const dispatch = useDispatch();
-
-  const loginValidationSchema = yup.object({
-    email: yup
-      .string('Enter your email.')
-      .email('Enter a valid email.')
-      .required('Email is required.'),
-    password: yup
-      .string('Enter your password.')
-      .min(8, 'Password must have a minimum length of 8.')
-      .matches(/([A-Z])+/, 'Password must have at least one upper letter.')
-      .matches(/[a-z]+/, 'Password must have at least one lower letter.')
-      .matches(/\d+/, 'Password must have at least one digit.')
-      .matches(
-        /[@$!%*?&]+/,
-        'Password must have at least one special character.',
-      )
-      .required('Password is required.'),
-  });
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -84,7 +66,10 @@ const LoginScreen = ({navigation, theme}) => {
               )}
             </Formik>
             <SafeAreaView>
-              <Button onPress={() => {}}>
+              <Button
+                onPress={() => {
+                  navigation.navigate('ForgotPasswordScreen');
+                }}>
                 <Text style={styles.buttonText}>Forgot Password</Text>
               </Button>
             </SafeAreaView>
