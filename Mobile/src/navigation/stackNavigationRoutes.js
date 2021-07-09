@@ -9,6 +9,11 @@ import AuthScreen from '../screens/authScreen';
 const Stack = createStackNavigator();
 
 const Auth = () => {
+  const authScreensOptions = {
+    headerBackTitle: '',
+    headerStyle: {backgroundColor: '#FBBC00'},
+  };
+
   return (
     <Stack.Navigator screenOptions={{}} initialRouteName="AuthScreen">
       <Stack.Screen
@@ -22,12 +27,15 @@ const Auth = () => {
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
-        options={{title: 'Login'}}
+        options={{
+          ...authScreensOptions,
+          title: 'Login',
+        }}
       />
       <Stack.Screen
         name="RegisterScreen"
         component={RegisterScreen}
-        options={{title: 'Register'}}
+        options={{...authScreensOptions, title: 'Register'}}
       />
     </Stack.Navigator>
   );

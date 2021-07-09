@@ -1,11 +1,14 @@
 import React from 'react';
-import {StyleSheet, StatusBar, View} from 'react-native';
+import {StyleSheet, StatusBar, View, Platform} from 'react-native';
+import {withTheme} from 'react-native-paper';
 import LunchLogo from '../assets/images/Lunch';
 
-const LoadingScreen = () => {
+const LoadingScreen = ({theme}) => {
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="#FBBC00" />
+      {Platform.OS !== 'ios' ? (
+        <StatusBar backgroundColor={theme.colors.primary} />
+      ) : null}
       <LunchLogo />
     </View>
   );
@@ -20,4 +23,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoadingScreen;
+export default withTheme(LoadingScreen);
