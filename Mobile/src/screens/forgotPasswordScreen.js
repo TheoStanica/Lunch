@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     padding: 25,
     paddingBottom: 100,
   },
+  glassButton: {marginVertical: 8, shadowColor: 'transparent'},
 });
 
 export default withTheme(ForgotPasswordScreen);
