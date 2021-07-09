@@ -7,6 +7,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {PersistGate} from 'redux-persist/integration/react';
 import LoadingScreen from './src/screens/loadingScreen';
 import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
+import DisplayErrors from './src/components/displayErrors';
 
 const theme = {
   ...DefaultTheme,
@@ -23,6 +24,7 @@ const App = () => {
         <PaperProvider theme={theme}>
           <NavigationContainer>
             <AppNavigatorRoutes />
+            <DisplayErrors />
           </NavigationContainer>
         </PaperProvider>
       </PersistGate>
