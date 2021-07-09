@@ -17,12 +17,26 @@ const theme = {
   },
 };
 
+const config = {
+  screens: {
+    Auth: {
+      screens: {
+        ForgotPasswordScreen: 'forgotpassword/:_token',
+      },
+    },
+  },
+};
+const linking = {
+  prefixes: ['lunchapp://'],
+  config,
+};
+
 const App = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={<LoadingScreen />} persistor={persistor}>
         <PaperProvider theme={theme}>
-          <NavigationContainer>
+          <NavigationContainer linking={linking} fallback={<LoadingScreen />}>
             <AppNavigatorRoutes />
             <DisplayErrors />
           </NavigationContainer>
