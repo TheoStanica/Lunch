@@ -1,5 +1,6 @@
 import {loginRequest, registerRequest} from './httpRequests';
 import {resetUser, setUser} from '../actions/userActions';
+import {handleError} from './errorThunks';
 
 export const loginUser =
   ({email, password}) =>
@@ -14,17 +15,30 @@ export const loginUser =
         }),
       );
     } catch (error) {
-      console.log(error?.response?.data);
+      dispatch(handleError(error));
     }
   };
 
 export const registerUser =
   ({email, password, fullname}) =>
-  async () => {
+  async dispatch => {
     try {
       await registerRequest({email, password, fullname});
+      dispatch(
+        setUser({
+          message:
+            'Account created! Please check your email to activate your account.',
+        }),
+      );
+      setTimeout(() => {
+        dispatch(
+          setUser({
+            message: '',
+          }),
+        );
+      }, 10000);
     } catch (error) {
-      console.log(error?.response?.data);
+      dispatch(handleError(error));
     }
   };
 
