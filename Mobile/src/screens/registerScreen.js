@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,17 +9,32 @@ import {
   View,
 } from 'react-native';
 import {Button, withTheme} from 'react-native-paper';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {registerUser} from '../redux/thunks/userThunks';
 import {Formik} from 'formik';
 import {registerValidationSchema} from '../assets/bodyValidation/userValidation';
 
 import TextInputField from '../components/textInputField';
 import HideKeyboard from '../components/hideKeyboard';
+import useMessages from '../hooks/useMessages';
 
-const RegisterScreen = ({theme}) => {
-  const {message} = useSelector(state => state.userReducer);
+const RegisterScreen = ({navigation, theme}) => {
+  const message = useMessages();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (message) {
+      navigation.reset({
+        routes: [
+          {name: 'AuthScreen'},
+          {
+            name: 'MessageScreen',
+            params: {message},
+          },
+        ],
+      });
+    }
+  }, [message]);
 
   return (
     <HideKeyboard>
@@ -85,9 +100,6 @@ const RegisterScreen = ({theme}) => {
                       color="#fff7">
                       <Text style={styles.buttonText}>Register</Text>
                     </Button>
-                    {message ? (
-                      <Text style={styles.successMessage}>{message}</Text>
-                    ) : null}
                   </>
                 )}
               </Formik>
