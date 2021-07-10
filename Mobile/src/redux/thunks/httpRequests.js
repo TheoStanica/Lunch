@@ -23,3 +23,7 @@ export const forgotPassword = async ({email, password, token}) => {
     });
   }
 };
+
+export const activateAccount = async ({activationToken}) => {
+  return await axiosInstance.get(`/user/activate/${activationToken}`);
+};

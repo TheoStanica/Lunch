@@ -1,4 +1,9 @@
-import {loginRequest, registerRequest, forgotPassword} from './httpRequests';
+import {
+  loginRequest,
+  registerRequest,
+  forgotPassword,
+  activateAccount,
+} from './httpRequests';
 import {resetUser, setUser} from '../actions/userActions';
 import {handleError} from './errorThunks';
 
@@ -30,13 +35,6 @@ export const registerUser =
             'Account created! Please check your email to activate your account.',
         }),
       );
-      setTimeout(() => {
-        dispatch(
-          setUser({
-            message: '',
-          }),
-        );
-      }, 10000);
     } catch (error) {
       dispatch(handleError(error));
     }
@@ -47,18 +45,35 @@ export const forgotPasswordUser =
   async dispatch => {
     try {
       await forgotPassword({email, password, token});
-      dispatch(
-        setUser({
-          message: 'Password was reseted.',
-        }),
-      );
-      setTimeout(() => {
+
+      if (email) {
         dispatch(
           setUser({
-            message: '',
+            message: 'Please check your email to reset your password.',
           }),
         );
-      }, 10000);
+      } else {
+        dispatch(
+          setUser({
+            message: 'Password was reseted.',
+          }),
+        );
+      }
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+
+export const activateAccountUser =
+  ({activationToken}) =>
+  async dispatch => {
+    try {
+      await activateAccount({activationToken});
+      dispatch(
+        setUser({
+          message: 'Account activated!',
+        }),
+      );
     } catch (error) {
       dispatch(handleError(error));
     }
