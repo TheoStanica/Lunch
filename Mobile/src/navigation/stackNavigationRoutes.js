@@ -6,6 +6,8 @@ import ForgotPasswordScreen from '../screens/forgotPasswordScreen';
 import TabNavigatorRoutes from './tabNavigationRoutes';
 import {useSelector} from 'react-redux';
 import AuthScreen from '../screens/authScreen';
+import MessageScreen from '../screens/messageScreen';
+import ActivationScreen from '../screens/activationScreen';
 
 const Stack = createStackNavigator();
 
@@ -13,6 +15,7 @@ const Auth = () => {
   const authScreensOptions = {
     headerBackTitle: '',
     headerStyle: {backgroundColor: '#FBBC00'},
+    headerTintColor: 'black',
   };
 
   return (
@@ -45,6 +48,16 @@ const Auth = () => {
         name="RegisterScreen"
         component={RegisterScreen}
         options={{...authScreensOptions, title: 'Register'}}
+      />
+      <Stack.Screen
+        name="MessageScreen"
+        component={MessageScreen}
+        options={{...authScreensOptions, title: ''}}
+      />
+      <Stack.Screen
+        name="ActivationScreen"
+        component={ActivationScreen}
+        options={{...authScreensOptions, title: ''}}
       />
     </Stack.Navigator>
   );
