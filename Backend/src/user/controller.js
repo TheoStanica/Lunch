@@ -173,6 +173,13 @@ const getUser = async (req, res, next) => {
   }
 };
 
+const updateUser = async (req, res, next) => {
+  try {
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   login,
   register,
@@ -180,4 +187,5 @@ module.exports = {
   refreshTokens,
   forgotPassword,
   getUser,
+  updateUser,
 };

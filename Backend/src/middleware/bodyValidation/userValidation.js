@@ -83,9 +83,12 @@ const forgotPasswordValidationSchema = [
     .optional(),
 ];
 
+const updateValidationSchema = [];
+
 module.exports = {
   validationResults,
   registerValidationSchema,
   loginValidationSchema,
   forgotPasswordValidationSchema,
+  updateValidationSchema,
 };

@@ -5,6 +5,7 @@ const {
   loginValidationSchema,
   registerValidationSchema,
   forgotPasswordValidationSchema,
+  updateValidationSchema,
   validationResults,
 } = require('../middleware/bodyValidation/userValidation');
 
@@ -26,6 +27,13 @@ router.post(
   forgotPasswordValidationSchema,
   validationResults,
   userController.forgotPassword
+);
+
+router.put(
+  '/:_userId?',
+  updateValidationSchema,
+  validationResults,
+  userController.updateUser
 );
 
 module.exports = router;
