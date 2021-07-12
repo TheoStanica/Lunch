@@ -1,10 +1,10 @@
 import axiosInstance from '../../api/buildClient';
 
-export const loginRequest = async ({email, password}) => {
+export const userLoginRequest = async ({email, password}) => {
   return await axiosInstance.post('/user/login', {email, password});
 };
 
-export const registerRequest = async ({email, password, fullname}) => {
+export const userRegisterRequest = async ({email, password, fullname}) => {
   return await axiosInstance.post('/user/register', {
     email,
     password,
@@ -12,7 +12,7 @@ export const registerRequest = async ({email, password, fullname}) => {
   });
 };
 
-export const forgotPassword = async ({email, password, token}) => {
+export const userForgotPasswordRequest = async ({email, password, token}) => {
   if (email) {
     return await axiosInstance.post('/user/forgotpassword', {
       email,

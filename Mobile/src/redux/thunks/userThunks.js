@@ -1,4 +1,8 @@
-import {loginRequest, registerRequest, forgotPassword} from './httpRequests';
+import {
+  userLoginRequest,
+  userRegisterRequest,
+  useerForgotPasswordRequest,
+} from './httpRequests';
 import {resetUser, setUser} from '../actions/userActions';
 import {handleError} from './errorThunks';
 
@@ -6,7 +10,7 @@ export const loginUser =
   ({email, password}) =>
   async dispatch => {
     try {
-      const response = await loginRequest({email, password});
+      const response = await userLoginRequest({email, password});
 
       dispatch(
         setUser({
@@ -23,7 +27,7 @@ export const registerUser =
   ({email, password, fullname}) =>
   async dispatch => {
     try {
-      await registerRequest({email, password, fullname});
+      await userRegisterRequest({email, password, fullname});
       dispatch(
         setUser({
           message:
@@ -46,7 +50,7 @@ export const forgotPasswordUser =
   ({email, password, token}) =>
   async dispatch => {
     try {
-      await forgotPassword({email, password, token});
+      await useerForgotPasswordRequest({email, password, token});
       dispatch(
         setUser({
           message: 'Password was reseted.',
