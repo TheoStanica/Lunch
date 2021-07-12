@@ -1,13 +1,39 @@
 import React from 'react';
 import {SafeAreaView, Text, StyleSheet} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {Card, Title, Button} from 'react-native-paper';
+import {useSelector} from 'react-redux';
+import ProfileField from '../components/profileField';
 
 const ProfileScreen = () => {
-  const dispatch = useDispatch();
+  const userReducer = useSelector(state => state.userReducer);
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Profile</Text>
+      <Title>Welcome</Title>
+      <Card>
+        <ProfileField
+          title={userReducer.fullname}
+          paragraph="Full name"
+          icon="account-circle-outline"
+        />
+        <ProfileField
+          title={userReducer.email}
+          paragraph="Email"
+          icon="email"
+        />
+        <ProfileField
+          title={`Account ${userReducer.status}`}
+          paragraph="Status"
+          icon={
+            userReducer.status === 'active'
+              ? 'chevron-down-circle-outline'
+              : 'close-circle-outline'
+          }
+        />
+      </Card>
+      <Button mode="contained" style={styles.glassButton} color="#fff7">
+        <Text style={styles.buttonText}>Update</Text>
+      </Button>
     </SafeAreaView>
   );
 };
@@ -15,6 +41,14 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginHorizontal: 15,
+  },
+  glassButton: {marginVertical: 8, shadowColor: 'transparent'},
+  buttonText: {
+    color: 'green',
+    fontSize: 18,
+    textTransform: 'capitalize',
+    lineHeight: 40,
   },
 });
 
