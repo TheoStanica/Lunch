@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView, Text, StyleSheet} from 'react-native';
+import {SafeAreaView, Text, StyleSheet, View} from 'react-native';
 import {Card, Title, Button} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import ProfileField from '../components/profileField';
@@ -9,35 +9,37 @@ const ProfileScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Title>Welcome</Title>
-      <Card>
-        <ProfileField
-          title={userReducer.fullname}
-          paragraph="Full name"
-          icon="account-circle-outline"
-        />
-        <ProfileField
-          title={userReducer.email}
-          paragraph="Email"
-          icon="email"
-        />
-        <ProfileField
-          title={`Account ${userReducer.status}`}
-          paragraph="Status"
-          icon={
-            userReducer.status === 'active'
-              ? 'chevron-down-circle-outline'
-              : 'close-circle-outline'
-          }
-        />
-      </Card>
-      <Button
-        mode="contained"
-        onPress={() => navigation.navigate('UpdateProfileScreen')}
-        style={styles.glassButton}
-        color="#fff7">
-        <Text style={styles.buttonText}>Update</Text>
-      </Button>
+      <View style={styles.contentContainer}>
+        <Title>Welcome</Title>
+        <Card>
+          <ProfileField
+            title={userReducer.fullname}
+            paragraph="Full name"
+            icon="account-circle-outline"
+          />
+          <ProfileField
+            title={userReducer.email}
+            paragraph="Email"
+            icon="email"
+          />
+          <ProfileField
+            title={`Account ${userReducer.status}`}
+            paragraph="Status"
+            icon={
+              userReducer.status === 'active'
+                ? 'chevron-down-circle-outline'
+                : 'close-circle-outline'
+            }
+          />
+        </Card>
+        <Button
+          mode="contained"
+          onPress={() => navigation.navigate('UpdateProfileScreen')}
+          style={styles.glassButton}
+          color="#fff7">
+          <Text style={styles.buttonText}>Update</Text>
+        </Button>
+      </View>
     </SafeAreaView>
   );
 };
@@ -45,7 +47,10 @@ const ProfileScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 15,
+  },
+  contentContainer: {
+    padding: 25,
+    paddingBottom: 100,
   },
   glassButton: {marginVertical: 8, shadowColor: 'transparent'},
   buttonText: {
