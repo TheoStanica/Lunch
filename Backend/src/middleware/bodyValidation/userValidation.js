@@ -59,7 +59,14 @@ const loginValidationSchema = [
     .withMessage('Password must have at least one special character.'),
 ];
 
-const passwordValidationSchema = [
+const forgotPasswordValidationSchema = [
+  check('email')
+    .notEmpty()
+    .withMessage('Email is required')
+    .normalizeEmail()
+    .isEmail()
+    .withMessage('Invalid email')
+    .optional(),
   check('password')
     .notEmpty()
     .withMessage('Password is required.')
@@ -80,5 +87,5 @@ module.exports = {
   validationResults,
   registerValidationSchema,
   loginValidationSchema,
-  passwordValidationSchema,
+  forgotPasswordValidationSchema,
 };
