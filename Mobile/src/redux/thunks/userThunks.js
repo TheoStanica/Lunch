@@ -1,7 +1,8 @@
 import {
   userLoginRequest,
   userRegisterRequest,
-  useerForgotPasswordRequest,
+  userForgotPasswordRequest,
+  userGetRequest,
 } from './httpRequests';
 import {resetUser, setUser} from '../actions/userActions';
 import {handleError} from './errorThunks';
@@ -50,7 +51,7 @@ export const forgotPasswordUser =
   ({email, password, token}) =>
   async dispatch => {
     try {
-      await useerForgotPasswordRequest({email, password, token});
+      await userForgotPasswordRequest({email, password, token});
       dispatch(
         setUser({
           message: 'Password was reseted.',
@@ -70,4 +71,15 @@ export const forgotPasswordUser =
 
 export const logoutUser = () => dispatch => {
   dispatch(resetUser());
+};
+
+export const getUser = () => async dispatch => {
+  try {
+    const response = await userGetRequest();
+
+    console.log(response.data.user);
+    dispatch(setUser(response.data.user));
+  } catch (error) {
+    dispatch(handleError(error));
+  }
 };

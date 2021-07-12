@@ -6,7 +6,7 @@ const setAuthHeaderValue = () => {
   return `Bearer ${store.getState().userReducer.accessToken}`;
 };
 
-const axiosInstance = axios.create(
+const api = axios.create(
   {baseURL: 'https://lunchapplication.herokuapp.com/api'},
   {
     headers: {
@@ -16,7 +16,7 @@ const axiosInstance = axios.create(
   },
 );
 
-axiosInstance.interceptors.request.use(
+api.interceptors.request.use(
   config => {
     if (store.getState().userReducer.accessToken)
       config.headers.Authorization = setAuthHeaderValue();
@@ -39,7 +39,7 @@ const processQueue = (error, token = null) => {
   failedQueue = [];
 };
 
-axiosInstance.interceptors.response.use(
+api.interceptors.response.use(
   response => response,
   error => {
     const originalRequest = error.config;
@@ -51,7 +51,7 @@ axiosInstance.interceptors.response.use(
         })
           .then(token => {
             originalRequest.headers['Authorization'] = 'Bearer ' + token;
-            return axiosInstance(originalRequest);
+            return api(originalRequest);
           })
           .catch(err => {
             return Promise.reject(err);
@@ -62,7 +62,7 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true;
 
       return new Promise((resolve, reject) => {
-        axiosInstance
+        api
           .post('/user/refresh', {
             refreshToken: store.getState().userReducer.refreshToken,
           })
@@ -76,7 +76,7 @@ axiosInstance.interceptors.response.use(
             originalRequest.headers['Authorization'] =
               'Bearer ' + data.accessToken;
             processQueue(null, data.refreshToken);
-            resolve(axiosInstance(originalRequest));
+            resolve(api(originalRequest));
           })
           .catch(async err => {
             await store.dispatch(
@@ -97,4 +97,4 @@ axiosInstance.interceptors.response.use(
   },
 );
 
-export default axiosInstance;
+export default api;
