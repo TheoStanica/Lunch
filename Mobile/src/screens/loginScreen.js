@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -8,7 +8,7 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import {Button, withTheme} from 'react-native-paper';
+import {Button, TextInput, withTheme} from 'react-native-paper';
 import {useDispatch} from 'react-redux';
 import {loginUser} from '../redux/thunks/userThunks';
 import {Formik} from 'formik';
@@ -18,6 +18,7 @@ import HideKeyboard from '../components/hideKeyboard';
 import TextInputField from '../components/textInputField';
 
 const LoginScreen = ({navigation, theme}) => {
+  const [hidePassword, setHidePassword] = useState(true);
   const dispatch = useDispatch();
 
   return (
@@ -52,7 +53,14 @@ const LoginScreen = ({navigation, theme}) => {
                       value={values.password}
                       errors={errors.password}
                       handleChange={handleChange}
-                      secureTextEntry={true}
+                      secureTextEntry={hidePassword}
+                      right={
+                        <TextInput.Icon
+                          name={hidePassword ? 'eye-off' : 'eye'}
+                          size={20}
+                          onPress={() => setHidePassword(!hidePassword)}
+                        />
+                      }
                       field="password"
                     />
                     <SafeAreaView>
