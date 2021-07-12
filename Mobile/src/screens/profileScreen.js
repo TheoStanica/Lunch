@@ -4,7 +4,7 @@ import {Card, Title, Button} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import ProfileField from '../components/profileField';
 
-const ProfileScreen = () => {
+const ProfileScreen = ({navigation}) => {
   const userReducer = useSelector(state => state.userReducer);
 
   return (
@@ -31,7 +31,11 @@ const ProfileScreen = () => {
           }
         />
       </Card>
-      <Button mode="contained" style={styles.glassButton} color="#fff7">
+      <Button
+        mode="contained"
+        onPress={() => navigation.navigate('UpdateProfileScreen')}
+        style={styles.glassButton}
+        color="#fff7">
         <Text style={styles.buttonText}>Update</Text>
       </Button>
     </SafeAreaView>
