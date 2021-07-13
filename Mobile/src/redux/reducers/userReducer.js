@@ -6,7 +6,6 @@ const initialState = {
   email: '',
   role: '',
   status: '',
-  message: '',
   accessToken: '',
   refreshToken: '',
 };

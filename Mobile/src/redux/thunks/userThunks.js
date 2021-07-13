@@ -25,57 +25,38 @@ export const loginUser =
   };
 
 export const registerUser =
-  ({email, password, fullname}) =>
+  ({email, password, fullname, onFinish}) =>
   async dispatch => {
     try {
       await registerRequest({email, password, fullname});
-      dispatch(
-        setUser({
-          message:
-            'Account created! Please check your email to activate your account.',
-        }),
-      );
+      onFinish(null);
     } catch (error) {
       dispatch(handleError(error));
+      onFinish(error);
     }
   };
 
 export const forgotPasswordUser =
-  ({email, password, token}) =>
+  ({email, password, token, onFinish}) =>
   async dispatch => {
     try {
       await forgotPassword({email, password, token});
-
-      if (email) {
-        dispatch(
-          setUser({
-            message: 'Please check your email to reset your password.',
-          }),
-        );
-      } else {
-        dispatch(
-          setUser({
-            message: 'Password was reseted.',
-          }),
-        );
-      }
+      onFinish(null);
     } catch (error) {
       dispatch(handleError(error));
+      onFinish(error);
     }
   };
 
 export const activateAccountUser =
-  ({activationToken}) =>
+  ({activationToken, onFinish}) =>
   async dispatch => {
     try {
       await activateAccount({activationToken});
-      dispatch(
-        setUser({
-          message: 'Account activated!',
-        }),
-      );
+      onFinish(null);
     } catch (error) {
       dispatch(handleError(error));
+      onFinish(error);
     }
   };
 

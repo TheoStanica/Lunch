@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, Text, StyleSheet, View} from 'react-native';
 import {Button, withTheme} from 'react-native-paper';
 import {Formik} from 'formik';
@@ -10,10 +10,9 @@ import {useDispatch} from 'react-redux';
 
 import TextInputField from '../components/textInputField';
 import {forgotPasswordUser} from '../redux/thunks/userThunks';
-import useMessages from '../hooks/useMessages';
 
 const ForgotPasswordScreen = ({theme, route, navigation}) => {
-  const message = useMessages();
+  const [message, setMessage] = useState('');
   const token = route?.params?._token;
   const dispatch = useDispatch();
 
@@ -41,8 +40,19 @@ const ForgotPasswordScreen = ({theme, route, navigation}) => {
               email: '',
             }}
             onSubmit={values => {
-              dispatch(forgotPasswordUser({email: values.email}));
-              values.email = '';
+              dispatch(
+                forgotPasswordUser({
+                  email: values.email,
+                  onFinish: error => {
+                    if (!error) {
+                      setMessage(
+                        'Please check your email to reset your password.',
+                      );
+                      values.email = '';
+                    }
+                  },
+                }),
+              );
             }}>
             {({values, handleChange, errors, isValid, handleSubmit}) => (
               <>
@@ -76,6 +86,11 @@ const ForgotPasswordScreen = ({theme, route, navigation}) => {
                 forgotPasswordUser({
                   password: values.password,
                   token,
+                  onFinish: error => {
+                    if (!error) {
+                      setMessage('Password reseted');
+                    }
+                  },
                 }),
               )
             }>

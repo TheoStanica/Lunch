@@ -1,16 +1,22 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Platform, StatusBar} from 'react-native';
 import {useDispatch} from 'react-redux';
-import useMessages from '../hooks/useMessages';
 import {activateAccountUser} from '../redux/thunks/userThunks';
 
 const ActivationScreen = ({route, navigation}) => {
-  const message = useMessages();
+  const [message, setMessage] = useState('');
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(
-      activateAccountUser({activationToken: route.params?._activationToken}),
+      activateAccountUser({
+        activationToken: route.params?._activationToken,
+        onFinish: error => {
+          if (!error) {
+            setMessage('Account activated!');
+          }
+        },
+      }),
     );
   }, []);
 

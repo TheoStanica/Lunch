@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -16,10 +16,9 @@ import {registerValidationSchema} from '../assets/bodyValidation/userValidation'
 
 import TextInputField from '../components/textInputField';
 import HideKeyboard from '../components/hideKeyboard';
-import useMessages from '../hooks/useMessages';
 
 const RegisterScreen = ({navigation, theme}) => {
-  const message = useMessages();
+  const [message, setMessage] = useState('');
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -57,6 +56,13 @@ const RegisterScreen = ({navigation, theme}) => {
                       email: values.email,
                       password: values.password,
                       fullname: values.fullname,
+                      onFinish: error => {
+                        if (!error) {
+                          setMessage(
+                            'Account created! Please check your email to activate your account.',
+                          );
+                        }
+                      },
                     }),
                   );
                 }}>
