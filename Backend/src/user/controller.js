@@ -95,11 +95,7 @@ const refreshTokens = async (req, res, next) => {
     let { refreshToken } = req.body,
       payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
-    if (!payload) {
-      return next(new BadRequestError('Invalid refresh token'));
-    }
-
-    const accesToken = jwt.sign(
+    const accessToken = jwt.sign(
       { id: payload.id },
       process.env.ACCESS_TOKEN_SECRET,
       {
@@ -114,9 +110,9 @@ const refreshTokens = async (req, res, next) => {
       }
     );
 
-    res.send({ accesToken, refreshToken });
+    res.send({ accessToken, refreshToken });
   } catch (error) {
-    return next(error);
+    return next(new BadRequestError('Invalid refresh token'));
   }
 };
 
