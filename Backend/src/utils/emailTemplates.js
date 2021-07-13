@@ -6,7 +6,7 @@ const sendActivationEmail = (user) => {
     subject: 'Lunch App Account Activation',
     html: `<h2>Hello ${user.fullname}</h2>
       <p>Please confirm your email by clicking on the following link</p>
-      <a href=lunchapp://activate/${user.activationToken}>Click here </a>
+      <a href=http://${process.env.HOST_URL}/api/deeplink/activate/${user.activationToken}>Click here </a>
       `,
   });
 };
@@ -17,7 +17,7 @@ const sendForgotPasswordEmail = (user) => {
     subject: 'Lunch App Forgot Password',
     html: `<h2>Hello ${user.fullname}</h2>
           <p>Please reset your password by clicking on the following link</p>
-          <a href=lunchapp://forgotpassword/${user.forgotPasswordToken}>Click here </a>
+          <a href=http://${process.env.HOST_URL}/api/deeplink/forgotpassword/${user.forgotPasswordToken}>Click here </a>
           `,
   });
 };

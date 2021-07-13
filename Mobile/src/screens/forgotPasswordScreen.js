@@ -13,7 +13,6 @@ import {forgotPasswordUser} from '../redux/thunks/userThunks';
 
 const ForgotPasswordScreen = ({theme, route, navigation}) => {
   const [message, setMessage] = useState('');
-  const token = route?.params?._token;
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -33,7 +32,7 @@ const ForgotPasswordScreen = ({theme, route, navigation}) => {
   return (
     <SafeAreaView style={styles.container(theme)}>
       <View style={styles.contentContainer}>
-        {!token ? (
+        {!route?.params?._token ? (
           <Formik
             validationSchema={emailValidationSchema}
             initialValues={{
@@ -85,7 +84,7 @@ const ForgotPasswordScreen = ({theme, route, navigation}) => {
               dispatch(
                 forgotPasswordUser({
                   password: values.password,
-                  token,
+                  route: route?.params?._token,
                   onFinish: error => {
                     if (!error) {
                       setMessage('Password reseted');
