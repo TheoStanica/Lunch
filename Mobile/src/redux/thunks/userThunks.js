@@ -77,7 +77,6 @@ export const getUser = () => async dispatch => {
   try {
     const response = await userGetRequest();
 
-    console.log(response.data.user);
     dispatch(setUser(response.data.user));
   } catch (error) {
     dispatch(handleError(error));
