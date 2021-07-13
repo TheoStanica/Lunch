@@ -8,8 +8,8 @@ import {
   ScrollView,
   View,
 } from 'react-native';
-import {Button, withTheme} from 'react-native-paper';
 import {useDispatch} from 'react-redux';
+import {Button, TextInput, withTheme} from 'react-native-paper';
 import {registerUser} from '../redux/thunks/userThunks';
 import {Formik} from 'formik';
 import {registerValidationSchema} from '../assets/bodyValidation/userValidation';
@@ -19,6 +19,8 @@ import HideKeyboard from '../components/hideKeyboard';
 
 const RegisterScreen = ({navigation, theme}) => {
   const [message, setMessage] = useState('');
+  const [hidePassword, setHidePassword] = useState(true);
+  const [hideRetypePassword, setHideRetypePassword] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -80,7 +82,14 @@ const RegisterScreen = ({navigation, theme}) => {
                       value={values.password}
                       errors={errors.password}
                       handleChange={handleChange}
-                      secureTextEntry={true}
+                      secureTextEntry={hidePassword}
+                      right={
+                        <TextInput.Icon
+                          name={hidePassword ? 'eye-off' : 'eye'}
+                          size={20}
+                          onPress={() => setHidePassword(!hidePassword)}
+                        />
+                      }
                       field="password"
                     />
                     <TextInputField
@@ -88,7 +97,16 @@ const RegisterScreen = ({navigation, theme}) => {
                       value={values.retypePassword}
                       errors={errors.retypePassword}
                       handleChange={handleChange}
-                      secureTextEntry={true}
+                      secureTextEntry={hideRetypePassword}
+                      right={
+                        <TextInput.Icon
+                          name={hideRetypePassword ? 'eye-off' : 'eye'}
+                          size={20}
+                          onPress={() =>
+                            setHideRetypePassword(!hideRetypePassword)
+                          }
+                        />
+                      }
                       field="retypePassword"
                     />
                     <TextInputField

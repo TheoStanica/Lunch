@@ -1,44 +1,40 @@
 import React, {useState} from 'react';
 import {
-  StyleSheet,
   SafeAreaView,
-  Text,
   KeyboardAvoidingView,
   View,
   ScrollView,
-  Platform,
+  StyleSheet,
+  Text,
 } from 'react-native';
-import {Button, TextInput, withTheme} from 'react-native-paper';
-import {useDispatch} from 'react-redux';
-import {loginUser} from '../redux/thunks/userThunks';
-import {Formik} from 'formik';
-import {loginValidationSchema} from '../assets/bodyValidation/userValidation';
-import HideKeyboard from '../components/hideKeyboard';
-
+import {Button, TextInput} from 'react-native-paper';
 import TextInputField from '../components/textInputField';
+import HideKeyboard from '../components/hideKeyboard';
+import {Formik} from 'formik';
+import {registerValidationSchema} from '../assets/bodyValidation/userValidation';
+import {useSelector} from 'react-redux';
 
-const LoginScreen = ({navigation, theme}) => {
+const UpdateProfileScreen = () => {
+  const userReducer = useSelector(state => state.userReducer);
   const [hidePassword, setHidePassword] = useState(true);
-  const dispatch = useDispatch();
+  const [hideRetypePassword, setHideRetypePassword] = useState(true);
 
   return (
     <HideKeyboard>
-      <SafeAreaView style={styles.container(theme)}>
+      <SafeAreaView style={styles.container}>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'margin'}>
           <ScrollView>
             <View style={styles.contentContainer}>
               <Formik
-                validationSchema={loginValidationSchema}
+                validationSchema={registerValidationSchema}
                 initialValues={{
-                  email: '',
+                  email: userReducer.email,
                   password: '',
+                  retypePassword: '',
+                  fullname: userReducer.fullname,
                 }}
-                onSubmit={values =>
-                  dispatch(
-                    loginUser({email: values.email, password: values.password}),
-                  )
-                }>
+                onSubmit={values => dispatch()}>
                 {({values, handleChange, errors, isValid, handleSubmit}) => (
                   <>
                     <TextInputField
@@ -63,6 +59,30 @@ const LoginScreen = ({navigation, theme}) => {
                       }
                       field="password"
                     />
+                    <TextInputField
+                      label="Retype Password"
+                      value={values.retypePassword}
+                      errors={errors.retypePassword}
+                      handleChange={handleChange}
+                      secureTextEntry={hideRetypePassword}
+                      right={
+                        <TextInput.Icon
+                          name={hideRetypePassword ? 'eye-off' : 'eye'}
+                          size={20}
+                          onPress={() =>
+                            setHideRetypePassword(!hideRetypePassword)
+                          }
+                        />
+                      }
+                      field="retypePassword"
+                    />
+                    <TextInputField
+                      label="Full Name"
+                      value={values.fullname}
+                      errors={errors.fullname}
+                      handleChange={handleChange}
+                      field="fullname"
+                    />
                     <SafeAreaView>
                       <Button
                         mode="contained"
@@ -70,20 +90,12 @@ const LoginScreen = ({navigation, theme}) => {
                         onPress={handleSubmit}
                         style={styles.glassButton}
                         color="#fff7">
-                        <Text style={styles.buttonText}>Login</Text>
+                        <Text style={styles.buttonText}>Update</Text>
                       </Button>
                     </SafeAreaView>
                   </>
                 )}
               </Formik>
-              <SafeAreaView>
-                <Button
-                  onPress={() => {
-                    navigation.navigate('ForgotPasswordScreen');
-                  }}>
-                  <Text style={styles.buttonText}>Forgot Password</Text>
-                </Button>
-              </SafeAreaView>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
@@ -93,22 +105,20 @@ const LoginScreen = ({navigation, theme}) => {
 };
 
 const styles = StyleSheet.create({
-  container: theme => ({
+  container: {
     flex: 1,
-    backgroundColor: theme.colors.primary,
-    justifyContent: 'flex-end',
-  }),
-  buttonText: {
-    color: 'black',
-    fontSize: 18,
-    textTransform: 'capitalize',
-    lineHeight: 40,
   },
   contentContainer: {
     padding: 25,
     paddingBottom: 100,
   },
   glassButton: {marginVertical: 8, shadowColor: 'transparent'},
+  buttonText: {
+    color: 'black',
+    fontSize: 18,
+    textTransform: 'capitalize',
+    lineHeight: 40,
+  },
 });
 
-export default withTheme(LoginScreen);
+export default UpdateProfileScreen;

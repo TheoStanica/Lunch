@@ -2,7 +2,7 @@ import {SET_USER, RESET_USER} from '../types';
 
 const initialState = {
   id: '',
-  fullName: '',
+  fullname: '',
   email: '',
   role: '',
   status: '',

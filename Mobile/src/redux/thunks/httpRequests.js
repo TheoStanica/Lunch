@@ -1,29 +1,28 @@
-import axiosInstance from '../../api/buildClient';
+import api from '../../api/buildClient';
 
-export const loginRequest = async ({email, password}) => {
-  return await axiosInstance.post('/user/login', {email, password});
+export const userLoginRequest = async ({email, password}) => {
+  return await api.post('/user/login', {email, password});
 };
 
-export const registerRequest = async ({email, password, fullname}) => {
-  return await axiosInstance.post('/user/register', {
+export const userRegisterRequest = async ({email, password, fullname}) => {
+  return await api.post('/user/register', {
     email,
     password,
     fullname,
   });
 };
 
-export const forgotPassword = async ({email, password, token}) => {
+export const userForgotPasswordRequest = async ({email, password, token}) => {
   if (email) {
-    return await axiosInstance.post('/user/forgotpassword', {
-      email,
-    });
+    return await api.post('/user/forgotpassword', {email});
   } else {
-    return await axiosInstance.post(`/user/forgotpassword/${token}`, {
-      password,
-    });
+    return await api.post(`/user/forgotpassword/${token}`, {password});
   }
 };
 
 export const activateAccount = async ({activationToken}) => {
-  return await axiosInstance.get(`/user/activate/${activationToken}`);
+  return await api.get(`/user/activate/${activationToken}`);
+  
+export const userGetRequest = async () => {
+  return await api.get('/user');
 };

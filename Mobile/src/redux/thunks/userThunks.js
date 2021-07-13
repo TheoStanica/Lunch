@@ -1,7 +1,8 @@
 import {
-  loginRequest,
-  registerRequest,
-  forgotPassword,
+  userLoginRequest,
+  userRegisterRequest,
+  userForgotPasswordRequest,
+  userGetRequest,
   activateAccount,
 } from './httpRequests';
 import {resetUser, setUser} from '../actions/userActions';
@@ -11,7 +12,7 @@ export const loginUser =
   ({email, password}) =>
   async dispatch => {
     try {
-      const response = await loginRequest({email, password});
+      const response = await userLoginRequest({email, password});
 
       dispatch(
         setUser({
@@ -28,7 +29,7 @@ export const registerUser =
   ({email, password, fullname, onFinish}) =>
   async dispatch => {
     try {
-      await registerRequest({email, password, fullname});
+      await userRegisterRequest({email, password, fullname});
       onFinish(null);
     } catch (error) {
       dispatch(handleError(error));
@@ -40,7 +41,7 @@ export const forgotPasswordUser =
   ({email, password, token, onFinish}) =>
   async dispatch => {
     try {
-      await forgotPassword({email, password, token});
+      await userForgotPasswordRequest({email, password, token});
       onFinish(null);
     } catch (error) {
       dispatch(handleError(error));
@@ -62,4 +63,14 @@ export const activateAccountUser =
 
 export const logoutUser = () => dispatch => {
   dispatch(resetUser());
+};
+
+export const getUser = () => async dispatch => {
+  try {
+    const response = await userGetRequest();
+
+    dispatch(setUser(response.data.user));
+  } catch (error) {
+    dispatch(handleError(error));
+  }
 };

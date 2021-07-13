@@ -4,7 +4,8 @@ const { authValidation } = require('../middleware/authValidation');
 const {
   loginValidationSchema,
   registerValidationSchema,
-  passwordValidationSchema,
+  forgotPasswordValidationSchema,
+  updateValidationSchema,
   validationResults,
 } = require('../middleware/bodyValidation/userValidation');
 
@@ -23,9 +24,16 @@ router.post(
 router.post('/refresh', userController.refreshTokens);
 router.post(
   '/forgotpassword/:_token?',
-  passwordValidationSchema,
+  forgotPasswordValidationSchema,
   validationResults,
   userController.forgotPassword
+);
+
+router.put(
+  '/:_userId?',
+  updateValidationSchema,
+  validationResults,
+  userController.updateUser
 );
 
 module.exports = router;

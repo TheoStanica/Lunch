@@ -1,11 +1,15 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {SafeAreaView, Text, StyleSheet} from 'react-native';
 import {Button} from 'react-native-paper';
 import {useDispatch} from 'react-redux';
-import {logoutUser} from '../redux/thunks/userThunks';
+import {logoutUser, getUser} from '../redux/thunks/userThunks';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getUser());
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
