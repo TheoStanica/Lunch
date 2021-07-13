@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, Text, StyleSheet, View} from 'react-native';
 import {Button, withTheme} from 'react-native-paper';
 import {Formik} from 'formik';
@@ -6,15 +6,29 @@ import {
   emailValidationSchema,
   passwordValidationSchema,
 } from '../assets/bodyValidation/userValidation';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 import TextInputField from '../components/textInputField';
 import {forgotPasswordUser} from '../redux/thunks/userThunks';
 
-const ForgotPasswordScreen = ({theme, route}) => {
-  const {message} = useSelector(state => state.userReducer);
+const ForgotPasswordScreen = ({theme, route, navigation}) => {
+  const [message, setMessage] = useState('');
   const token = route?.params?._token;
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (message) {
+      navigation.reset({
+        routes: [
+          {name: 'AuthScreen'},
+          {
+            name: 'MessageScreen',
+            params: {message},
+          },
+        ],
+      });
+    }
+  }, [message]);
 
   return (
     <SafeAreaView style={styles.container(theme)}>
@@ -26,8 +40,19 @@ const ForgotPasswordScreen = ({theme, route}) => {
               email: '',
             }}
             onSubmit={values => {
-              dispatch(forgotPasswordUser({email: values.email}));
-              values.email = '';
+              dispatch(
+                forgotPasswordUser({
+                  email: values.email,
+                  onFinish: error => {
+                    if (!error) {
+                      setMessage(
+                        'Please check your email to reset your password.',
+                      );
+                      values.email = '';
+                    }
+                  },
+                }),
+              );
             }}>
             {({values, handleChange, errors, isValid, handleSubmit}) => (
               <>
@@ -61,6 +86,11 @@ const ForgotPasswordScreen = ({theme, route}) => {
                 forgotPasswordUser({
                   password: values.password,
                   token,
+                  onFinish: error => {
+                    if (!error) {
+                      setMessage('Password reseted');
+                    }
+                  },
                 }),
               )
             }>
@@ -90,9 +120,6 @@ const ForgotPasswordScreen = ({theme, route}) => {
                   color="#fff7">
                   <Text style={styles.buttonText}>Reset Password</Text>
                 </Button>
-                {message ? (
-                  <Text style={styles.successMessage}>{message}</Text>
-                ) : null}
               </>
             )}
           </Formik>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,8 +8,8 @@ import {
   ScrollView,
   View,
 } from 'react-native';
+import {useDispatch} from 'react-redux';
 import {Button, TextInput, withTheme} from 'react-native-paper';
-import {useDispatch, useSelector} from 'react-redux';
 import {registerUser} from '../redux/thunks/userThunks';
 import {Formik} from 'formik';
 import {registerValidationSchema} from '../assets/bodyValidation/userValidation';
@@ -17,11 +17,25 @@ import {registerValidationSchema} from '../assets/bodyValidation/userValidation'
 import TextInputField from '../components/textInputField';
 import HideKeyboard from '../components/hideKeyboard';
 
-const RegisterScreen = ({theme}) => {
+const RegisterScreen = ({navigation, theme}) => {
+  const [message, setMessage] = useState('');
   const [hidePassword, setHidePassword] = useState(true);
   const [hideRetypePassword, setHideRetypePassword] = useState(true);
-  const {message} = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (message) {
+      navigation.reset({
+        routes: [
+          {name: 'AuthScreen'},
+          {
+            name: 'MessageScreen',
+            params: {message},
+          },
+        ],
+      });
+    }
+  }, [message]);
 
   return (
     <HideKeyboard>
@@ -44,6 +58,13 @@ const RegisterScreen = ({theme}) => {
                       email: values.email,
                       password: values.password,
                       fullname: values.fullname,
+                      onFinish: error => {
+                        if (!error) {
+                          setMessage(
+                            'Account created! Please check your email to activate your account.',
+                          );
+                        }
+                      },
                     }),
                   );
                 }}>
@@ -103,9 +124,6 @@ const RegisterScreen = ({theme}) => {
                       color="#fff7">
                       <Text style={styles.buttonText}>Register</Text>
                     </Button>
-                    {message ? (
-                      <Text style={styles.successMessage}>{message}</Text>
-                    ) : null}
                   </>
                 )}
               </Formik>

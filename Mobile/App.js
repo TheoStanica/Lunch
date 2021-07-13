@@ -22,6 +22,7 @@ const config = {
     Auth: {
       screens: {
         ForgotPasswordScreen: 'forgotpassword/:_token',
+        ActivationScreen: 'activate/:_activationToken',
       },
     },
   },

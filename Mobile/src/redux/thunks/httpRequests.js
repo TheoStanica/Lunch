@@ -20,6 +20,9 @@ export const userForgotPasswordRequest = async ({email, password, token}) => {
   }
 };
 
+export const activateAccount = async ({activationToken}) => {
+  return await api.get(`/user/activate/${activationToken}`);
+  
 export const userGetRequest = async () => {
   return await api.get('/user');
 };
