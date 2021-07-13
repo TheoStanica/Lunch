@@ -3,7 +3,7 @@ import {
   userRegisterRequest,
   userForgotPasswordRequest,
   userGetRequest,
-  activateAccount,
+  userActivateAccountRequest,
 } from './httpRequests';
 import {resetUser, setUser} from '../actions/userActions';
 import {handleError} from './errorThunks';
@@ -53,7 +53,7 @@ export const activateAccountUser =
   ({activationToken, onFinish}) =>
   async dispatch => {
     try {
-      await activateAccount({activationToken});
+      await userActivateAccountRequest({activationToken});
       onFinish(null);
     } catch (error) {
       dispatch(handleError(error));
