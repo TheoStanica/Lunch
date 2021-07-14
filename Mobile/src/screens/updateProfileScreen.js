@@ -12,12 +12,14 @@ import TextInputField from '../components/textInputField';
 import HideKeyboard from '../components/hideKeyboard';
 import {Formik} from 'formik';
 import {registerValidationSchema} from '../assets/bodyValidation/userValidation';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {updateUser} from '../redux/thunks/userThunks';
 
 const UpdateProfileScreen = () => {
   const userReducer = useSelector(state => state.userReducer);
   const [hidePassword, setHidePassword] = useState(true);
   const [hideRetypePassword, setHideRetypePassword] = useState(true);
+  const dispatch = useDispatch();
 
   return (
     <HideKeyboard>
@@ -34,7 +36,15 @@ const UpdateProfileScreen = () => {
                   retypePassword: '',
                   fullname: userReducer.fullname,
                 }}
-                onSubmit={values => dispatch()}>
+                onSubmit={values =>
+                  dispatch(
+                    updateUser({
+                      email: values.email,
+                      password: values.password,
+                      fullname: values.fullname,
+                    }),
+                  )
+                }>
                 {({values, handleChange, errors, isValid, handleSubmit}) => (
                   <>
                     <TextInputField
