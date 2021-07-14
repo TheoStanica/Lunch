@@ -4,6 +4,7 @@ import {
   userForgotPasswordRequest,
   userGetRequest,
   userActivateAccountRequest,
+  userPutRequest,
 } from './httpRequests';
 import {resetUser, setUser} from '../actions/userActions';
 import {handleError} from './errorThunks';
@@ -74,3 +75,14 @@ export const getUser = () => async dispatch => {
     dispatch(handleError(error));
   }
 };
+
+export const updateUser =
+  ({email, password, fullname}) =>
+  async dispatch => {
+    try {
+      await userPutRequest({email, password, fullname});
+      dispatch(setUser({email, password, fullname}));
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };

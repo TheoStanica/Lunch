@@ -27,3 +27,7 @@ export const userActivateAccountRequest = async ({activationToken}) => {
 export const userGetRequest = async () => {
   return await api.get('/user');
 };
+
+export const userPutRequest = async ({email, password, fullname}) => {
+  return await api.put('/user', {email, password, fullname});
+};
