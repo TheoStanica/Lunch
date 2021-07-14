@@ -11,7 +11,7 @@ import {Button, TextInput} from 'react-native-paper';
 import TextInputField from '../components/textInputField';
 import HideKeyboard from '../components/hideKeyboard';
 import {Formik} from 'formik';
-import {registerValidationSchema} from '../assets/bodyValidation/userValidation';
+import {updateValidationSchema} from '../assets/bodyValidation/userValidation';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateUser} from '../redux/thunks/userThunks';
 
@@ -29,11 +29,11 @@ const UpdateProfileScreen = () => {
           <ScrollView>
             <View style={styles.contentContainer}>
               <Formik
-                validationSchema={registerValidationSchema}
+                validationSchema={updateValidationSchema}
                 initialValues={{
                   email: userReducer.email,
-                  password: '',
-                  retypePassword: '',
+                  password: undefined,
+                  retypePassword: null,
                   fullname: userReducer.fullname,
                 }}
                 onSubmit={values =>
