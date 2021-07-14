@@ -6,15 +6,20 @@ const {
   registerValidationSchema,
   forgotPasswordValidationSchema,
   updateValidationSchema,
-  validationResults,
 } = require('../middleware/bodyValidation/userValidation');
+const { validationResults } = require('../middleware/bodyValidation/index');
 
 const userController = require('./controller');
 
 router.get('/activate/:_activationToken', userController.activateAccount);
 router.get('/', authValidation, userController.getUser);
 
-router.post('/login', loginValidationSchema, userController.login);
+router.post(
+  '/login',
+  loginValidationSchema,
+  validationResults,
+  userController.login
+);
 router.post(
   '/register',
   registerValidationSchema,
