@@ -1,6 +1,9 @@
 const router = require('express').Router();
 
-const { authValidation } = require('../middleware/authValidation');
+const {
+  userAuthValidation,
+  adminAuthValidation,
+} = require('../middleware/authValidation');
 const {
   loginValidationSchema,
   registerValidationSchema,
@@ -12,7 +15,8 @@ const {
 const userController = require('./controller');
 
 router.get('/activate/:_activationToken', userController.activateAccount);
-router.get('/', authValidation, userController.getUser);
+router.get('/all', adminAuthValidation, userController.getAllUsers);
+router.get('/:_userId?', userAuthValidation, userController.getUser);
 
 router.post('/login', loginValidationSchema, userController.login);
 router.post(
@@ -30,11 +34,13 @@ router.post(
 );
 
 router.put(
-  '/',
-  authValidation,
+  '/:_userId?',
+  userAuthValidation,
   updateValidationSchema,
   validationResults,
   userController.updateUser
 );
+
+router.delete('/:_userId', adminAuthValidation, userController.deleteUser);
 
 module.exports = router;

@@ -1,5 +1,7 @@
 const AccountNotActivatedError = require('../errors/accountNotActivatedError');
 const BadRequestError = require('../errors/badRequestError');
+const NotFoundError = require('../errors/notFoundError');
+const ForbiddenError = require('../errors/forbiddenError');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
@@ -9,8 +11,7 @@ const {
   sendActivationEmail,
   sendForgotPasswordEmail,
 } = require('../utils/emailTemplates');
-const { accountStatus } = require('../utils/enums');
-const NotFoundError = require('../errors/notFoundError');
+const { accountStatus, accountRole } = require('../utils/enums');
 
 const register = async (req, res, next) => {
   try {
@@ -35,22 +36,21 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const user = await User.findOne({ email: req.body.email });
 
-    const user = await User.findOne({ email });
     if (!user) {
       return next(new BadRequestError('Invalid credentials'));
     }
-    if (user.status === 'pending') {
+    if (user.status === accountStatus.pending) {
       sendActivationEmail(user);
       return next(new AccountNotActivatedError());
     }
-    if (!bcrypt.compareSync(password, user.password)) {
+    if (!bcrypt.compareSync(req.body.password, user.password)) {
       return next(new BadRequestError('Invalid credentials'));
     }
 
     const accessToken = jwt.sign(
-      { id: user.id },
+      { id: user.id, role: user.role },
       process.env.ACCESS_TOKEN_SECRET,
       {
         expiresIn: process.env.ACCESS_TOKEN_LIFE,
@@ -58,7 +58,7 @@ const login = async (req, res, next) => {
     );
 
     const refreshToken = jwt.sign(
-      { id: user.id },
+      { id: user.id, role: user.role },
       process.env.REFRESH_TOKEN_SECRET,
       {
         expiresIn: process.env.REFRESH_TOKEN_LIFE,
@@ -96,14 +96,14 @@ const refreshTokens = async (req, res, next) => {
       payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
     const accessToken = jwt.sign(
-      { id: payload.id },
+      { id: payload.id, role: payload.role },
       process.env.ACCESS_TOKEN_SECRET,
       {
         expiresIn: process.env.ACCESS_TOKEN_LIFE,
       }
     );
     refreshToken = jwt.sign(
-      { id: payload.id },
+      { id: payload.id, role: payload.role },
       process.env.REFRESH_TOKEN_SECRET,
       {
         expiresIn: process.env.REFRESH_TOKEN_LIFE,
@@ -157,10 +157,14 @@ const forgotPassword = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findOne({ _id: req.params._userId || req.user.id });
 
     if (!user) {
       return next(new NotFoundError('User not found'));
+    }
+
+    if (req.user.role === accountRole.user && user.id !== req.user.id) {
+      return next(new ForbiddenError());
     }
 
     res.send({ user });
@@ -169,22 +173,60 @@ const getUser = async (req, res, next) => {
   }
 };
 
+const getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find({});
+
+    res.send({ users });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const updateUser = async (req, res, next) => {
   try {
-    let user = await User.findById(req.user.id);
+    let user = await User.findOne({ _id: req.params._userId || req.user.id });
 
     if (!user) {
       return next(new NotFoundError('User not found'));
     }
 
+    if (req.user.role === accountRole.user && user.id !== req.user.id) {
+      return next(new ForbiddenError());
+    }
+
+    if (req.body.email && (await User.findOne({ email: req.body.email }))) {
+      return next(new BadRequestError('Email in use'));
+    }
+
     user.email = req.body.email || user.email;
     if (req.body.password)
       user.password = bcrypt.hashSync(req.body.password) || user.password;
-    user.fullname = req.body.fullnname || user.fullname;
+    user.fullname = req.body.fullname || user.fullname;
+
+    if (req.user.role === accountRole.admin) {
+      user.role = req.body.role || user.role;
+      user.status = req.body.status || user.status;
+    }
 
     user = await user.save();
 
-    res.status(201).send();
+    res.send({ user });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const deleteUser = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ _id: req.params._userId });
+
+    if (!user) {
+      return next(new NotFoundError('User not found'));
+    }
+    await user.delete();
+
+    res.status(204).send();
   } catch (error) {
     return next(error);
   }
@@ -197,5 +239,7 @@ module.exports = {
   refreshTokens,
   forgotPassword,
   getUser,
+  getAllUsers,
   updateUser,
+  deleteUser,
 };

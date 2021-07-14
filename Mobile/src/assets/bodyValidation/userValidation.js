@@ -21,6 +21,7 @@ const passwordValidationSchema = yup.object({
     .oneOf([yup.ref('password')], 'Passwords must match')
     .required('Retype password is required.'),
 });
+
 const loginValidationSchema = yup.object({
   email: yup
     .string('Enter your email.')
@@ -59,9 +60,47 @@ const registerValidationSchema = yup.object({
     .required('Full name is required.'),
 });
 
+const updateValidationSchema = yup.object({
+  email: yup
+    .string('Enter your email.')
+    .email('Enter a valid email.')
+    .required('Email is required.')
+    .optional(),
+  password: yup
+    .string('Enter your password.')
+    .notRequired()
+    .nullable()
+    .min(8, 'Password must have a minimum length of 8.')
+    .notRequired()
+    .nullable()
+    .matches(/([A-Z])+/, 'Password must have at least one upper letter.')
+    .notRequired()
+    .nullable()
+    .matches(/[a-z]+/, 'Password must have at least one lower letter.')
+    .notRequired()
+    .nullable()
+    .matches(/\d+/, 'Password must have at least one digit.')
+    .notRequired()
+    .nullable()
+    .matches(/[@$!%*?&]+/, 'Password must have at least one special character.')
+    .notRequired()
+    .nullable(),
+  retypePassword: yup
+    .string('Retype your password.')
+    .notRequired()
+    .nullable()
+    .oneOf([yup.ref('password'), null], 'Passwords must match'),
+  fullname: yup
+    .string('Enter your full name.')
+    .matches(/^[A-Z][- a-zA-Z]+$/, 'Enter a valid full name.')
+    .required('Full name is required.')
+    .optional(),
+});
+
 module.exports = {
   emailValidationSchema,
   loginValidationSchema,
   registerValidationSchema,
   passwordValidationSchema,
+  updateValidationSchema,
 };
