@@ -195,6 +195,10 @@ const updateUser = async (req, res, next) => {
       return next(new ForbiddenError());
     }
 
+    if (req.body.email && (await User.findOne({ email: req.body.email }))) {
+      return next(new BadRequestError('Email in use'));
+    }
+
     user.email = req.body.email || user.email;
     if (req.body.password)
       user.password = bcrypt.hashSync(req.body.password) || user.password;
@@ -204,6 +208,7 @@ const updateUser = async (req, res, next) => {
       user.role = req.body.role || user.role;
       user.status = req.body.status || user.status;
     }
+
     user = await user.save();
 
     res.send({ user });
