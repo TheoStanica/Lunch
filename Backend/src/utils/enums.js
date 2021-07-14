@@ -3,4 +3,9 @@ const accountStatus = Object.freeze({
   pending: 'pending',
 });
 
-module.exports = { accountStatus };
+const accountRole = Object.freeze({
+  user: 'user',
+  admin: 'admin',
+});
+
+module.exports = { accountStatus, accountRole };
