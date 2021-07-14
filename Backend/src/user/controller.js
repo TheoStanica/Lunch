@@ -1,5 +1,7 @@
 const AccountNotActivatedError = require('../errors/accountNotActivatedError');
 const BadRequestError = require('../errors/badRequestError');
+const NotFoundError = require('../errors/notFoundError');
+const ForbiddenError = require('../errors/forbiddenError');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
@@ -9,8 +11,7 @@ const {
   sendActivationEmail,
   sendForgotPasswordEmail,
 } = require('../utils/emailTemplates');
-const { accountStatus } = require('../utils/enums');
-const NotFoundError = require('../errors/notFoundError');
+const { accountStatus, accountRole } = require('../utils/enums');
 
 const register = async (req, res, next) => {
   try {
@@ -156,11 +157,16 @@ const forgotPassword = async (req, res, next) => {
 };
 
 const getUser = async (req, res, next) => {
+  const id = req.params._userId || req.user.id;
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(id);
 
     if (!user) {
       return next(new NotFoundError('User not found'));
+    }
+
+    if (req.user.role === accountRole.user && user.id !== req.user.id) {
+      return next(new ForbiddenError());
     }
 
     res.send({ user });

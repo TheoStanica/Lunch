@@ -15,7 +15,7 @@ const {
 const userController = require('./controller');
 
 router.get('/activate/:_activationToken', userController.activateAccount);
-router.get('/', userAuthValidation, userController.getUser);
+router.get('/:_userId?', userAuthValidation, userController.getUser);
 router.get('/all', adminAuthValidation, userController.getAllUsers);
 
 router.post('/login', loginValidationSchema, userController.login);
