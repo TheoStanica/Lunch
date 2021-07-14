@@ -41,7 +41,7 @@ const login = async (req, res, next) => {
     if (!user) {
       return next(new BadRequestError('Invalid credentials'));
     }
-    if (user.status === 'pending') {
+    if (user.status === accountStatus.pending) {
       sendActivationEmail(user);
       return next(new AccountNotActivatedError());
     }
