@@ -185,17 +185,25 @@ const getAllUsers = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   try {
-    let user = await User.findOne({ _id: req.user.id });
+    let user = await User.findOne({ _id: req.params._userId || req.user.id });
 
     if (!user) {
       return next(new NotFoundError('User not found'));
     }
 
+    if (req.user.role === accountRole.user && user.id !== req.user.id) {
+      return next(new ForbiddenError());
+    }
+
     user.email = req.body.email || user.email;
     if (req.body.password)
       user.password = bcrypt.hashSync(req.body.password) || user.password;
-    user.fullname = req.body.fullnname || user.fullname;
+    user.fullname = req.body.fullname || user.fullname;
 
+    if (req.user.role === accountRole.admin) {
+      user.role = req.body.role || user.role;
+      user.status = req.body.status || user.status;
+    }
     user = await user.save();
 
     res.send({ user });

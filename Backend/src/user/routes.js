@@ -34,7 +34,7 @@ router.post(
 );
 
 router.put(
-  '/',
+  '/:_userId?',
   userAuthValidation,
   updateValidationSchema,
   validationResults,
