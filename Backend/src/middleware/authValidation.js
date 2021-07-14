@@ -30,7 +30,7 @@ const userAuthValidation = (req, res, next) => {
 
 const adminAuthValidation = (req, res, next) => {
   const payload = authValidation(req, res, next);
-  console.log(payload);
+
   if (payload.role === accountRole.admin) {
     req.user = payload;
     next();

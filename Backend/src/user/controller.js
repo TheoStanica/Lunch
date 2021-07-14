@@ -36,9 +36,8 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const user = await User.findOne({ email: req.body.email });
 
-    const user = await User.findOne({ email });
     if (!user) {
       return next(new BadRequestError('Invalid credentials'));
     }
@@ -46,7 +45,7 @@ const login = async (req, res, next) => {
       sendActivationEmail(user);
       return next(new AccountNotActivatedError());
     }
-    if (!bcrypt.compareSync(password, user.password)) {
+    if (!bcrypt.compareSync(req.body.password, user.password)) {
       return next(new BadRequestError('Invalid credentials'));
     }
 
@@ -157,9 +156,8 @@ const forgotPassword = async (req, res, next) => {
 };
 
 const getUser = async (req, res, next) => {
-  const id = req.params._userId || req.user.id;
   try {
-    const user = await User.findById(id);
+    const user = await User.findOne({ _id: req.params._userId || req.user.id });
 
     if (!user) {
       return next(new NotFoundError('User not found'));
@@ -187,7 +185,7 @@ const getAllUsers = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   try {
-    let user = await User.findById(req.user.id);
+    let user = await User.findOne({ _id: req.user.id });
 
     if (!user) {
       return next(new NotFoundError('User not found'));
@@ -200,7 +198,22 @@ const updateUser = async (req, res, next) => {
 
     user = await user.save();
 
-    res.status(201).send();
+    res.send({ user });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const deleteUser = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ _id: req.params._userId });
+
+    if (!user) {
+      return next(new NotFoundError('User not found'));
+    }
+    await user.delete();
+
+    res.status(204).send();
   } catch (error) {
     return next(error);
   }
@@ -215,4 +228,5 @@ module.exports = {
   getUser,
   getAllUsers,
   updateUser,
+  deleteUser,
 };
