@@ -1,14 +1,4 @@
-const RequestValidationError = require('../../errors/requestValidationError');
-const { check, validationResult } = require('express-validator');
-
-const validationResults = (req, res, next) => {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    throw new RequestValidationError(errors.array());
-  }
-  next();
-};
+const { check } = require('express-validator');
 
 const registerValidationSchema = [
   check('email')
@@ -86,7 +76,6 @@ const forgotPasswordValidationSchema = [
 const updateValidationSchema = [];
 
 module.exports = {
-  validationResults,
   registerValidationSchema,
   loginValidationSchema,
   forgotPasswordValidationSchema,
