@@ -30,7 +30,8 @@ router.post(
 );
 
 router.put(
-  '/:_userId?',
+  '/',
+  authValidation,
   updateValidationSchema,
   validationResults,
   userController.updateUser

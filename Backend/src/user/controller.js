@@ -171,6 +171,20 @@ const getUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   try {
+    let user = await User.findById(req.user.id);
+
+    if (!user) {
+      return next(new NotFoundError('User not found'));
+    }
+
+    user.email = req.body.email || user.email;
+    if (req.body.password)
+      user.password = bcrypt.hashSync(req.body.password) || user.password;
+    user.fullname = req.body.fullnname || user.fullname;
+
+    user = await user.save();
+
+    res.status(201).send();
   } catch (error) {
     return next(error);
   }
