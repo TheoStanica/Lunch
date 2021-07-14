@@ -50,7 +50,7 @@ const login = async (req, res, next) => {
     }
 
     const accessToken = jwt.sign(
-      { id: user.id },
+      { id: user.id, role: user.role },
       process.env.ACCESS_TOKEN_SECRET,
       {
         expiresIn: process.env.ACCESS_TOKEN_LIFE,
@@ -58,7 +58,7 @@ const login = async (req, res, next) => {
     );
 
     const refreshToken = jwt.sign(
-      { id: user.id },
+      { id: user.id, role: user.role },
       process.env.REFRESH_TOKEN_SECRET,
       {
         expiresIn: process.env.REFRESH_TOKEN_LIFE,
@@ -96,14 +96,14 @@ const refreshTokens = async (req, res, next) => {
       payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
     const accessToken = jwt.sign(
-      { id: payload.id },
+      { id: payload.id, role: payload.role },
       process.env.ACCESS_TOKEN_SECRET,
       {
         expiresIn: process.env.ACCESS_TOKEN_LIFE,
       }
     );
     refreshToken = jwt.sign(
-      { id: payload.id },
+      { id: payload.id, role: payload.role },
       process.env.REFRESH_TOKEN_SECRET,
       {
         expiresIn: process.env.REFRESH_TOKEN_LIFE,
@@ -169,6 +169,16 @@ const getUser = async (req, res, next) => {
   }
 };
 
+const getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find({});
+
+    res.send({ users });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const updateUser = async (req, res, next) => {
   try {
     let user = await User.findById(req.user.id);
@@ -197,5 +207,6 @@ module.exports = {
   refreshTokens,
   forgotPassword,
   getUser,
+  getAllUsers,
   updateUser,
 };

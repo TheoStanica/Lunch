@@ -5,14 +5,17 @@ const UnauthorizedError = require('../errors/unauthorizedError');
 const { accountRole } = require('../utils/enums');
 
 const authValidation = (req, res, next) => {
-  const accessToken = req.header('authorization').split(' ')[1];
+  const accessToken = req.header('authorization');
 
   if (!accessToken) {
     throw new ForbiddenError();
   }
 
   try {
-    return jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    return jwt.verify(
+      accessToken.split(' ')[1],
+      process.env.ACCESS_TOKEN_SECRET
+    );
   } catch (errror) {
     throw new UnauthorizedError();
   }
@@ -27,7 +30,7 @@ const userAuthValidation = (req, res, next) => {
 
 const adminAuthValidation = (req, res, next) => {
   const payload = authValidation(req, res, next);
-
+  console.log(payload);
   if (payload.role === accountRole.admin) {
     req.user = payload;
     next();
