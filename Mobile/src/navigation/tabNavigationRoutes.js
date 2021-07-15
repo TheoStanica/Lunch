@@ -3,6 +3,8 @@ import HomeScreen from '../screens/homeScreen';
 import ProfileScreen from '../screens/profileScreen';
 import UpdateProfileScreen from '../screens/updateProfileScreen';
 import AdminScreen from '../screens/adminScreen';
+import ManageUsersScreen from '../screens/manageUsersScreen';
+import ManageRestaurantsScreen from '../screens/manageRestaurantsScreen';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {createStackNavigator} from '@react-navigation/stack';
@@ -29,6 +31,28 @@ const ProfileStack = () => {
   );
 };
 
+const AdminStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="AdminScreen"
+        component={AdminScreen}
+        options={{title: 'Admin', headerShown: false}}
+      />
+      <Stack.Screen
+        name="ManageUsersScreen"
+        component={ManageUsersScreen}
+        options={{title: 'Manage Users'}}
+      />
+      <Stack.Screen
+        name="ManageRestaurantsScreen"
+        component={ManageRestaurantsScreen}
+        options={{title: 'Manage Restaurants'}}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const TabNavigatorRoutes = () => {
   const userReducer = useSelector(state => state.userReducer);
 
@@ -50,12 +74,12 @@ const TabNavigatorRoutes = () => {
       />
       {userReducer.role === 'admin' ? (
         <Tab.Screen
-          name="AdminScreen"
-          component={AdminScreen}
+          name="AdminStack"
+          component={AdminStack}
           options={{
             tabBarLabel: 'Admin',
             tabBarIcon: ({color}) => (
-              <Icon name="account" size={25} color={color} />
+              <Icon name="account-tie" size={25} color={color} />
             ),
           }}
         />
@@ -63,7 +87,7 @@ const TabNavigatorRoutes = () => {
         <></>
       )}
       <Tab.Screen
-        name="ProfileScreen"
+        name="ProfileStack"
         component={ProfileStack}
         options={{
           tabBarLabel: 'Profile',
