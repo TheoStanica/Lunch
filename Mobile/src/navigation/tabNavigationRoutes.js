@@ -68,7 +68,8 @@ const TabNavigatorRoutes = () => {
         style: {backgroundColor: '#4A6572'},
         inactiveTintColor: 'white',
         activeTintColor: '#FBBC00',
-      }}>
+      }}
+      screenOptions={{unmountOnBlur: true}}>
       <Tab.Screen
         name="HomeScreen"
         component={HomeScreen}
