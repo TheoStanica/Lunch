@@ -15,7 +15,7 @@ router.post(
   validationResults,
   restaurantController.createRestaurant
 );
-router.get('/', restaurantController.getAllRestaurants);
+router.get('/', adminAuthValidation, restaurantController.getAllRestaurants);
 router.get(
   '/:_id',
   adminAuthValidation,
