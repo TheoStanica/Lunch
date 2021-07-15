@@ -29,7 +29,13 @@ const ProfileStack = () => {
 
 const TabNavigatorRoutes = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      tabBarOptions={{
+        tabStyle: {backgroundColor: '#4A6572'},
+        style: {backgroundColor: '#4A6572'},
+        inactiveTintColor: 'white',
+        activeTintColor: '#FBBC00',
+      }}>
       <Tab.Screen
         name="HomeScreen"
         component={HomeScreen}
