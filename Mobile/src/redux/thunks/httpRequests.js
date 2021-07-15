@@ -31,3 +31,7 @@ export const userGetRequest = async () => {
 export const userPutRequest = async ({email, password, fullname}) => {
   return await api.put('/user', {email, password, fullname});
 };
+
+export const restaurantGetRestaurantsRequest = async () => {
+  return await api.get('/restaurant');
+};
