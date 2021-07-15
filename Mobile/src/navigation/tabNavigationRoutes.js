@@ -82,6 +82,7 @@ const TabNavigatorRoutes = () => {
           name="AdminStack"
           component={AdminStack}
           options={{
+            unmountOnBlur: true,
             tabBarLabel: 'Admin',
             tabBarIcon: ({color}) => (
               <Icon name="shield-account" size={25} color={color} />
@@ -95,6 +96,7 @@ const TabNavigatorRoutes = () => {
         name="ProfileStack"
         component={ProfileStack}
         options={{
+          unmountOnBlur: true,
           tabBarLabel: 'Profile',
           tabBarIcon: ({color}) => (
             <Icon name="card-account-details-outline" size={25} color={color} />
