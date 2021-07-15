@@ -5,15 +5,15 @@ import {
   View,
   ScrollView,
   StyleSheet,
-  Text,
 } from 'react-native';
-import {Button, TextInput} from 'react-native-paper';
+import {TextInput} from 'react-native-paper';
 import TextInputField from '../components/textInputField';
 import HideKeyboard from '../components/hideKeyboard';
 import {Formik} from 'formik';
 import {updateValidationSchema} from '../assets/bodyValidation/userValidation';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateUser} from '../redux/thunks/userThunks';
+import ActionButton from '../components/actionButton';
 
 const UpdateProfileScreen = () => {
   const userReducer = useSelector(state => state.userReducer);
@@ -93,16 +93,7 @@ const UpdateProfileScreen = () => {
                       handleChange={handleChange}
                       field="fullname"
                     />
-                    <SafeAreaView>
-                      <Button
-                        mode="contained"
-                        disabled={!isValid}
-                        onPress={handleSubmit}
-                        style={styles.glassButton}
-                        color="#fff7">
-                        <Text style={styles.buttonText}>Update</Text>
-                      </Button>
-                    </SafeAreaView>
+                    <ActionButton text="Update" onPress={handleSubmit} />
                   </>
                 )}
               </Formik>
