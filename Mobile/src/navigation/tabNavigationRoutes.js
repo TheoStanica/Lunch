@@ -14,9 +14,14 @@ import {useSelector} from 'react-redux';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
+const screenOptions = {
+  headerBackTitle: '',
+  headerTintColor: 'black',
+};
+
 const ProfileStack = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{...screenOptions}}>
       <Stack.Screen
         name="ProfileScreen"
         component={ProfileScreen}
@@ -33,7 +38,7 @@ const ProfileStack = () => {
 
 const AdminStack = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{...screenOptions}}>
       <Stack.Screen
         name="AdminScreen"
         component={AdminScreen}

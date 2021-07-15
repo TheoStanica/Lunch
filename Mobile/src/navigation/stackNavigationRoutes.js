@@ -19,45 +19,38 @@ const Auth = () => {
   };
 
   return (
-    <Stack.Navigator initialRouteName="AuthScreen">
+    <Stack.Navigator
+      initialRouteName="AuthScreen"
+      screenOptions={{...authScreensOptions}}>
       <Stack.Screen
         name="AuthScreen"
         component={AuthScreen}
-        options={{
-          headerShown: false,
-          title: 'Auth',
-        }}
+        options={{headerShown: false, title: 'Auth'}}
       />
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
-        options={{
-          ...authScreensOptions,
-          title: 'Login',
-        }}
+        options={{title: 'Login'}}
       />
       <Stack.Screen
         name="ForgotPasswordScreen"
         component={ForgotPasswordScreen}
-        options={{
-          ...authScreensOptions,
-          title: 'Forgot Password',
-        }}
+        options={{title: 'Forgot Password'}}
       />
       <Stack.Screen
         name="RegisterScreen"
         component={RegisterScreen}
-        options={{...authScreensOptions, title: 'Register'}}
+        options={{title: 'Register'}}
       />
       <Stack.Screen
         name="MessageScreen"
         component={MessageScreen}
-        options={{...authScreensOptions, title: ''}}
+        options={{title: ''}}
       />
       <Stack.Screen
         name="ActivationScreen"
         component={ActivationScreen}
-        options={{...authScreensOptions, title: ''}}
+        options={{title: ''}}
       />
     </Stack.Navigator>
   );
