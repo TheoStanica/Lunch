@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     justifyContent: 'center',
+    alignItems: 'center',
   },
   divider: {
     borderBottomWidth: 1,
@@ -36,6 +37,7 @@ const styles = StyleSheet.create({
   },
   paragraph: {
     color: 'gray',
+    textTransform: 'capitalize',
   },
 });
 

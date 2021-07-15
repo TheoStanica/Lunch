@@ -79,7 +79,7 @@ const TabNavigatorRoutes = () => {
           options={{
             tabBarLabel: 'Admin',
             tabBarIcon: ({color}) => (
-              <Icon name="account-tie" size={25} color={color} />
+              <Icon name="shield-account" size={25} color={color} />
             ),
           }}
         />
