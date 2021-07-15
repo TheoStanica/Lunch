@@ -5,6 +5,7 @@ import {
   userGetRequest,
   userActivateAccountRequest,
   userPutRequest,
+  userGetAllRequest,
 } from './httpRequests';
 import {resetUser, setUser} from '../actions/userActions';
 import {handleError} from './errorThunks';
@@ -84,5 +85,18 @@ export const updateUser =
       dispatch(setUser({email, password, fullname}));
     } catch (error) {
       dispatch(handleError(error));
+    }
+  };
+
+export const getAllUsers =
+  ({onFinish}) =>
+  async dispatch => {
+    try {
+      const response = await userGetAllRequest();
+
+      onFinish(response.data.users);
+    } catch (error) {
+      dispatch(handleError(error));
+      onFinish(null);
     }
   };
