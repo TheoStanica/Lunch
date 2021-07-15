@@ -1,7 +1,6 @@
 const BadRequestError = require('../errors/badRequestError');
-
-const Restaurant = require('./model');
 const NotFoundError = require('../errors/notFoundError');
+const Restaurant = require('./model');
 
 const createRestaurant = async (req, res, next) => {
   try {
@@ -34,6 +33,7 @@ const getRestaurant = async (req, res, next) => {
     return next(error);
   }
 };
+
 const getAllRestaurants = async (req, res, next) => {
   try {
     const restaurants = await Restaurant.find({});
@@ -46,7 +46,7 @@ const getAllRestaurants = async (req, res, next) => {
 const updateRestaurant = async (req, res, next) => {
   try {
     const { _id } = req.params;
-    const { name, cost } = req.body;
+    const { name, cost, status } = req.body;
 
     const restaurant = await Restaurant.findById(_id);
 
@@ -63,6 +63,7 @@ const updateRestaurant = async (req, res, next) => {
       {
         name: name || restaurant.name,
         cost: cost || restaurant.cost,
+        status: status || restaurant.status,
       },
       { new: true }
     );

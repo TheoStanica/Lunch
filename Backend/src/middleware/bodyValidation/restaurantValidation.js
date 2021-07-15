@@ -1,4 +1,5 @@
 const { check, param } = require('express-validator');
+const { restaurantStatus } = require('../../utils/enums');
 
 const createRestaurantValidationSchema = [
   check('name').notEmpty().withMessage('Please provide a valid name'),
@@ -18,6 +19,10 @@ const restaurantIdValidationSchema = [
 const updateRestaurantValidationSchema = [
   check('name').optional(),
   check('cost').optional().isNumeric().withMessage('Cost must be a number'),
+  check('status')
+    .optional()
+    .isIn([restaurantStatus.active, restaurantStatus.inactive])
+    .withMessage('Should be active or inactive.'),
 ];
 
 module.exports = {

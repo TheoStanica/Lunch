@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { restaurantStatus } = require('../utils/enums');
 
 const restaurantSchema = new mongoose.Schema(
   {
@@ -11,6 +12,11 @@ const restaurantSchema = new mongoose.Schema(
     cost: {
       type: Number,
       required: true,
+    },
+    status: {
+      type: String,
+      enum: [restaurantStatus],
+      default: restaurantStatus.active,
     },
   },
   {

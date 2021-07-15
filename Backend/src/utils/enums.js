@@ -8,4 +8,9 @@ const accountRole = Object.freeze({
   admin: 'admin',
 });
 
-module.exports = { accountStatus, accountRole };
+const restaurantStatus = Object.freeze({
+  active: 'active',
+  inactive: 'inactive',
+});
+
+module.exports = { accountStatus, accountRole, restaurantStatus };
