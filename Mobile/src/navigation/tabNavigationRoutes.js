@@ -2,10 +2,12 @@ import React from 'react';
 import HomeScreen from '../screens/homeScreen';
 import ProfileScreen from '../screens/profileScreen';
 import UpdateProfileScreen from '../screens/updateProfileScreen';
+import AdminScreen from '../screens/adminScreen';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useSelector} from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -28,6 +30,8 @@ const ProfileStack = () => {
 };
 
 const TabNavigatorRoutes = () => {
+  const userReducer = useSelector(state => state.userReducer);
+
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -44,6 +48,20 @@ const TabNavigatorRoutes = () => {
           tabBarIcon: ({color}) => <Icon name="home" size={25} color={color} />,
         }}
       />
+      {userReducer.role === 'admin' ? (
+        <Tab.Screen
+          name="AdminScreen"
+          component={AdminScreen}
+          options={{
+            tabBarLabel: 'Admin',
+            tabBarIcon: ({color}) => (
+              <Icon name="account" size={25} color={color} />
+            ),
+          }}
+        />
+      ) : (
+        <></>
+      )}
       <Tab.Screen
         name="ProfileScreen"
         component={ProfileStack}
