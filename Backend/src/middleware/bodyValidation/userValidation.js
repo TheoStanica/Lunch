@@ -1,4 +1,5 @@
 const { check } = require('express-validator');
+const { accountStatus, accountRole } = require('../../utils/enums');
 
 const registerValidationSchema = [
   check('email')
@@ -104,13 +105,13 @@ const updateValidationSchema = [
   check('role')
     .notEmpty()
     .withMessage('Role is required.')
-    .isIn(['user', 'admin'])
+    .isIn([accountRole.user, accountRole.admin])
     .withMessage('Role should be user or admin')
     .optional(),
   check('status')
     .notEmpty()
     .withMessage('Status is required.')
-    .isIn(['active', 'pending'])
+    .isIn([accountStatus.active, accountStatus.pending])
     .withMessage('Status should be active or pending.')
     .optional(),
 ];

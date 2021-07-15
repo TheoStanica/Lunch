@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { accountRole, accountStatus } = require('../utils/enums');
 
 const userSchema = new mongoose.Schema(
   {
@@ -17,13 +18,13 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['user', 'admin'],
-      default: 'user',
+      enum: [accountRole],
+      default: accountRole.user,
     },
     status: {
       type: String,
-      enum: ['pending', 'active'],
-      default: 'pending',
+      enum: [accountStatus],
+      default: accountStatus.pending,
     },
     activationToken: {
       type: String,
