@@ -78,11 +78,13 @@ export const getUser = () => async dispatch => {
 };
 
 export const updateUser =
-  ({email, password, fullname}) =>
+  ({_userId, email, password, fullname, role}) =>
   async dispatch => {
     try {
-      await userPutRequest({email, password, fullname});
-      dispatch(setUser({email, password, fullname}));
+      await userPutRequest({_userId, email, password, fullname, role});
+      if (!_userId) {
+        dispatch(setUser({email, password, fullname, role}));
+      }
     } catch (error) {
       dispatch(handleError(error));
     }
