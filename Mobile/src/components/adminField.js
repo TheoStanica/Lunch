@@ -3,7 +3,13 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const AdminField = ({onPress, title, description, icon, iconColor}) => {
+const AdminField = ({
+  onPress,
+  title,
+  description,
+  icon,
+  iconColor = '#FBBC00',
+}) => {
   return (
     <TouchableRipple onPress={onPress} rippleColor="#4A6572">
       <List.Item
