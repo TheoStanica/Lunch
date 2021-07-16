@@ -2,15 +2,18 @@ import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, View, Text, FlatList} from 'react-native';
 import {getAllUsers} from '../redux/thunks/userThunks';
 import {useDispatch} from 'react-redux';
-import {Modal, Button, TextInput} from 'react-native-paper';
+import {Modal} from 'react-native-paper';
 import {Formik} from 'formik';
 import {registerValidationSchema} from '../assets/bodyValidation/userValidation';
 
+import DropDownPicker from 'react-native-dropdown-picker';
 import AdminField from '../components/adminField';
 import TextInputField from '../components/textInputField';
 import ActionButton from '../components/actionButton';
 
 const ManageUsersScreen = () => {
+  const [openDropDown, setOpenDropDown] = useState(false);
+  const [roleValue, setRoleValue] = useState(null);
   const [selectedUser, setSelectedUser] = useState('');
   const [users, setUsers] = useState([]);
   const dispatch = useDispatch();
@@ -26,6 +29,7 @@ const ManageUsersScreen = () => {
       }),
     );
   }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -38,7 +42,10 @@ const ManageUsersScreen = () => {
                 title={item.fullname}
                 description={item.email}
                 icon="account-edit"
-                onPress={() => setSelectedUser(item)}
+                onPress={() => {
+                  setSelectedUser(item);
+                  setRoleValue(item.role);
+                }}
               />
             </View>
           );
@@ -46,7 +53,11 @@ const ManageUsersScreen = () => {
       />
       <Modal
         visible={selectedUser !== ''}
-        onDismiss={() => setSelectedUser('')}
+        onDismiss={() => {
+          setSelectedUser('');
+          setRoleValue(null);
+          setOpenDropDown(false);
+        }}
         contentContainerStyle={{
           padding: 20,
           marginHorizontal: 20,
@@ -60,6 +71,7 @@ const ManageUsersScreen = () => {
             role: selectedUser.role,
           }}
           onSubmit={values => {
+            values.role = roleValue;
             dispatch(
               registerUser({
                 email: values.email,
@@ -91,12 +103,15 @@ const ManageUsersScreen = () => {
                 handleChange={handleChange}
                 field="fullname"
               />
-              <TextInputField
-                label="Role"
-                value={values.role}
-                errors={errors.role}
-                handleChange={handleChange}
-                field="role"
+              <DropDownPicker
+                open={openDropDown}
+                value={roleValue}
+                setValue={setRoleValue}
+                setOpen={setOpenDropDown}
+                items={[
+                  {label: 'user', value: 'user'},
+                  {label: 'admin', value: 'admin'},
+                ]}
               />
               <View style={styles.containerButtons}>
                 <ActionButton text="Edit" style={styles.container} />
