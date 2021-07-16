@@ -4,6 +4,7 @@ import {getAllUsers, updateUser} from '../redux/thunks/userThunks';
 import {useDispatch, useSelector} from 'react-redux';
 import {Modal} from 'react-native-paper';
 import {Formik} from 'formik';
+import {updateValidationSchema} from '../assets/bodyValidation/userValidation';
 
 import DropDownPicker from 'react-native-dropdown-picker';
 import AdminField from '../components/adminField';
@@ -66,7 +67,7 @@ const ManageUsersScreen = () => {
           backgroundColor: 'white',
         }}>
         <Formik
-          //validationSchema={{}}
+          validationSchema={updateValidationSchema}
           initialValues={{
             email: selectedUser.email,
             fullname: selectedUser.fullname,
@@ -84,6 +85,8 @@ const ManageUsersScreen = () => {
                 role: values.role,
               }),
             );
+
+            setSelectedUser('');
           }}>
           {({values, handleChange, errors, isValid, handleSubmit}) => (
             <>
@@ -95,13 +98,6 @@ const ManageUsersScreen = () => {
                 handleChange={handleChange}
                 field="email"
               />
-              <TextInputField
-                label="Full Name"
-                value={values.fullname}
-                errors={errors.fullname}
-                handleChange={handleChange}
-                field="fullname"
-              />
               <DropDownPicker
                 open={openDropDown}
                 value={roleValue}
@@ -111,6 +107,13 @@ const ManageUsersScreen = () => {
                   {label: 'user', value: 'user'},
                   {label: 'admin', value: 'admin'},
                 ]}
+              />
+              <TextInputField
+                label="Full Name"
+                value={values.fullname}
+                errors={errors.fullname}
+                handleChange={handleChange}
+                field="fullname"
               />
               <View style={styles.containerButtons}>
                 <ActionButton

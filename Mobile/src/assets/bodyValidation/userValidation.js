@@ -63,9 +63,11 @@ const registerValidationSchema = yup.object({
 const updateValidationSchema = yup.object({
   email: yup
     .string('Enter your email.')
+    .notRequired()
+    .nullable()
     .email('Enter a valid email.')
-    .required('Email is required.')
-    .optional(),
+    .notRequired()
+    .nullable(),
   password: yup
     .string('Enter your password.')
     .notRequired()
@@ -92,9 +94,18 @@ const updateValidationSchema = yup.object({
     .oneOf([yup.ref('password'), null], 'Passwords must match'),
   fullname: yup
     .string('Enter your full name.')
+    .notRequired()
+    .nullable()
     .matches(/^[A-Z][- a-zA-Z]+$/, 'Enter a valid full name.')
-    .required('Full name is required.')
-    .optional(),
+    .notRequired()
+    .nullable(),
+  role: yup
+    .string('Enter your role.')
+    .notRequired()
+    .nullable()
+    .matches(/(user|admin)/)
+    .notRequired()
+    .nullable(),
 });
 
 module.exports = {
