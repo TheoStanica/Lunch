@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, View, Text, FlatList} from 'react-native';
-import {getAllUsers} from '../redux/thunks/userThunks';
-import {useDispatch} from 'react-redux';
+import {getAllUsers, updateUser} from '../redux/thunks/userThunks';
+import {useDispatch, useSelector} from 'react-redux';
 import {Modal} from 'react-native-paper';
 import {Formik} from 'formik';
-import {registerValidationSchema} from '../assets/bodyValidation/userValidation';
 
 import DropDownPicker from 'react-native-dropdown-picker';
 import AdminField from '../components/adminField';
@@ -12,6 +11,7 @@ import TextInputField from '../components/textInputField';
 import ActionButton from '../components/actionButton';
 
 const ManageUsersScreen = () => {
+  const userReducer = useSelector(state => state.userReducer);
   const [openDropDown, setOpenDropDown] = useState(false);
   const [roleValue, setRoleValue] = useState(null);
   const [selectedUser, setSelectedUser] = useState('');
@@ -28,7 +28,7 @@ const ManageUsersScreen = () => {
         },
       }),
     );
-  }, []);
+  }, [users]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -36,7 +36,7 @@ const ManageUsersScreen = () => {
         data={users}
         keyExtractor={item => item.id}
         renderItem={({item}) => {
-          return (
+          return item.id !== userReducer.id ? (
             <View style={styles.container}>
               <AdminField
                 title={item.fullname}
@@ -48,6 +48,8 @@ const ManageUsersScreen = () => {
                 }}
               />
             </View>
+          ) : (
+            <></>
           );
         }}
       />
@@ -64,7 +66,7 @@ const ManageUsersScreen = () => {
           backgroundColor: 'white',
         }}>
         <Formik
-          validationSchema={registerValidationSchema}
+          //validationSchema={{}}
           initialValues={{
             email: selectedUser.email,
             fullname: selectedUser.fullname,
@@ -72,18 +74,14 @@ const ManageUsersScreen = () => {
           }}
           onSubmit={values => {
             values.role = roleValue;
+            if (values.email === selectedUser.email) delete values.email;
+
             dispatch(
-              registerUser({
+              updateUser({
+                _userId: selectedUser.id,
                 email: values.email,
                 fullname: values.fullname,
                 role: values.role,
-                onFinish: error => {
-                  if (!error) {
-                    setMessage(
-                      'Account created! Please check your email to activate your account.',
-                    );
-                  }
-                },
               }),
             );
           }}>
@@ -115,7 +113,11 @@ const ManageUsersScreen = () => {
                 ]}
               />
               <View style={styles.containerButtons}>
-                <ActionButton text="Edit" style={styles.container} />
+                <ActionButton
+                  text="Edit"
+                  style={styles.container}
+                  onPress={handleSubmit}
+                />
                 <ActionButton text="Delete" style={styles.container} />
               </View>
             </>
