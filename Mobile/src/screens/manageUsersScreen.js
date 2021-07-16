@@ -89,6 +89,7 @@ const ManageUsersScreen = () => {
           }}>
           {({values, handleChange, errors, isValid, handleSubmit}) => (
             <>
+              <Text style={styles.title}>Update User</Text>
               <TextInputField
                 label="Email"
                 value={values.email}
@@ -131,6 +132,11 @@ const styles = StyleSheet.create({
   },
   containerButtons: {
     flexDirection: 'row',
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 10,
+    textAlign: 'center',
   },
 });
 
