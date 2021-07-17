@@ -1,4 +1,4 @@
-const { check } = require('express-validator');
+const { check, param } = require('express-validator');
 const { accountStatus, accountRole } = require('../../utils/enums');
 
 const registerValidationSchema = [
@@ -116,9 +116,28 @@ const updateValidationSchema = [
     .optional(),
 ];
 
+const userIdValidationSchema = [
+  param('_userId')
+    .notEmpty()
+    .withMessage('User ID is required.')
+    .matches(/^[0-9a-fA-F]{24}$/)
+    .withMessage('Please provide a valid user ID.'),
+];
+
+const optionalUserIdValidationSchema = [
+  param('_userId')
+    .notEmpty()
+    .withMessage('User ID is required.')
+    .matches(/^[0-9a-fA-F]{24}$/)
+    .withMessage('Please provide a valid user ID.')
+    .optional(),
+];
+
 module.exports = {
   registerValidationSchema,
   loginValidationSchema,
   forgotPasswordValidationSchema,
   updateValidationSchema,
+  userIdValidationSchema,
+  optionalUserIdValidationSchema,
 };
