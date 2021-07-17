@@ -6,6 +6,7 @@ import {
   userActivateAccountRequest,
   userPutRequest,
   userGetAllRequest,
+  userDeleteRequest,
 } from './httpRequests';
 import {resetUser, setUser} from '../actions/userActions';
 import {handleError} from './errorThunks';
@@ -100,5 +101,15 @@ export const getAllUsers =
     } catch (error) {
       dispatch(handleError(error));
       onFinish(null);
+    }
+  };
+
+export const deleteUser =
+  ({_userId}) =>
+  async dispatch => {
+    try {
+      await userDeleteRequest({_userId});
+    } catch (error) {
+      dispatch(handleError(error));
     }
   };

@@ -45,3 +45,7 @@ export const userPutRequest = async ({
 export const userGetAllRequest = async () => {
   return await api.get('/user/all');
 };
+
+export const userDeleteRequest = async ({_userId}) => {
+  return await api.delete(`/user/${_userId}`);
+};
