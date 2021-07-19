@@ -11,6 +11,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useSelector} from 'react-redux';
 import RestaurantDetailsScreen from '../screens/restaurantDetailsScreen';
+import CreateRestaurantScreen from '../screens/createRestaurantScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -59,6 +60,15 @@ const AdminStack = () => {
         name="RestaurantDetailsScreen"
         component={RestaurantDetailsScreen}
         options={{title: 'Restaurant Details'}}
+      />
+      <Stack.Screen
+        name="CreateRestaurantScreen"
+        component={CreateRestaurantScreen}
+        options={{
+          title: 'Create Restaurant',
+          detachPreviousScreen: true,
+          detachInactiveScreens: true,
+        }}
       />
     </Stack.Navigator>
   );
