@@ -8,16 +8,21 @@ import AdminField from '../components/adminField';
 const ManageUsersScreen = ({navigation}) => {
   const userReducer = useSelector(state => state.userReducer);
   const {allUsers, allUsersById} = useSelector(state => state.allUsersReducer);
+  const [isFetching, setIsFetching] = useState(true);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getAllUsers());
-  }, []);
+  const onRefresh = () => {
+    setIsFetching(true);
+    dispatch(getAllUsers(() => setIsFetching(false)));
+  };
+  useEffect(() => onRefresh(), []);
 
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
         data={allUsers}
+        onRefresh={onRefresh}
+        refreshing={isFetching}
         keyExtractor={item => item}
         renderItem={({item: _userId}) => {
           return _userId !== userReducer.id ? (

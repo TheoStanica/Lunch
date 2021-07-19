@@ -105,11 +105,12 @@ export const updateUser =
     }
   };
 
-export const getAllUsers = () => async dispatch => {
+export const getAllUsers = callback => async dispatch => {
   try {
     const response = await userGetAllRequest();
 
     dispatch(setAllUsers({allUsers: response.data.users}));
+    if (typeof callback == 'function') callback();
   } catch (error) {
     dispatch(handleError(error));
   }
