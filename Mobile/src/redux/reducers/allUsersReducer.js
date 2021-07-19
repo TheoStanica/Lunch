@@ -1,4 +1,4 @@
-import {SET_ALLUSERS, REMOVE_USER, EDIT_USER} from '../types';
+import {SET_ALLUSERS, DELETE_USER, UPDATE_USER} from '../types';
 
 const INITIAL_STATE = {
   allUsers: [],
@@ -18,7 +18,7 @@ const allUsersReducer = (state = INITIAL_STATE, action) => {
 
       return {allUsers: _allUsers, allUsersById: _allUsersById};
 
-    case REMOVE_USER:
+    case DELETE_USER:
       const {[action.payload.user]: _, ...allUsersById} = state.allUsersById;
       const allUsers = state.allUsers.filter(
         user => user !== action.payload.user,
@@ -26,7 +26,7 @@ const allUsersReducer = (state = INITIAL_STATE, action) => {
 
       return {allUsers, allUsersById};
 
-    case EDIT_USER:
+    case UPDATE_USER:
       const {[action.payload.id]: user, ...__allUsersById} = state.allUsersById;
       const __allUsers = state.allUsers;
 

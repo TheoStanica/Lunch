@@ -1,4 +1,4 @@
-import {SET_ALLUSERS, REMOVE_USER, EDIT_USER} from '../types';
+import {SET_ALLUSERS, DELETE_USER, UPDATE_USER} from '../types';
 
 export const setAllUsers = allUsers => {
   return {
@@ -7,16 +7,16 @@ export const setAllUsers = allUsers => {
   };
 };
 
-export const removeUser = user => {
+export const deleteUserAction = user => {
   return {
-    type: REMOVE_USER,
+    type: DELETE_USER,
     payload: user,
   };
 };
 
-export const editUser = (id, email, fullname, role) => {
+export const updateUserAction = (id, email, fullname, role) => {
   return {
-    type: EDIT_USER,
+    type: UPDATE_USER,
     payload: id,
     email,
     fullname,
