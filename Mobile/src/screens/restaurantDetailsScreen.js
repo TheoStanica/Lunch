@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   activeContainer: {
+    marginLeft: 12,
     flexDirection: 'row',
     alignItems: 'center',
   },
