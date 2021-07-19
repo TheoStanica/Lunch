@@ -6,7 +6,6 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {RectButton} from 'react-native-gesture-handler';
 
 const AdminField = ({
-  id,
   onEdit,
   onDelete,
   title,
@@ -35,7 +34,7 @@ const AdminField = ({
           </Animated.Text>
         </RectButton>
         <RectButton
-          onPress={() => (onEdit ? onEdit(id) : null)}
+          onPress={() => (onEdit ? onEdit() : null)}
           style={[styles.swipeableButton, styles.swipeableEdit]}>
           <Animated.Text style={[styles.actionText, styles.swipeableEditText]}>
             Edit
