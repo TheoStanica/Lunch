@@ -5,8 +5,15 @@ import {
   userGetRequest,
   userActivateAccountRequest,
   userPutRequest,
+  userGetAllRequest,
+  userDeleteRequest,
 } from './httpRequests';
 import {resetUser, setUser} from '../actions/userActions';
+import {
+  setAllUsers,
+  deleteUserAction,
+  updateUserAction,
+} from '../actions/allUsersActions';
 import {handleError} from './errorThunks';
 
 export const loginUser =
@@ -77,11 +84,44 @@ export const getUser = () => async dispatch => {
 };
 
 export const updateUser =
-  ({email, password, fullname}) =>
+  ({_userId, email, password, fullname, role}) =>
   async dispatch => {
     try {
-      await userPutRequest({email, password, fullname});
-      dispatch(setUser({email, password, fullname}));
+      const response = await userPutRequest({
+        _userId,
+        email,
+        password,
+        fullname,
+        role,
+      });
+
+      if (!_userId) {
+        dispatch(setUser(response.data.user));
+      } else {
+        dispatch(updateUserAction(response.data.user));
+      }
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+
+export const getAllUsers = () => async dispatch => {
+  try {
+    const response = await userGetAllRequest();
+
+    dispatch(setAllUsers({allUsers: response.data.users}));
+  } catch (error) {
+    dispatch(handleError(error));
+  }
+};
+
+export const deleteUser =
+  ({_userId}) =>
+  async dispatch => {
+    try {
+      await userDeleteRequest({_userId});
+
+      dispatch(deleteUserAction({user: _userId}));
     } catch (error) {
       dispatch(handleError(error));
     }

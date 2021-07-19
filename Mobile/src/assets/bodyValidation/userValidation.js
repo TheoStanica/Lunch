@@ -64,8 +64,7 @@ const updateValidationSchema = yup.object({
   email: yup
     .string('Enter your email.')
     .email('Enter a valid email.')
-    .required('Email is required.')
-    .optional(),
+    .required('Email is required.'),
   password: yup
     .string('Enter your password.')
     .notRequired()
@@ -93,8 +92,14 @@ const updateValidationSchema = yup.object({
   fullname: yup
     .string('Enter your full name.')
     .matches(/^[A-Z][- a-zA-Z]+$/, 'Enter a valid full name.')
-    .required('Full name is required.')
-    .optional(),
+    .required('Full name is required.'),
+  role: yup
+    .string('Enter your role.')
+    .notRequired()
+    .nullable()
+    .oneOf(['user', 'admin'], 'Role should be user or admin.')
+    .notRequired()
+    .nullable(),
 });
 
 module.exports = {

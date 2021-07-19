@@ -3,12 +3,12 @@ import {Card, Title, Paragraph, Divider} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {View, StyleSheet} from 'react-native';
 
-const ProfileField = ({title, paragraph, icon}) => {
+const ProfileField = ({title, paragraph, icon, iconColor = '#FBBC00'}) => {
   return (
     <Card.Content>
       <View style={styles.container}>
         <View style={styles.icon}>
-          <Icon name={icon} size={40} color="green" />
+          <Icon name={icon} size={40} color={iconColor} />
         </View>
         <View style={styles.content}>
           <Title>{title}</Title>

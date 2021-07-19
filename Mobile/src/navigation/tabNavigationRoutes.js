@@ -5,6 +5,7 @@ import UpdateProfileScreen from '../screens/updateProfileScreen';
 import AdminScreen from '../screens/adminScreen';
 import ManageUsersScreen from '../screens/manageUsersScreen';
 import ManageRestaurantsScreen from '../screens/manageRestaurantsScreen';
+import UserDetailsScreen from '../screens/userDetailsScreen';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {createStackNavigator} from '@react-navigation/stack';
@@ -51,6 +52,11 @@ const AdminStack = () => {
         name="ManageUsersScreen"
         component={ManageUsersScreen}
         options={{title: 'Manage Users'}}
+      />
+      <Stack.Screen
+        name="UserDetailsScreen"
+        component={UserDetailsScreen}
+        options={{title: 'Update User'}}
       />
       <Stack.Screen
         name="ManageRestaurantsScreen"
@@ -105,6 +111,7 @@ const TabNavigatorRoutes = () => {
           name="AdminStack"
           component={AdminStack}
           options={{
+            unmountOnBlur: true,
             tabBarLabel: 'Admin',
             tabBarIcon: ({color}) => (
               <Icon name="shield-account" size={25} color={color} />
@@ -118,6 +125,7 @@ const TabNavigatorRoutes = () => {
         name="ProfileStack"
         component={ProfileStack}
         options={{
+          unmountOnBlur: true,
           tabBarLabel: 'Profile',
           tabBarIcon: ({color}) => (
             <Icon name="card-account-details-outline" size={25} color={color} />

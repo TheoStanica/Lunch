@@ -9,6 +9,8 @@ const {
   registerValidationSchema,
   forgotPasswordValidationSchema,
   updateValidationSchema,
+  userIdValidationSchema,
+  optionalUserIdValidationSchema,
 } = require('../middleware/bodyValidation/userValidation');
 const { validationResults } = require('../middleware/bodyValidation/index');
 
@@ -16,7 +18,13 @@ const userController = require('./controller');
 
 router.get('/activate/:_activationToken', userController.activateAccount);
 router.get('/all', adminAuthValidation, userController.getAllUsers);
-router.get('/:_userId?', userAuthValidation, userController.getUser);
+router.get(
+  '/:_userId?',
+  userAuthValidation,
+  optionalUserIdValidationSchema,
+  validationResults,
+  userController.getUser
+);
 
 router.post(
   '/login',
@@ -42,10 +50,17 @@ router.put(
   '/:_userId?',
   userAuthValidation,
   updateValidationSchema,
+  optionalUserIdValidationSchema,
   validationResults,
   userController.updateUser
 );
 
-router.delete('/:_userId', adminAuthValidation, userController.deleteUser);
+router.delete(
+  '/:_userId',
+  adminAuthValidation,
+  userIdValidationSchema,
+  validationResults,
+  userController.deleteUser
+);
 
 module.exports = router;

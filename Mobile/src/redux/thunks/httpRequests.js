@@ -28,8 +28,26 @@ export const userGetRequest = async () => {
   return await api.get('/user');
 };
 
-export const userPutRequest = async ({email, password, fullname}) => {
-  return await api.put('/user', {email, password, fullname});
+export const userPutRequest = async ({
+  _userId,
+  email,
+  password,
+  fullname,
+  role,
+}) => {
+  if (!_userId) {
+    return await api.put('user', {email, password, fullname, role});
+  } else {
+    return await api.put(`/user/${_userId}`, {email, password, fullname, role});
+  }
+};
+
+export const userGetAllRequest = async () => {
+  return await api.get('/user/all');
+};
+
+export const userDeleteRequest = async ({_userId}) => {
+  return await api.delete(`/user/${_userId}`);
 };
 
 export const restaurantGetRestaurantsRequest = async () => {
