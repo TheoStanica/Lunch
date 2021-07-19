@@ -9,6 +9,7 @@ import {
   userDeleteRequest,
 } from './httpRequests';
 import {resetUser, setUser} from '../actions/userActions';
+import {setAllUsers} from '../actions/allUsersActions';
 import {handleError} from './errorThunks';
 
 export const loginUser =
@@ -91,18 +92,15 @@ export const updateUser =
     }
   };
 
-export const getAllUsers =
-  ({onFinish}) =>
-  async dispatch => {
-    try {
-      const response = await userGetAllRequest();
+export const getAllUsers = () => async dispatch => {
+  try {
+    const response = await userGetAllRequest();
 
-      onFinish(response.data.users);
-    } catch (error) {
-      dispatch(handleError(error));
-      onFinish(null);
-    }
-  };
+    dispatch(setAllUsers({allUsers: response.data.users}));
+  } catch (error) {
+    dispatch(handleError(error));
+  }
+};
 
 export const deleteUser =
   ({_userId}) =>

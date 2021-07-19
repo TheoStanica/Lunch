@@ -7,38 +7,30 @@ import AdminField from '../components/adminField';
 
 const ManageUsersScreen = ({navigation}) => {
   const userReducer = useSelector(state => state.userReducer);
-  const [users, setUsers] = useState([]);
+  const {allUsers, allUsersById} = useSelector(state => state.allUsersReducer);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(
-      getAllUsers({
-        onFinish: users => {
-          if (users) {
-            setUsers(users);
-          }
-        },
-      }),
-    );
-  }, [users]);
+    dispatch(getAllUsers());
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={users}
-        keyExtractor={item => item.id}
-        renderItem={({item}) => {
-          return item.id !== userReducer.id ? (
+        data={allUsers}
+        keyExtractor={item => item}
+        renderItem={({item: _userId}) => {
+          return _userId !== userReducer.id ? (
             <AdminField
-              title={item.fullname}
-              description={item.email}
+              title={allUsersById[_userId].fullname}
+              description={allUsersById[_userId].email}
               icon="account-edit"
               onEdit={() => {
                 navigation.navigate('UserDetailsScreen', {
-                  user: item,
+                  user: allUsersById[_userId],
                 });
               }}
-              onDelete={() => dispatch(deleteUser({_userId: item.id}))}
+              onDelete={() => dispatch(deleteUser({_userId}))}
             />
           ) : (
             <></>
