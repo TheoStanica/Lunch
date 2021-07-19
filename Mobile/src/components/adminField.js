@@ -6,7 +6,6 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {RectButton} from 'react-native-gesture-handler';
 
 const AdminField = ({
-  id,
   onEdit,
   onDelete,
   title,
@@ -19,7 +18,7 @@ const AdminField = ({
       <>
         <RectButton
           style={[styles.swipeableButton, styles.swipeableDelete]}
-          onPress={() =>
+          onPress={() => {
             Alert.alert(
               'Are you sure?',
               `Are you sure you want to remove ${title}?`,
@@ -27,8 +26,8 @@ const AdminField = ({
                 {text: 'Yes', onPress: () => (onDelete ? onDelete() : null)},
                 {text: 'No'},
               ],
-            )
-          }>
+            );
+          }}>
           <Animated.Text
             style={[styles.actionText, styles.swipeableDeleteText]}>
             Delete
