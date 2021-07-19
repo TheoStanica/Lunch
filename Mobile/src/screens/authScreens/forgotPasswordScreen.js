@@ -5,11 +5,11 @@ import {Formik} from 'formik';
 import {
   emailValidationSchema,
   passwordValidationSchema,
-} from '../assets/bodyValidation/userValidation';
+} from '../../assets/bodyValidation/userValidation';
 import {useDispatch} from 'react-redux';
 
-import TextInputField from '../components/textInputField';
-import {forgotPasswordUser} from '../redux/thunks/userThunks';
+import TextInputField from '../../components/textInputField';
+import {forgotPasswordUser} from '../../redux/thunks/userThunks';
 
 const ForgotPasswordScreen = ({theme, route, navigation}) => {
   const [message, setMessage] = useState('');

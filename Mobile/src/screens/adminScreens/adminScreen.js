@@ -1,7 +1,7 @@
 import React from 'react';
 import {SafeAreaView, View, StyleSheet} from 'react-native';
 
-import ActionButton from '../components/actionButton';
+import ActionButton from '../../components/actionButton';
 
 const AdminScreen = ({navigation}) => {
   return (

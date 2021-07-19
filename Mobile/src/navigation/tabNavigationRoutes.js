@@ -2,18 +2,18 @@ import React from 'react';
 import HomeScreen from '../screens/userScreens/homeScreen';
 import ProfileScreen from '../screens/userScreens/profileScreen';
 import UpdateProfileScreen from '../screens/userScreens/updateProfileScreen';
-import AdminScreen from '../screens/adminScreen';
+import AdminScreen from '../screens/adminScreens/adminScreen';
 import ManageUsersScreen from '../screens/adminScreens/manageUsersScreen';
 import ManageRestaurantsScreen from '../screens/adminScreens/manageRestaurantsScreen';
 import UserDetailsScreen from '../screens/adminScreens/userDetailsScreen';
+import RestaurantDetailsScreen from '../screens/adminScreens/restaurantDetailsScreen';
+import CreateRestaurantScreen from '../screens/adminScreens/createRestaurantScreen';
+import MessageScreen from '../screens/messageScreen';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useSelector} from 'react-redux';
-import RestaurantDetailsScreen from '../screens/restaurantDetailsScreen';
-import CreateRestaurantScreen from '../screens/createRestaurantScreen';
-import MessageScreen from '../screens/messageScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();

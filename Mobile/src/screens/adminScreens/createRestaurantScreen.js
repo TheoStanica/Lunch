@@ -2,11 +2,11 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Formik} from 'formik';
 import {useDispatch} from 'react-redux';
-import TextInputField from '../components/textInputField';
-import ActionButton from '../components/actionButton';
-import {restaurantValidationSchema} from '../assets/bodyValidation/restaurantValidation';
-import HideKeyboard from '../components/hideKeyboard';
-import {createRestaurant} from '../redux/thunks/restaurantThunks';
+import TextInputField from '../../components/textInputField';
+import ActionButton from '../../components/actionButton';
+import {restaurantValidationSchema} from '../../assets/bodyValidation/restaurantValidation';
+import HideKeyboard from '../../components/hideKeyboard';
+import {createRestaurant} from '../../redux/thunks/restaurantThunks';
 
 const CreateRestaurantScreen = ({navigation}) => {
   const dispatch = useDispatch();

@@ -8,7 +8,7 @@ import {
   StatusBar,
 } from 'react-native';
 import {Button, withTheme} from 'react-native-paper';
-import LunchLogo from '../assets/images/Lunch';
+import LunchLogo from '../../assets/images/Lunch';
 
 const AuthScreen = ({navigation, theme}) => {
   const fadeIn = new Animated.Value(0);
