@@ -9,7 +9,7 @@ import {
   userDeleteRequest,
 } from './httpRequests';
 import {resetUser, setUser} from '../actions/userActions';
-import {setAllUsers, removeUser} from '../actions/allUsersActions';
+import {setAllUsers, removeUser, editUser} from '../actions/allUsersActions';
 import {handleError} from './errorThunks';
 
 export const loginUser =
@@ -86,6 +86,8 @@ export const updateUser =
       await userPutRequest({_userId, email, password, fullname, role});
       if (!_userId) {
         dispatch(setUser({email, password, fullname, role}));
+      } else {
+        dispatch(editUser({id: _userId, email, fullname, role}));
       }
     } catch (error) {
       dispatch(handleError(error));

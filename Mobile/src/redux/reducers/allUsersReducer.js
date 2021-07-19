@@ -1,4 +1,4 @@
-import {SET_ALLUSERS, REMOVE_USER} from '../types';
+import {SET_ALLUSERS, REMOVE_USER, EDIT_USER} from '../types';
 
 const INITIAL_STATE = {
   allUsers: [],
@@ -25,6 +25,20 @@ const allUsersReducer = (state = INITIAL_STATE, action) => {
       );
 
       return {allUsers, allUsersById};
+
+    case EDIT_USER:
+      const {[action.payload.id]: user, ...__allUsersById} = state.allUsersById;
+      const __allUsers = state.allUsers;
+
+      action.payload.email = action.payload.email
+        ? action.payload.email
+        : user.email;
+      __allUsersById[user.id] = {
+        ...user,
+        ...action.payload,
+      };
+
+      return {allUsers: __allUsers, allUsersById: __allUsersById};
 
     default:
       return state;
