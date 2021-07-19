@@ -11,6 +11,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useSelector} from 'react-redux';
+import RestaurantDetailsScreen from '../screens/restaurantDetailsScreen';
+import CreateRestaurantScreen from '../screens/createRestaurantScreen';
+import MessageScreen from '../screens/messageScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -60,6 +63,25 @@ const AdminStack = () => {
         component={ManageRestaurantsScreen}
         options={{title: 'Manage Restaurants'}}
       />
+      <Stack.Screen
+        name="RestaurantDetailsScreen"
+        component={RestaurantDetailsScreen}
+        options={{title: 'Restaurant Details'}}
+      />
+      <Stack.Screen
+        name="CreateRestaurantScreen"
+        component={CreateRestaurantScreen}
+        options={{
+          title: 'Create Restaurant',
+          detachPreviousScreen: true,
+          detachInactiveScreens: true,
+        }}
+      />
+      <Stack.Screen
+        name="MessageScreen"
+        component={MessageScreen}
+        options={{title: '', headerStyle: {backgroundColor: '#FCBB00'}}}
+      />
     </Stack.Navigator>
   );
 };
@@ -74,7 +96,8 @@ const TabNavigatorRoutes = () => {
         style: {backgroundColor: '#4A6572'},
         inactiveTintColor: 'white',
         activeTintColor: '#FBBC00',
-      }}>
+      }}
+      screenOptions={{unmountOnBlur: true}}>
       <Tab.Screen
         name="HomeScreen"
         component={HomeScreen}
