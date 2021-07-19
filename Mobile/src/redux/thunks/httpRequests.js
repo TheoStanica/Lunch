@@ -35,3 +35,10 @@ export const userPutRequest = async ({email, password, fullname}) => {
 export const restaurantGetRestaurantsRequest = async () => {
   return await api.get('/restaurant');
 };
+
+export const restaurantUpdateRequest = async ({id, name, cost, status}) => {
+  return await api.put(`/restaurant/${id}`, {name, cost, status});
+};
+export const restaurantDeleteRequest = async ({id}) => {
+  return await api.delete(`/restaurant/${id}`);
+};

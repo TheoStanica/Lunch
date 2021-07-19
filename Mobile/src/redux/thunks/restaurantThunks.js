@@ -1,28 +1,58 @@
-import {setRestaurants} from '../actions/restaurantActions';
+import {
+  deleteRestaurantAction,
+  setRestaurantsAction,
+  updateRestaurantAction,
+} from '../actions/restaurantActions';
 import {handleError} from './errorThunks';
-import {restaurantGetRestaurantsRequest} from './httpRequests';
+import {
+  restaurantDeleteRequest,
+  restaurantGetRestaurantsRequest,
+  restaurantUpdateRequest,
+} from './httpRequests';
 
-export const getRestaurants =
-  ({onFinish = () => {}}) =>
+export const getRestaurants = callback => async dispatch => {
+  try {
+    const response = await restaurantGetRestaurantsRequest();
+
+    const restaurantsObj = response.data.reduce(
+      (obj, restaurant) => ({...obj, [restaurant.id]: {...restaurant}}),
+      {},
+    );
+    const restaurantIds = response.data.map(restaurant => restaurant.id);
+
+    dispatch(
+      setRestaurantsAction({
+        restaurants: restaurantIds,
+        restaurantsById: restaurantsObj,
+      }),
+    );
+
+    if (typeof callback == 'function') callback();
+  } catch (error) {
+    dispatch(handleError(error));
+  }
+};
+export const updateRestaurant =
+  ({id, name, cost, status}, callback) =>
   async dispatch => {
     try {
-      const response = await restaurantGetRestaurantsRequest();
+      await restaurantUpdateRequest({id, name, cost, status});
 
-      const restaurantsObj = response.data.reduce(
-        (obj, restaurant) => ({...obj, [restaurant.id]: {...restaurant}}),
-        {},
-      );
-      const restaurantIds = response.data.map(restaurant => restaurant.id);
+      dispatch(updateRestaurantAction({id, name, cost, status}));
 
-      dispatch(
-        setRestaurants({
-          restaurants: restaurantIds,
-          restaurantsById: restaurantsObj,
-        }),
-      );
-      onFinish(null);
+      if (typeof callback == 'function') callback();
     } catch (error) {
       dispatch(handleError(error));
-      onFinish(error);
+    }
+  };
+
+export const deleteRestaurant =
+  ({id}) =>
+  async dispatch => {
+    try {
+      await restaurantDeleteRequest({id});
+      dispatch(deleteRestaurantAction({id}));
+    } catch (error) {
+      dispatch(handleError(error));
     }
   };
