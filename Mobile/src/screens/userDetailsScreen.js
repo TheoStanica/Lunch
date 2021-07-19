@@ -50,16 +50,19 @@ const UserDetailsScreen = ({route, navigation}) => {
                   handleChange={handleChange}
                   field="email"
                 />
-                <DropDownPicker
-                  open={openDropDown}
-                  value={roleValue}
-                  setValue={setRoleValue}
-                  setOpen={setOpenDropDown}
-                  items={[
-                    {label: 'user', value: 'user'},
-                    {label: 'admin', value: 'admin'},
-                  ]}
-                />
+                <View style={styles.dropDownPicker}>
+                  <Text style={styles.roleText(openDropDown)}>Role</Text>
+                  <DropDownPicker
+                    open={openDropDown}
+                    value={roleValue}
+                    setValue={setRoleValue}
+                    setOpen={setOpenDropDown}
+                    items={[
+                      {label: 'user', value: 'user'},
+                      {label: 'admin', value: 'admin'},
+                    ]}
+                  />
+                </View>
                 <TextInputField
                   label="Full Name"
                   value={values.fullname}
@@ -84,6 +87,16 @@ const styles = StyleSheet.create({
   contentContainer: {
     padding: 25,
     paddingBottom: 100,
+  },
+  roleText: openDropDown => ({
+    paddingLeft: 12,
+    paddingRight: 12,
+    paddingBottom: 10,
+    color: openDropDown ? 'black' : 'gray',
+    fontSize: 12,
+  }),
+  dropDownPicker: {
+    marginBottom: 12,
   },
 });
 
