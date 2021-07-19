@@ -12,6 +12,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useSelector} from 'react-redux';
 import RestaurantDetailsScreen from '../screens/restaurantDetailsScreen';
 import CreateRestaurantScreen from '../screens/createRestaurantScreen';
+import MessageScreen from '../screens/messageScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -69,6 +70,11 @@ const AdminStack = () => {
           detachPreviousScreen: true,
           detachInactiveScreens: true,
         }}
+      />
+      <Stack.Screen
+        name="MessageScreen"
+        component={MessageScreen}
+        options={{title: '', headerStyle: {backgroundColor: '#FCBB00'}}}
       />
     </Stack.Navigator>
   );

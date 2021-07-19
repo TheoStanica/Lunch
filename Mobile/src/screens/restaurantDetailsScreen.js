@@ -40,7 +40,13 @@ const RestaurantDetailsScreen = ({route, navigation}) => {
                   ? values.status
                   : undefined,
             };
-            dispatch(updateRestaurant(data, () => navigation.goBack()));
+            dispatch(
+              updateRestaurant(data, () =>
+                navigation.replace('MessageScreen', {
+                  message: 'Restaurant Updated!',
+                }),
+              ),
+            );
           }}>
           {({values, handleChange, errors, handleSubmit, setFieldValue}) => (
             <View style={styles.contentContainer}>
