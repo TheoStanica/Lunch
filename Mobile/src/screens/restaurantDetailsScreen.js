@@ -70,8 +70,6 @@ const RestaurantDetailsScreen = ({route, navigation}) => {
                         values.status === 'active' ? 'inactive' : 'active',
                       )
                     }
-                    trackColor={{true: '#FCBB00', false: 'gray'}}
-                    thumbColor="white"
                   />
                 </View>
               </View>
