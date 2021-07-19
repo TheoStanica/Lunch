@@ -45,9 +45,7 @@ const AdminField = ({
   };
 
   return (
-    <Swipeable
-      renderLeftActions={renderActions}
-      renderRightActions={renderActions}>
+    <Swipeable renderRightActions={renderActions}>
       <List.Item
         style={styles.itemContainer}
         title={title}
