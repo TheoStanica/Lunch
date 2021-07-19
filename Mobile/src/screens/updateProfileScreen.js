@@ -1,11 +1,5 @@
 import React, {useState} from 'react';
-import {
-  SafeAreaView,
-  KeyboardAvoidingView,
-  View,
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
+import {SafeAreaView, View, ScrollView, StyleSheet} from 'react-native';
 import {TextInput} from 'react-native-paper';
 import TextInputField from '../components/textInputField';
 import HideKeyboard from '../components/hideKeyboard';
@@ -24,82 +18,79 @@ const UpdateProfileScreen = () => {
   return (
     <HideKeyboard>
       <SafeAreaView style={styles.container}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'margin'}>
-          <ScrollView>
-            <View style={styles.contentContainer}>
-              <Formik
-                validationSchema={updateValidationSchema}
-                initialValues={{
-                  email: userReducer.email,
-                  password: undefined,
-                  retypePassword: null,
-                  fullname: userReducer.fullname,
-                }}
-                onSubmit={values =>
-                  dispatch(
-                    updateUser({
-                      email: values.email,
-                      password: values.password,
-                      fullname: values.fullname,
-                    }),
-                  )
-                }>
-                {({values, handleChange, errors, isValid, handleSubmit}) => (
-                  <>
-                    <TextInputField
-                      label="Email"
-                      value={values.email}
-                      errors={errors.email}
-                      handleChange={handleChange}
-                      field="email"
-                    />
-                    <TextInputField
-                      label="Password"
-                      value={values.password}
-                      errors={errors.password}
-                      handleChange={handleChange}
-                      secureTextEntry={hidePassword}
-                      right={
-                        <TextInput.Icon
-                          name={hidePassword ? 'eye-off' : 'eye'}
-                          size={20}
-                          onPress={() => setHidePassword(!hidePassword)}
-                        />
-                      }
-                      field="password"
-                    />
-                    <TextInputField
-                      label="Retype Password"
-                      value={values.retypePassword}
-                      errors={errors.retypePassword}
-                      handleChange={handleChange}
-                      secureTextEntry={hideRetypePassword}
-                      right={
-                        <TextInput.Icon
-                          name={hideRetypePassword ? 'eye-off' : 'eye'}
-                          size={20}
-                          onPress={() =>
-                            setHideRetypePassword(!hideRetypePassword)
-                          }
-                        />
-                      }
-                      field="retypePassword"
-                    />
-                    <TextInputField
-                      label="Full Name"
-                      value={values.fullname}
-                      errors={errors.fullname}
-                      handleChange={handleChange}
-                      field="fullname"
-                    />
-                    <ActionButton text="Update" onPress={handleSubmit} />
-                  </>
-                )}
-              </Formik>
-            </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
+        <ScrollView>
+          <View style={styles.contentContainer}>
+            <Formik
+              validationSchema={updateValidationSchema}
+              initialValues={{
+                email: userReducer.email,
+                password: undefined,
+                retypePassword: undefined,
+                fullname: userReducer.fullname,
+              }}
+              onSubmit={values =>
+                dispatch(
+                  updateUser({
+                    email: values.email,
+                    password: values.password,
+                    fullname: values.fullname,
+                  }),
+                )
+              }>
+              {({values, handleChange, errors, handleSubmit}) => (
+                <>
+                  <TextInputField
+                    label="Email"
+                    value={values.email}
+                    errors={errors.email}
+                    handleChange={handleChange}
+                    field="email"
+                  />
+                  <TextInputField
+                    label="Password"
+                    value={values.password}
+                    errors={errors.password}
+                    handleChange={handleChange}
+                    secureTextEntry={hidePassword}
+                    right={
+                      <TextInput.Icon
+                        name={hidePassword ? 'eye-off' : 'eye'}
+                        size={20}
+                        onPress={() => setHidePassword(!hidePassword)}
+                      />
+                    }
+                    field="password"
+                  />
+                  <TextInputField
+                    label="Retype Password"
+                    value={values.retypePassword}
+                    errors={errors.retypePassword}
+                    handleChange={handleChange}
+                    secureTextEntry={hideRetypePassword}
+                    right={
+                      <TextInput.Icon
+                        name={hideRetypePassword ? 'eye-off' : 'eye'}
+                        size={20}
+                        onPress={() =>
+                          setHideRetypePassword(!hideRetypePassword)
+                        }
+                      />
+                    }
+                    field="retypePassword"
+                  />
+                  <TextInputField
+                    label="Full Name"
+                    value={values.fullname}
+                    errors={errors.fullname}
+                    handleChange={handleChange}
+                    field="fullname"
+                  />
+                  <ActionButton text="Update" onPress={handleSubmit} />
+                </>
+              )}
+            </Formik>
+          </View>
+        </ScrollView>
       </SafeAreaView>
     </HideKeyboard>
   );
@@ -112,13 +103,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     padding: 25,
     paddingBottom: 100,
-  },
-  glassButton: {marginVertical: 8, shadowColor: 'transparent'},
-  buttonText: {
-    color: 'black',
-    fontSize: 18,
-    textTransform: 'capitalize',
-    lineHeight: 40,
   },
 });
 

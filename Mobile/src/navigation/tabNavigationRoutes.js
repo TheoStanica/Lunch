@@ -53,7 +53,7 @@ const AdminStack = () => {
       <Stack.Screen
         name="UserDetailsScreen"
         component={UserDetailsScreen}
-        options={{title: 'Edit User'}}
+        options={{title: 'Update User'}}
       />
       <Stack.Screen
         name="ManageRestaurantsScreen"
