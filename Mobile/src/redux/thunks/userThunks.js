@@ -9,7 +9,7 @@ import {
   userDeleteRequest,
 } from './httpRequests';
 import {resetUser, setUser} from '../actions/userActions';
-import {setAllUsers} from '../actions/allUsersActions';
+import {setAllUsers, removeUser} from '../actions/allUsersActions';
 import {handleError} from './errorThunks';
 
 export const loginUser =
@@ -107,6 +107,8 @@ export const deleteUser =
   async dispatch => {
     try {
       await userDeleteRequest({_userId});
+
+      dispatch(removeUser({user: _userId}));
     } catch (error) {
       dispatch(handleError(error));
     }
