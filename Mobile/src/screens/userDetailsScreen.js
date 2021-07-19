@@ -1,17 +1,19 @@
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView, StyleSheet, View, Text} from 'react-native';
+import {SafeAreaView, StyleSheet, Text} from 'react-native';
 import {updateUser} from '../redux/thunks/userThunks';
 import {Formik} from 'formik';
 import {updateValidationSchema} from '../assets/bodyValidation/userValidation';
+import {useDispatch, useSelector} from 'react-redux';
 
 import DropDownPicker from 'react-native-dropdown-picker';
 import TextInputField from '../components/textInputField';
 import ActionButton from '../components/actionButton';
 
-const UserDetailsScreen = ({route}) => {
-  const [openDropDown, setOpenDropDown] = useState(false);
-  const [roleValue, setRoleValue] = useState(null);
+const UserDetailsScreen = ({route, navigation}) => {
   const {user} = route.params;
+  const [openDropDown, setOpenDropDown] = useState(false);
+  const [roleValue, setRoleValue] = useState(user.role);
+  const dispatch = useDispatch();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -34,8 +36,7 @@ const UserDetailsScreen = ({route}) => {
               role: values.role,
             }),
           );
-
-          setuser('');
+          navigation.goBack();
         }}>
         {({values, handleChange, errors, isValid, handleSubmit}) => (
           <>
@@ -64,14 +65,7 @@ const UserDetailsScreen = ({route}) => {
               handleChange={handleChange}
               field="fullname"
             />
-            <View style={styles.containerButtons}>
-              <ActionButton
-                text="Edit"
-                style={styles.container}
-                onPress={handleSubmit}
-              />
-              <ActionButton text="Delete" style={styles.container} />
-            </View>
+            <ActionButton text="Update" onPress={handleSubmit} />
           </>
         )}
       </Formik>
