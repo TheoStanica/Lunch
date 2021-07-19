@@ -10,12 +10,12 @@ import {
 } from 'react-native';
 import {Button, TextInput, withTheme} from 'react-native-paper';
 import {useDispatch} from 'react-redux';
-import {loginUser} from '../redux/thunks/userThunks';
+import {loginUser} from '../../redux/thunks/userThunks';
 import {Formik} from 'formik';
-import {loginValidationSchema} from '../assets/bodyValidation/userValidation';
-import HideKeyboard from '../components/hideKeyboard';
+import {loginValidationSchema} from '../../assets/bodyValidation/userValidation';
+import HideKeyboard from '../../components/hideKeyboard';
 
-import TextInputField from '../components/textInputField';
+import TextInputField from '../../components/textInputField';
 
 const LoginScreen = ({navigation, theme}) => {
   const [hidePassword, setHidePassword] = useState(true);

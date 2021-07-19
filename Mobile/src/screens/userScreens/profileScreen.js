@@ -2,10 +2,10 @@ import React from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {Card, Title} from 'react-native-paper';
 import {useSelector} from 'react-redux';
-import ProfileField from '../components/profileField';
-import ActionButton from '../components/actionButton';
+import ProfileField from '../../components/profileField';
+import ActionButton from '../../components/actionButton';
 import {useDispatch} from 'react-redux';
-import {logoutUser} from '../redux/thunks/userThunks';
+import {logoutUser} from '../../redux/thunks/userThunks';
 
 const ProfileScreen = ({navigation}) => {
   const userReducer = useSelector(state => state.userReducer);

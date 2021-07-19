@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {SafeAreaView, Text, StyleSheet} from 'react-native';
 import {useDispatch} from 'react-redux';
-import {getUser} from '../redux/thunks/userThunks';
+import {getUser} from '../../redux/thunks/userThunks';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();

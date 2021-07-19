@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, FlatList} from 'react-native';
-import {getAllUsers, deleteUser} from '../redux/thunks/userThunks';
+import {getAllUsers, deleteUser} from '../../redux/thunks/userThunks';
 import {useDispatch, useSelector} from 'react-redux';
 
-import AdminField from '../components/adminField';
+import AdminField from '../../components/adminField';
 
 const ManageUsersScreen = ({navigation}) => {
   const userReducer = useSelector(state => state.userReducer);

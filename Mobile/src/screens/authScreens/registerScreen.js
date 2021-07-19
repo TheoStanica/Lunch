@@ -10,12 +10,12 @@ import {
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import {Button, TextInput, withTheme} from 'react-native-paper';
-import {registerUser} from '../redux/thunks/userThunks';
+import {registerUser} from '../../redux/thunks/userThunks';
 import {Formik} from 'formik';
-import {registerValidationSchema} from '../assets/bodyValidation/userValidation';
+import {registerValidationSchema} from '../../assets/bodyValidation/userValidation';
 
-import TextInputField from '../components/textInputField';
-import HideKeyboard from '../components/hideKeyboard';
+import TextInputField from '../../components/textInputField';
+import HideKeyboard from '../../components/hideKeyboard';
 
 const RegisterScreen = ({navigation, theme}) => {
   const [message, setMessage] = useState('');

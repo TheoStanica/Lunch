@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
 import {SafeAreaView, StyleSheet, View, Text} from 'react-native';
-import {updateUser} from '../redux/thunks/userThunks';
+import {updateUser} from '../../redux/thunks/userThunks';
 import {Formik} from 'formik';
-import {updateValidationSchema} from '../assets/bodyValidation/userValidation';
+import {updateValidationSchema} from '../../assets/bodyValidation/userValidation';
 import {useDispatch} from 'react-redux';
 
 import DropDownPicker from 'react-native-dropdown-picker';
-import TextInputField from '../components/textInputField';
-import ActionButton from '../components/actionButton';
-import HideKeyboard from '../components/hideKeyboard';
+import TextInputField from '../../components/textInputField';
+import ActionButton from '../../components/actionButton';
+import HideKeyboard from '../../components/hideKeyboard';
 
 const UserDetailsScreen = ({route, navigation}) => {
   const {user} = route.params;
