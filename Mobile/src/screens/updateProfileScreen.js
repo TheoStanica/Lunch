@@ -28,15 +28,18 @@ const UpdateProfileScreen = () => {
                 retypePassword: undefined,
                 fullname: userReducer.fullname,
               }}
-              onSubmit={values =>
+              onSubmit={values => {
+                if (values.email === userReducer.email)
+                  values.email = undefined;
+
                 dispatch(
                   updateUser({
                     email: values.email,
                     password: values.password,
                     fullname: values.fullname,
                   }),
-                )
-              }>
+                );
+              }}>
               {({values, handleChange, errors, handleSubmit}) => (
                 <>
                   <TextInputField

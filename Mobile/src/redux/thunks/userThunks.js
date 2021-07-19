@@ -87,11 +87,18 @@ export const updateUser =
   ({_userId, email, password, fullname, role}) =>
   async dispatch => {
     try {
-      await userPutRequest({_userId, email, password, fullname, role});
+      const response = await userPutRequest({
+        _userId,
+        email,
+        password,
+        fullname,
+        role,
+      });
+
       if (!_userId) {
-        dispatch(setUser({email, password, fullname, role}));
+        dispatch(setUser(response.data.user));
       } else {
-        dispatch(updateUserAction({id: _userId, email, fullname, role}));
+        dispatch(updateUserAction(response.data.user));
       }
     } catch (error) {
       dispatch(handleError(error));

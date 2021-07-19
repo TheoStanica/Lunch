@@ -19,25 +19,19 @@ const allUsersReducer = (state = INITIAL_STATE, action) => {
       return {allUsers: _allUsers, allUsersById: _allUsersById};
 
     case DELETE_USER:
-      const {[action.payload.user]: _, ...allUsersById} = state.allUsersById;
-      const allUsers = state.allUsers.filter(
-        user => user !== action.payload.user,
-      );
+      const {[action.payload.user]: _, ...allUsersById} = state.allUsersById,
+        allUsers = state.allUsers.filter(user => user !== action.payload.user);
 
       return {allUsers, allUsersById};
 
     case UPDATE_USER:
-      const {[action.payload.id]: user, ...__allUsersById} = state.allUsersById;
-      const __allUsers = state.allUsers;
+      const {[action.payload.id]: user, ...__allUsersById} = state.allUsersById,
+        __allUsers = state.allUsers;
 
-      action.payload.email = action.payload.email
-        ? action.payload.email
-        : user.email;
       __allUsersById[user.id] = {
         ...user,
         ...action.payload,
       };
-
       return {allUsers: __allUsers, allUsersById: __allUsersById};
 
     default:
