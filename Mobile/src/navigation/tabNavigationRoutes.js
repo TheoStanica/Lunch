@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useSelector} from 'react-redux';
+import RestaurantDetailsScreen from '../screens/restaurantDetailsScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -53,6 +54,11 @@ const AdminStack = () => {
         name="ManageRestaurantsScreen"
         component={ManageRestaurantsScreen}
         options={{title: 'Manage Restaurants'}}
+      />
+      <Stack.Screen
+        name="RestaurantDetailsScreen"
+        component={RestaurantDetailsScreen}
+        options={{title: 'Restaurant Details'}}
       />
     </Stack.Navigator>
   );
