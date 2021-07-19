@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Platform, StatusBar} from 'react-native';
 import {useDispatch} from 'react-redux';
-import {activateAccountUser} from '../redux/thunks/userThunks';
+import {activateAccountUser} from '../../redux/thunks/userThunks';
 
 const ActivationScreen = ({route, navigation}) => {
   const [message, setMessage] = useState('');

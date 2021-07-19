@@ -1,11 +1,11 @@
 import React from 'react';
-import HomeScreen from '../screens/homeScreen';
-import ProfileScreen from '../screens/profileScreen';
-import UpdateProfileScreen from '../screens/updateProfileScreen';
+import HomeScreen from '../screens/userScreens/homeScreen';
+import ProfileScreen from '../screens/userScreens/profileScreen';
+import UpdateProfileScreen from '../screens/userScreens/updateProfileScreen';
 import AdminScreen from '../screens/adminScreen';
-import ManageUsersScreen from '../screens/manageUsersScreen';
-import ManageRestaurantsScreen from '../screens/manageRestaurantsScreen';
-import UserDetailsScreen from '../screens/userDetailsScreen';
+import ManageUsersScreen from '../screens/adminScreens/manageUsersScreen';
+import ManageRestaurantsScreen from '../screens/adminScreens/manageRestaurantsScreen';
+import UserDetailsScreen from '../screens/adminScreens/userDetailsScreen';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {createStackNavigator} from '@react-navigation/stack';

@@ -1,13 +1,13 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import LoginScreen from '../screens/loginScreen';
-import RegisterScreen from '../screens/registerScreen';
-import ForgotPasswordScreen from '../screens/forgotPasswordScreen';
+import LoginScreen from '../screens/authScreens/loginScreen';
+import RegisterScreen from '../screens/authScreens/registerScreen';
+import ForgotPasswordScreen from '../screens/authScreens/forgotPasswordScreen';
 import TabNavigatorRoutes from './tabNavigationRoutes';
 import {useSelector} from 'react-redux';
-import AuthScreen from '../screens/authScreen';
+import AuthScreen from '../screens/authScreens/authScreen';
 import MessageScreen from '../screens/messageScreen';
-import ActivationScreen from '../screens/activationScreen';
+import ActivationScreen from '../screens/authScreens/activationScreen';
 
 const Stack = createStackNavigator();
 
