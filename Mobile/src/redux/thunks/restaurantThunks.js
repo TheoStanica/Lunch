@@ -5,6 +5,7 @@ import {
 } from '../actions/restaurantActions';
 import {handleError} from './errorThunks';
 import {
+  restaurantCreateRequest,
   restaurantDeleteRequest,
   restaurantGetRestaurantsRequest,
   restaurantUpdateRequest,
@@ -52,6 +53,17 @@ export const deleteRestaurant =
     try {
       await restaurantDeleteRequest({id});
       dispatch(deleteRestaurantAction({id}));
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+
+export const createRestaurant =
+  ({name, cost}, callback) =>
+  async dispatch => {
+    try {
+      await restaurantCreateRequest({name, cost});
+      if (typeof callback == 'function') callback();
     } catch (error) {
       dispatch(handleError(error));
     }

@@ -39,6 +39,11 @@ export const restaurantGetRestaurantsRequest = async () => {
 export const restaurantUpdateRequest = async ({id, name, cost, status}) => {
   return await api.put(`/restaurant/${id}`, {name, cost, status});
 };
+
 export const restaurantDeleteRequest = async ({id}) => {
   return await api.delete(`/restaurant/${id}`);
+};
+
+export const restaurantCreateRequest = async ({name, cost}) => {
+  return await api.post('/restaurant', {name, cost});
 };
