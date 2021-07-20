@@ -6,7 +6,6 @@ const Menu = require('./model');
 const createMenu = async (req, res, next) => {
   try {
     const { restaurantId } = req.body;
-    console.log(req.body);
 
     if (!(await Restaurant.findById(restaurantId))) {
       return next(new BadRequestError('Please provide a valid restaurantId'));

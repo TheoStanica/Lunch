@@ -35,9 +35,11 @@ const menuSchema = new mongoose.Schema(
     },
     cancelAt: {
       type: Date,
+      required: true,
     },
     notifyAfter: {
       type: Date,
+      required: true,
     },
   },
   {
