@@ -34,7 +34,7 @@ const ManageRestaurantsScreen = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
       setVisible(true);
-    }, 2000);
+    }, 500);
   }, []);
 
   return (

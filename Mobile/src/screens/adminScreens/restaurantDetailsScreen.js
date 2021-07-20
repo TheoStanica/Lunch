@@ -1,7 +1,7 @@
 import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {Formik} from 'formik';
-import {Switch} from 'react-native-paper';
+import {Switch, List} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import TextInputField from '../../components/textInputField';
 import ActionButton from '../../components/actionButton';
@@ -66,18 +66,20 @@ const RestaurantDetailsScreen = ({route, navigation}) => {
                   field="cost"
                   keyboardType="numeric"
                 />
-                <View style={styles.activeContainer}>
-                  <Text>Active </Text>
-                  <Switch
-                    value={values.status === 'active' ? true : false}
-                    onValueChange={() =>
-                      setFieldValue(
-                        'status',
-                        values.status === 'active' ? 'inactive' : 'active',
-                      )
-                    }
-                  />
-                </View>
+                <List.Item
+                  title="Active"
+                  right={() => (
+                    <Switch
+                      value={values.status === 'active' ? true : false}
+                      onValueChange={() =>
+                        setFieldValue(
+                          'status',
+                          values.status === 'active' ? 'inactive' : 'active',
+                        )
+                      }
+                    />
+                  )}
+                />
               </View>
               <ActionButton text="Update" onPress={handleSubmit} />
             </View>
@@ -96,11 +98,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     justifyContent: 'space-between',
-  },
-  activeContainer: {
-    marginLeft: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   title: {
     fontSize: 24,
