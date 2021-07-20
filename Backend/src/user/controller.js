@@ -200,9 +200,10 @@ const updateUser = async (req, res, next) => {
     }
 
     user.email = req.body.email || user.email;
+    user.fullname = req.body.fullname || user.fullname;
+
     if (req.body.password)
       user.password = bcrypt.hashSync(req.body.password) || user.password;
-    user.fullname = req.body.fullname || user.fullname;
 
     if (req.user.role === accountRole.admin) {
       user.role = req.body.role || user.role;

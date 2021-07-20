@@ -1,20 +1,18 @@
 const mongoose = require('mongoose');
 const { courseRequiredType, orderStatus } = require('../utils/enums');
 
-const courseType = [
-  {
-    _id: false,
-    option: {
-      type: Number,
-      required: true,
-    },
-    requiredType: {
-      type: String,
-      enum: [courseRequiredType],
-      default: courseRequiredType.both,
-    },
+const courseType = {
+  _id: false,
+  option: {
+    type: Number,
+    required: true,
   },
-];
+  requiredType: {
+    type: String,
+    enum: [courseRequiredType],
+    default: courseRequiredType.both,
+  },
+};
 
 const orderSchema = new mongoose.Schema(
   {
@@ -41,12 +39,15 @@ const orderSchema = new mongoose.Schema(
     },
     appetizer: {
       type: courseType,
+      required: true,
     },
     mainCourse: {
       type: courseType,
+      required: true,
     },
     desert: {
       type: courseType,
+      required: true,
     },
   },
   {
