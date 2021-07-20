@@ -13,4 +13,21 @@ const restaurantStatus = Object.freeze({
   inactive: 'inactive',
 });
 
-module.exports = { accountStatus, accountRole, restaurantStatus };
+const courseRequiredType = Object.freeze({
+  restaurant: 'restaurant',
+  takeaway: 'takeaway',
+  both: 'both',
+});
+
+const orderStatus = Object.freeze({
+  active: 'active',
+  cancelled: 'cancelled',
+});
+
+module.exports = {
+  accountStatus,
+  accountRole,
+  restaurantStatus,
+  courseRequiredType,
+  orderStatus,
+};
