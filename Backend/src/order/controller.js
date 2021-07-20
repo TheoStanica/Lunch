@@ -33,6 +33,14 @@ const updateOrder = async (req, res, next) => {
       return next(new NotFoundError('Order not found'));
     }
 
+    if (req.body.menuId && !(await Menu.findOne({ _id: req.body.menuId }))) {
+      return next(new BadRequestError('Please provide a valid menu id.'));
+    }
+
+    if (req.body.userId && !(await User.findOne({ _id: req.body.userId }))) {
+      return next(new BadRequestError('Please provide a valid user id.'));
+    }
+
     order.type = req.body.type || order.type;
     order.status = req.body.status || order.status;
     order.userId = req.body.userId || order.userId;
