@@ -1,13 +1,36 @@
+const { courseRequiredType } = require('../utils/enums');
 const mongoose = require('mongoose');
+
+const courseType = {
+  _id: false,
+  description: {
+    type: String,
+    required: true,
+  },
+  requiredType: {
+    type: String,
+    enum: [courseRequiredType],
+    default: courseRequiredType.both,
+  },
+};
 
 const menuSchema = new mongoose.Schema(
   {
-    appetizer: {},
-    mainCourse: {},
-    dessert: {},
+    appetizer: {
+      type: [courseType],
+      validate: (v) => Array.isArray(v) && v.length > 0,
+    },
+    mainCourse: {
+      type: [courseType],
+      validate: (v) => Array.isArray(v) && v.length > 0,
+    },
+    dessert: {
+      type: [courseType],
+      validate: (v) => Array.isArray(v) && v.length > 0,
+    },
     restaurantId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Restaurat',
+      ref: 'Restaurant',
       required: true,
     },
     cancelAt: {
