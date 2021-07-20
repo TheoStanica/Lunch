@@ -12,7 +12,19 @@ const AdminField = ({
   description,
   icon,
   iconColor = '#FBBC00',
+  index,
+  row,
+  prevOpenedRow,
+  onUpdateRow,
+  onUpdatePrevOpenedRow,
 }) => {
+  const closeRow = index => {
+    if (prevOpenedRow && prevOpenedRow !== row[index]) {
+      prevOpenedRow.close();
+    }
+    onUpdatePrevOpenedRow(row[index]);
+  };
+
   const renderActions = () => {
     return (
       <>
@@ -45,7 +57,16 @@ const AdminField = ({
   };
 
   return (
-    <Swipeable renderRightActions={renderActions}>
+    <Swipeable
+      renderRightActions={renderActions}
+      friction={1.5}
+      ref={ref => {
+        row[index] = ref;
+        onUpdateRow(row);
+      }}
+      onSwipeableOpen={() => {
+        closeRow(index);
+      }}>
       <List.Item
         style={styles.itemContainer}
         title={title}

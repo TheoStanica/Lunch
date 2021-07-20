@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {StyleSheet, FlatList} from 'react-native';
 import {FAB} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
@@ -17,6 +17,11 @@ const ManageRestaurantsScreen = ({navigation}) => {
   const [isFetching, setIsFetching] = useState(true);
   const dispatch = useDispatch();
 
+  const [row, setRow] = useState([]);
+  const [previousOpenedRow, setPreviousOpenedRow] = useState(null);
+
+  const [visible, setVisible] = useState(false);
+
   const onRefresh = () => {
     setIsFetching(true);
     dispatch(getRestaurants(() => setIsFetching(false)));
@@ -26,6 +31,11 @@ const ManageRestaurantsScreen = ({navigation}) => {
       onRefresh();
     }, []),
   );
+  useEffect(() => {
+    setTimeout(() => {
+      setVisible(true);
+    }, 2000);
+  }, []);
 
   return (
     <HideKeyboard>
@@ -35,7 +45,7 @@ const ManageRestaurantsScreen = ({navigation}) => {
           keyExtractor={restaurant => restaurant}
           renderItem={restaurant => (
             <AdminField
-              id={restaurant.item}
+              index={restaurant.index}
               title={restaurantsById[restaurant.item].name}
               description={`Cost: ${restaurantsById[restaurant.item].cost} lei`}
               icon="food"
@@ -45,6 +55,10 @@ const ManageRestaurantsScreen = ({navigation}) => {
                   restaurantId: restaurant.item,
                 })
               }
+              row={row}
+              onUpdateRow={row => setRow(row)}
+              prevOpenedRow={previousOpenedRow}
+              onUpdatePrevOpenedRow={prevRow => setPreviousOpenedRow(prevRow)}
             />
           )}
           onRefresh={onRefresh}
@@ -54,6 +68,7 @@ const ManageRestaurantsScreen = ({navigation}) => {
           style={styles.fab}
           icon="plus"
           color="white"
+          visible={visible}
           animated={true}
           onPress={() => navigation.navigate('CreateRestaurantScreen')}
         />
@@ -65,7 +80,7 @@ const ManageRestaurantsScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   fab: {
     position: 'absolute',
-    margin: 20,
+    margin: 40,
     right: 0,
     bottom: 0,
   },

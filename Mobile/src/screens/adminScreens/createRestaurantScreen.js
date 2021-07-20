@@ -21,7 +21,6 @@ const CreateRestaurantScreen = ({navigation}) => {
             cost: '',
           }}
           onSubmit={values => {
-            console.log('dispatching thunk to create restaurant', values);
             dispatch(
               createRestaurant({name: values.name, cost: values.cost}, () => {
                 navigation.replace('MessageScreen', {
