@@ -30,7 +30,7 @@ const orderSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: [courseType],
+      enum: [courseRequiredType],
       required: true,
     },
     status: {
