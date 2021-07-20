@@ -3,6 +3,7 @@ const apiRouter = new Router();
 
 const userRoutes = require('./user/routes');
 const restaurantRoutes = require('./restaurant/routes');
+const orderRoutes = require('./order/routes');
 
 apiRouter.get('/deeplink/:_path*', (req, res) => {
   res.redirect(`lunchapp://${req.params._path}${req.params[0]}`);
@@ -10,5 +11,6 @@ apiRouter.get('/deeplink/:_path*', (req, res) => {
 
 apiRouter.use('/user', userRoutes);
 apiRouter.use('/restaurant', restaurantRoutes);
+apiRouter.use('/order', orderRoutes);
 
 module.exports = apiRouter;
