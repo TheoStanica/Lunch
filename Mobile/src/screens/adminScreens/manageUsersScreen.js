@@ -9,6 +9,8 @@ const ManageUsersScreen = ({navigation}) => {
   const userReducer = useSelector(state => state.userReducer);
   const {allUsers, allUsersById} = useSelector(state => state.allUsersReducer);
   const [isFetching, setIsFetching] = useState(true);
+  const [row, setRow] = useState([]);
+  const [previousOpenedRow, setPreviousOpenedRow] = useState(null);
   const dispatch = useDispatch();
 
   const onRefresh = () => {
@@ -35,7 +37,12 @@ const ManageUsersScreen = ({navigation}) => {
                   user: allUsersById[_userId],
                 });
               }}
+              index={_userId}
               onDelete={() => dispatch(deleteUser({_userId}))}
+              row={row}
+              onUpdateRow={row => setRow(row)}
+              prevOpenedRow={previousOpenedRow}
+              onUpdatePrevOpenedRow={prevRow => setPreviousOpenedRow(prevRow)}
             />
           ) : (
             <></>
