@@ -13,10 +13,22 @@ const restaurantSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    cancelAt: {
+      type: Date,
+      required: true,
+    },
+    notifyAfter: {
+      type: Date,
+      required: true,
+    },
     status: {
       type: String,
       enum: [restaurantStatus],
       default: restaurantStatus.active,
+    },
+    deleted: {
+      type: Boolean,
+      default: false,
     },
   },
   {
@@ -36,6 +48,7 @@ restaurantSchema.options.toJSON = {
     delete ret.__v;
     delete ret.createdAt;
     delete ret.updatedAt;
+    delete ret.deleted;
     return ret;
   },
 };
