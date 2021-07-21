@@ -1,4 +1,4 @@
-const { check } = require('express-validator');
+const { check, param } = require('express-validator');
 const { courseRequiredType, courseTypes } = require('../../utils/enums');
 
 const createMenuValidationSchema = [
@@ -87,7 +87,15 @@ const updateMenuValidationSchema = [
     .optional(),
 ];
 
+const menuIdValidationSchema = [
+  param('_id')
+    .notEmpty()
+    .matches(/^[0-9a-fA-F]{24}$/)
+    .withMessage('Please provide a valid menu ID'),
+];
+
 module.exports = {
   createMenuValidationSchema,
   updateMenuValidationSchema,
+  menuIdValidationSchema,
 };

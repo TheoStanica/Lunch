@@ -5,6 +5,7 @@ const { validationResults } = require('../middleware/bodyValidation/index');
 const {
   createMenuValidationSchema,
   updateMenuValidationSchema,
+  menuIdValidationSchema,
 } = require('../middleware/bodyValidation/menuValidation');
 
 router.post(
@@ -22,6 +23,12 @@ router.put(
   menuController.updateMenu
 );
 router.get('/', adminAuthValidation, menuController.getMenus);
-router.delete('/:_id', menuController.deleteMenu);
+router.delete(
+  '/:_id',
+  adminAuthValidation,
+  menuIdValidationSchema,
+  validationResults,
+  menuController.deleteMenu
+);
 
 module.exports = router;
