@@ -82,6 +82,7 @@ const deleteRestaurant = async (req, res, next) => {
       return next(new NotFoundError("Restaurant doesn't exist"));
     }
     restaurant.deleted = true;
+    await restaurant.save();
 
     res.status(204).send();
   } catch (error) {

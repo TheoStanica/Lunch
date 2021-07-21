@@ -18,11 +18,9 @@ const createValidationSchema = [
     .isIn([courseRequiredType.restaurant, courseRequiredType.takeaway])
     .withMessage('Type should be restaurant or takeaway'),
   check('menuOptions').notEmpty().withMessage('Menu options are required'),
-  check('menuOptions.*.option')
-    .notEmpty()
-    .withMessage('Menu option is required')
+  check('menuOptions.*')
     .isNumeric()
-    .withMessage('Menu option must be a number'),
+    .withMessage('Menu option should be a number'),
 ];
 
 const updateValidationSchema = [
@@ -54,12 +52,9 @@ const updateValidationSchema = [
     .notEmpty()
     .withMessage('Menu options are required')
     .optional(),
-  check('menuOptions.*.option')
-    .notEmpty()
-    .withMessage('Menu option is required')
+  check('menuOptions.*')
     .isNumeric()
-    .withMessage('Menu option must be a number')
-    .optional(),
+    .withMessage('Menu option should be a number'),
 ];
 
 const orderIdValidationSchema = [
