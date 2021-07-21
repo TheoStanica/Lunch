@@ -27,6 +27,10 @@ const orderSchema = new mongoose.Schema(
     menuOptions: {
       type: {},
     },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: {

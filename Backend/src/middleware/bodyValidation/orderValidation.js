@@ -62,6 +62,15 @@ const updateValidationSchema = [
     .optional(),
 ];
 
+const deleteValidationSchema = [
+  check('deleted')
+    .notEmpty()
+    .withMessage('Deleted is required.')
+    .trim()
+    .isBoolean()
+    .withMessage('Delete should be true or false.'),
+];
+
 const orderIdValidationSchema = [
   param('_orderId')
     .notEmpty()
@@ -73,5 +82,6 @@ const orderIdValidationSchema = [
 module.exports = {
   createValidationSchema,
   updateValidationSchema,
+  deleteValidationSchema,
   orderIdValidationSchema,
 };
