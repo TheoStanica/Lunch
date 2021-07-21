@@ -18,6 +18,10 @@ const restaurantSchema = new mongoose.Schema(
       enum: [restaurantStatus],
       default: restaurantStatus.active,
     },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: {
