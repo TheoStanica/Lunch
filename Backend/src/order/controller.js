@@ -4,7 +4,48 @@ const Order = require('./model');
 const Menu = require('../menu/model');
 const User = require('../user/model');
 
-const getOrders = async (req, res, next) => {};
+const convertFilterToQuery = (filter) => {
+  const newFilter = {};
+
+  if (filter._id) {
+    newFilter._id = filter._id;
+  }
+
+  if (filter.type) {
+    newFilter.type = filter.type;
+  }
+
+  if (filter.status) {
+    newFilter.states = filter.status;
+  }
+
+  if (filter.menuId) {
+    newFilter.menuId = filter.menuId;
+  }
+
+  if (filter.userId) {
+    newFilter.userId = filter.userId;
+  }
+
+  return newFilter;
+};
+
+const getOrders = async (req, res, next) => {
+  try {
+    if (req.query.filter) {
+      const query = convertFilterToQuery(JSON.parse(req.query.filter)),
+        orders = await Order.find(query).populate('menuId').populate('userId');
+
+      res.send({ orders });
+    } else {
+      const orders = await Order.find({});
+
+      res.send({ orders });
+    }
+  } catch (error) {
+    return next(error);
+  }
+};
 
 const createOrder = async (req, res, next) => {
   try {
