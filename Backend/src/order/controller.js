@@ -44,16 +44,12 @@ const convertFilterToQuery = (filter) => {
 
 const getOrders = async (req, res, next) => {
   try {
-    if (req.query.filter) {
-      const query = convertFilterToQuery(JSON.parse(req.query.filter)),
-        orders = await Order.find(query).populate('menuId').populate('userId');
+    const query = req.query.filter
+        ? convertFilterToQuery(JSON.parse(req.query.filter))
+        : {},
+      orders = await Order.find(query).populate('menuId').populate('userId');
 
-      res.send({ orders });
-    } else {
-      const orders = await Order.find({});
-
-      res.send({ orders });
-    }
+    res.send({ orders });
   } catch (error) {
     return next(error);
   }
