@@ -104,6 +104,7 @@ const deleteOrder = async (req, res, next) => {
       return next(new NotFoundError('Order not found'));
     }
     order.deleted = true;
+    await order.save();
 
     res.status(204).send();
   } catch (error) {
