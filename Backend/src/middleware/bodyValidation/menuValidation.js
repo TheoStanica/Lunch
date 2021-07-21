@@ -7,7 +7,6 @@ const createMenuValidationSchema = [
     .withMessage('restaurantId is required')
     .matches(/^[0-9a-fA-F]{24}$/)
     .withMessage('Please provide a valid restaurantId'),
-
   check(`menu`).notEmpty().withMessage(`Menu is required`),
   check('menu.*.*')
     .custom((obj) => {
@@ -32,15 +31,6 @@ const createMenuValidationSchema = [
     ])
     .withMessage(`Please provide a valid requiredType for the course`)
     .optional(),
-
-  check('cancelAt')
-    .notEmpty()
-    .isISO8601()
-    .withMessage('cancelAt must be a valid date'),
-  check('notifyAfter')
-    .notEmpty()
-    .isISO8601()
-    .withMessage('notifyAfter must be a valid date'),
 ];
 
 const updateMenuValidationSchema = [
@@ -75,16 +65,6 @@ const updateMenuValidationSchema = [
       courseRequiredType.both,
     ])
     .withMessage(`Please provide a valid requiredType for the course`),
-  check('cancelAt')
-    .notEmpty()
-    .isISO8601()
-    .withMessage('cancelAt must be a valid date')
-    .optional(),
-  check('notifyAfter')
-    .notEmpty()
-    .isISO8601()
-    .withMessage('notifyAfter must be a valid date')
-    .optional(),
 ];
 
 const menuIdValidationSchema = [
@@ -94,8 +74,11 @@ const menuIdValidationSchema = [
     .withMessage('Please provide a valid menu ID'),
 ];
 
+const getMenuValidationSchema = [];
+
 module.exports = {
   createMenuValidationSchema,
   updateMenuValidationSchema,
   menuIdValidationSchema,
+  getMenuValidationSchema,
 };

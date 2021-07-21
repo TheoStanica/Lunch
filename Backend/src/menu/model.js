@@ -10,14 +10,6 @@ const menuSchema = new mongoose.Schema(
       ref: 'Restaurant',
       required: true,
     },
-    cancelAt: {
-      type: Date,
-      required: true,
-    },
-    notifyAfter: {
-      type: Date,
-      required: true,
-    },
     deleted: {
       type: Boolean,
       default: false,
