@@ -18,7 +18,7 @@ const createMenuValidationSchema = [
       return true;
     })
     .withMessage(
-      'Course must only have only description and requiredType(optional) field'
+      'Course must have only description and requiredType(optional) fields'
     ),
   check(`menu.*.*.description`)
     .notEmpty()
@@ -50,7 +50,19 @@ const updateMenuValidationSchema = [
     .matches(/^[0-9a-fA-F]{24}$/)
     .withMessage('Please provide a valid restaurantId')
     .optional(),
-  check(`menu`).notEmpty().withMessage(`Menu is required`),
+  check(`menu`).optional(),
+  check('menu.*.*')
+    .custom((obj) => {
+      const keys = Object.keys(obj);
+      if (keys.length > 2) return false;
+      if (keys.some((key) => !Object.keys(courseTypes).includes(key)))
+        return false;
+      return true;
+    })
+    .optional()
+    .withMessage(
+      'Course must only have only description and requiredType(optional) field'
+    ),
   check(`menu.*.*.description`)
     .notEmpty()
     .withMessage(`Please provide a description for the course`)
