@@ -225,7 +225,7 @@ const deleteUser = async (req, res, next) => {
     if (!user) {
       return next(new NotFoundError('User not found'));
     }
-    await user.delete();
+    user.deleted = true;
 
     res.status(204).send();
   } catch (error) {

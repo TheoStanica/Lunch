@@ -37,6 +37,10 @@ const userSchema = new mongoose.Schema(
     forgotPasswordTokenExp: {
       type: Date,
     },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: {
@@ -58,6 +62,7 @@ userSchema.options.toJSON = {
     delete ret.forgotPasswordTokenExp;
     delete ret.createdAt;
     delete ret.updatedAt;
+    delete ret.deleted;
     delete ret.__v;
     return ret;
   },
