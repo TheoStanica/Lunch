@@ -4,7 +4,6 @@ const { validationResults } = require('../middleware/bodyValidation/index');
 const {
   createValidationSchema,
   updateValidationSchema,
-  deleteValidationSchema,
   orderIdValidationSchema,
 } = require('../middleware/bodyValidation/orderValidation');
 
@@ -35,7 +34,6 @@ router.delete(
   '/:_orderId',
   userAuthValidation,
   orderIdValidationSchema,
-  deleteValidationSchema,
   validationResults,
   orderController.deleteOrder
 );
