@@ -21,8 +21,29 @@ const createMenu = async (req, res, next) => {
 const updateMenu = async (req, res, next) => {
   try {
     const { _id } = req.params;
+    const { menu, restaurantId, cancelAt, notifyAfter } = req.body;
 
-    res.send();
+    const existingMenu = await Menu.findById(_id);
+    if (!existingMenu) {
+      return next(new BadRequestError('Please provide a valid menu id'));
+    }
+
+    if (restaurantId && !(await Restaurant.findById(restaurantId))) {
+      return next(new BadRequestError('Please provide a valid restaurantId'));
+    }
+
+    const updatedMenu = await Menu.findByIdAndUpdate(
+      _id,
+      {
+        menu: menu || existingMenu.menu,
+        cancelAt: cancelAt || existingMenu.cancelAt,
+        notifyAfter: notifyAfter || existingMenu.notifyAfter,
+        restaurantId: restaurantId || existingMenu.restaurantId,
+      },
+      { new: true }
+    );
+
+    res.send(updatedMenu);
   } catch (error) {
     return next(error);
   }

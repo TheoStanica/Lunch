@@ -1,5 +1,5 @@
 const { check } = require('express-validator');
-const { courseRequiredType } = require('../../utils/enums');
+const { courseRequiredType, courseTypes } = require('../../utils/enums');
 
 const createMenuValidationSchema = [
   check('restaurantId')
@@ -7,42 +7,32 @@ const createMenuValidationSchema = [
     .withMessage('restaurantId is required')
     .matches(/^[0-9a-fA-F]{24}$/)
     .withMessage('Please provide a valid restaurantId'),
-  check('appetizer').notEmpty().withMessage('appetizer is required'),
-  check('appetizer.*.description')
+
+  check(`menu`).notEmpty().withMessage(`Menu is required`),
+  check('menu.*.*')
+    .custom((obj) => {
+      const keys = Object.keys(obj);
+      if (keys.length > 2) return false;
+      if (keys.some((key) => !Object.keys(courseTypes).includes(key)))
+        return false;
+      return true;
+    })
+    .withMessage(
+      'Course must only have only description and requiredType(optional) field'
+    ),
+  check(`menu.*.*.description`)
     .notEmpty()
-    .withMessage('Please provide appetizer.description'),
-  check('appetizer.*.requiredType')
-    .optional()
+    .withMessage(`Please provide a description for the course`),
+  check(`menu.*.*.requiredType`)
+    .notEmpty()
     .isIn([
       courseRequiredType.restaurant,
       courseRequiredType.takeaway,
       courseRequiredType.both,
     ])
-    .withMessage('Please provide a valid appetizer.requiredType'),
-  check('mainCourse').notEmpty().withMessage('mainCourse is required'),
-  check('mainCourse.*.description')
-    .notEmpty()
-    .withMessage('Please provide mainCourse.description'),
-  check('mainCourse.*.requiredType')
-    .optional()
-    .isIn([
-      courseRequiredType.restaurant,
-      courseRequiredType.takeaway,
-      courseRequiredType.both,
-    ])
-    .withMessage('Please provide a valid mainCourse.requiredType'),
-  check('dessert').notEmpty().withMessage('dessert is required'),
-  check('dessert.*.description')
-    .notEmpty()
-    .withMessage('Please provide dessert.description'),
-  check('dessert.*.requiredType')
-    .optional()
-    .isIn([
-      courseRequiredType.restaurant,
-      courseRequiredType.takeaway,
-      courseRequiredType.both,
-    ])
-    .withMessage('Please provide a valid dessert.requiredType'),
+    .withMessage(`Please provide a valid requiredType for the course`)
+    .optional(),
+
   check('cancelAt')
     .notEmpty()
     .isISO8601()
@@ -53,6 +43,39 @@ const createMenuValidationSchema = [
     .withMessage('notifyAfter must be a valid date'),
 ];
 
+const updateMenuValidationSchema = [
+  check('restaurantId')
+    .notEmpty()
+    .withMessage('restaurantId is required')
+    .matches(/^[0-9a-fA-F]{24}$/)
+    .withMessage('Please provide a valid restaurantId')
+    .optional(),
+  check(`menu`).notEmpty().withMessage(`Menu is required`),
+  check(`menu.*.*.description`)
+    .notEmpty()
+    .withMessage(`Please provide a description for the course`)
+    .optional(),
+  check(`menu.*.*.requiredType`)
+    .optional()
+    .isIn([
+      courseRequiredType.restaurant,
+      courseRequiredType.takeaway,
+      courseRequiredType.both,
+    ])
+    .withMessage(`Please provide a valid requiredType for the course`),
+  check('cancelAt')
+    .notEmpty()
+    .isISO8601()
+    .withMessage('cancelAt must be a valid date')
+    .optional(),
+  check('notifyAfter')
+    .notEmpty()
+    .isISO8601()
+    .withMessage('notifyAfter must be a valid date')
+    .optional(),
+];
+
 module.exports = {
   createMenuValidationSchema,
+  updateMenuValidationSchema,
 };

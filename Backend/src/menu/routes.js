@@ -4,6 +4,7 @@ const { adminAuthValidation } = require('../middleware/authValidation');
 const { validationResults } = require('../middleware/bodyValidation/index');
 const {
   createMenuValidationSchema,
+  updateMenuValidationSchema,
 } = require('../middleware/bodyValidation/menuValidation');
 
 router.post(
@@ -13,7 +14,12 @@ router.post(
   validationResults,
   menuController.createMenu
 );
-router.put('/:_id', menuController.updateMenu);
+router.put(
+  '/:_id',
+  updateMenuValidationSchema,
+  validationResults,
+  menuController.updateMenu
+);
 router.delete('/:_id', menuController.deleteMenu);
 
 module.exports = router;

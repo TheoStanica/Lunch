@@ -19,9 +19,15 @@ const courseRequiredType = Object.freeze({
   both: 'both',
 });
 
+const courseTypes = Object.freeze({
+  description: 'description',
+  requiredType: 'requiredType',
+});
+
 module.exports = {
   accountStatus,
   accountRole,
   restaurantStatus,
   courseRequiredType,
+  courseTypes,
 };
