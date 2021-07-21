@@ -24,17 +24,8 @@ const orderSchema = new mongoose.Schema(
       default: orderStatus.active,
       required: true,
     },
-    appetizer: {
-      type: Number,
-      required: true,
-    },
-    mainCourse: {
-      type: Number,
-      required: true,
-    },
-    desert: {
-      type: Number,
-      required: true,
+    menuOptions: {
+      type: {},
     },
   },
   {

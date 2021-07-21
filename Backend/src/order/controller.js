@@ -86,9 +86,7 @@ const updateOrder = async (req, res, next) => {
     order.status = req.body.status || order.status;
     order.userId = req.body.userId || order.userId;
     order.menuId = req.body.menuId || order.menuId;
-    order.appetizer = req.body.appetizer || order.appetizer;
-    order.mainCourse = req.body.mainCourse || order.mainCourse;
-    order.desert = req.body.desert || order.desert;
+    order.menuOptions = req.body.menuOptions || order.menuOptions;
 
     order = await order.save();
 

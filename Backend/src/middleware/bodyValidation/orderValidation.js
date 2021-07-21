@@ -17,21 +17,12 @@ const createValidationSchema = [
     .withMessage('Type is required.')
     .isIn([courseRequiredType.restaurant, courseRequiredType.takeaway])
     .withMessage('Type should be restaurant or takeaway'),
-  check('appetizer')
+  check('menuOptions').notEmpty().withMessage('Menu options are required'),
+  check('menuOptions.*.option')
     .notEmpty()
-    .withMessage('Appetizer option is required.')
+    .withMessage('Menu option is required')
     .isNumeric()
-    .withMessage('Appetizer option must be a number'),
-  check('mainCourse')
-    .notEmpty()
-    .withMessage('Main Course option is required.')
-    .isNumeric()
-    .withMessage('Main Course option must be a number'),
-  check('desert')
-    .notEmpty()
-    .withMessage('Desert option is required.')
-    .isNumeric()
-    .withMessage('Desert optoion must be a number'),
+    .withMessage('Menu option must be a number'),
 ];
 
 const updateValidationSchema = [
@@ -59,23 +50,15 @@ const updateValidationSchema = [
     .isIn([orderStatus.active, orderStatus.cancelled])
     .withMessage('Status should be active or cancelled')
     .optional(),
-  check('appetizer')
+  check('menuOptions')
     .notEmpty()
-    .withMessage('Appetizer option is required.')
-    .isNumeric()
-    .withMessage('Appetizer option must be a number')
+    .withMessage('Menu options are required')
     .optional(),
-  check('mainCourse')
+  check('menuOptions.*.option')
     .notEmpty()
-    .withMessage('Main Course option is required.')
+    .withMessage('Menu option is required')
     .isNumeric()
-    .withMessage('Main Course option must be a number')
-    .optional(),
-  check('desert')
-    .notEmpty()
-    .withMessage('Desert option is required.')
-    .isNumeric()
-    .withMessage('Desert optoion must be a number')
+    .withMessage('Menu option must be a number')
     .optional(),
 ];
 
