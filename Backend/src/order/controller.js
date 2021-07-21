@@ -27,6 +27,18 @@ const convertFilterToQuery = (filter) => {
     newFilter.userId = filter.userId;
   }
 
+  if (filter.createdAt && filter.endedAt) {
+    newFilter.createdAt = { $gte: filter.createdAt, $lte: filter.endedAt };
+  } else {
+    if (filter.createdAt) {
+      newFilter.createdAt = { $gte: filter.createdAt };
+    }
+
+    if (filter.endedAt) {
+      newFilter.createdAt = { $lte: filter.endedAt };
+    }
+  }
+
   return newFilter;
 };
 
