@@ -6,10 +6,6 @@ const createRestaurant = async (req, res, next) => {
   try {
     const { name, cost, cancelAt, notifyAfter } = req.body;
 
-    if (await Restaurant.findOne({ name })) {
-      return next(new BadRequestError('Restaurant already exists.'));
-    }
-
     await Restaurant.create({ name, cost, cancelAt, notifyAfter });
 
     res.sendStatus(201);
@@ -52,10 +48,6 @@ const updateRestaurant = async (req, res, next) => {
 
     if (!restaurant || restaurant.deleted) {
       return next(new NotFoundError("Restaurant doesn't exist."));
-    }
-
-    if (name && (await Restaurant.findOne({ name }))) {
-      return next(new BadRequestError('Restaurant name already exists.'));
     }
 
     const updatedRestaurant = await Restaurant.findByIdAndUpdate(
