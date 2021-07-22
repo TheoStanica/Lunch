@@ -48,41 +48,10 @@ const getMenus = async (req, res, next) => {
   try {
     const query = req.query.filter
         ? convertFilterToQuery(JSON.parse(req?.query?.filter))
-        : {},
+        : { deleted: false },
       menus = await Menu.find(query).populate('restaurantId');
 
     res.send({ menus });
-  } catch (error) {
-    return next(error);
-  }
-};
-
-const updateMenu = async (req, res, next) => {
-  try {
-    const { _id } = req.params;
-    const { menu, restaurantId, cancelAt, notifyAfter } = req.body;
-
-    const existingMenu = await Menu.findById(_id);
-    if (!existingMenu || existingMenu?.deleted) {
-      return next(new BadRequestError('Please provide a valid menu id'));
-    }
-
-    if (restaurantId && !(await Restaurant.findById(restaurantId))) {
-      return next(new BadRequestError('Please provide a valid restaurantId'));
-    }
-
-    const updatedMenu = await Menu.findByIdAndUpdate(
-      _id,
-      {
-        menu: menu || existingMenu.menu,
-        cancelAt: cancelAt || existingMenu.cancelAt,
-        notifyAfter: notifyAfter || existingMenu.notifyAfter,
-        restaurantId: restaurantId || existingMenu.restaurantId,
-      },
-      { new: true }
-    );
-
-    res.send(updatedMenu);
   } catch (error) {
     return next(error);
   }
@@ -94,7 +63,7 @@ const deleteMenu = async (req, res, next) => {
 
     const menu = await Menu.findOne({ _id });
 
-    if (!menu) {
+    if (!menu || menu.deleted) {
       return next(new NotFoundError("Menu doesn't exist"));
     }
 
@@ -108,7 +77,6 @@ const deleteMenu = async (req, res, next) => {
 
 module.exports = {
   createMenu,
-  updateMenu,
   deleteMenu,
   getMenus,
 };

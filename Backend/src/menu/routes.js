@@ -15,13 +15,6 @@ router.post(
   validationResults,
   menuController.createMenu
 );
-router.put(
-  '/:_id',
-  adminAuthValidation,
-  updateMenuValidationSchema,
-  validationResults,
-  menuController.updateMenu
-);
 router.get('/', adminAuthValidation, menuController.getMenus);
 router.delete(
   '/:_id',
