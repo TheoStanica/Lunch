@@ -41,6 +41,11 @@ const login = async (req, res, next) => {
     if (!user) {
       return next(new BadRequestError('Invalid credentials'));
     }
+
+    if (user.deleted) {
+      return next(new BadRequestError('Account is inactive.'));
+    }
+
     if (user.status === accountStatus.pending) {
       sendActivationEmail(user);
       return next(new AccountNotActivatedError());
@@ -93,7 +98,16 @@ const activateAccount = async (req, res, next) => {
 const refreshTokens = async (req, res, next) => {
   try {
     let { refreshToken } = req.body,
-      payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+      payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET),
+      user = await User.findOne({ _id: payload.id });
+
+    if (!user) {
+      return next(new NotFoundError('User not found'));
+    }
+
+    if (user.deleted) {
+      return next(new BadRequestError('Account is inactive.'));
+    }
 
     const accessToken = jwt.sign(
       { id: payload.id, role: payload.role },
@@ -175,7 +189,7 @@ const getUser = async (req, res, next) => {
 
 const getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.find({});
+    const users = await User.find({ deleted: false });
 
     res.send({ users });
   } catch (error) {
@@ -225,6 +239,7 @@ const deleteUser = async (req, res, next) => {
     if (!user) {
       return next(new NotFoundError('User not found'));
     }
+
     user.deleted = true;
     await user.save();
 
