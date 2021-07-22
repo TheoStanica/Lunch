@@ -5,7 +5,7 @@ const Menu = require('../menu/model');
 const User = require('../user/model');
 
 const convertFilterToQuery = (filter) => {
-  const newFilter = {};
+  const newFilter = { deleted: false };
 
   if (filter._id) {
     newFilter._id = filter._id;
@@ -46,7 +46,7 @@ const getOrders = async (req, res, next) => {
   try {
     const query = req.query.filter
         ? convertFilterToQuery(JSON.parse(req.query.filter))
-        : {},
+        : { deleted: false },
       orders = await Order.find(query).populate('menuId').populate('userId');
 
     res.send({ orders });
@@ -82,6 +82,10 @@ const updateOrder = async (req, res, next) => {
       return next(new NotFoundError('Order not found'));
     }
 
+    if (order.deleted) {
+      return next(new BadRequestError('Order is inactive.'));
+    }
+
     if (req.body.menuId && !(await Menu.findOne({ _id: req.body.menuId }))) {
       return next(new BadRequestError('Please provide a valid menu id.'));
     }
@@ -111,6 +115,11 @@ const deleteOrder = async (req, res, next) => {
     if (!order) {
       return next(new NotFoundError('Order not found'));
     }
+
+    if (order.deleted) {
+      return next(new BadRequestError('Order is inactive.'));
+    }
+
     order.deleted = true;
     await order.save();
 
