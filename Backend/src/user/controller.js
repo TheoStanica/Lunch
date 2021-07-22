@@ -38,7 +38,7 @@ const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
 
-    if (!user) {
+    if (!user || user.deleted) {
       return next(new BadRequestError('Invalid credentials'));
     }
 
@@ -101,12 +101,8 @@ const refreshTokens = async (req, res, next) => {
       payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET),
       user = await User.findOne({ _id: payload.id });
 
-    if (!user) {
+    if (!user || user.deleted) {
       return next(new NotFoundError('User not found'));
-    }
-
-    if (user.deleted) {
-      return next(new BadRequestError('Account is inactive.'));
     }
 
     const accessToken = jwt.sign(

@@ -78,12 +78,8 @@ const updateOrder = async (req, res, next) => {
   try {
     let order = await Order.findOne({ _id: req.params._orderId });
 
-    if (!order) {
+    if (!order || order.deleted) {
       return next(new NotFoundError('Order not found'));
-    }
-
-    if (order.deleted) {
-      return next(new BadRequestError('Order is inactive.'));
     }
 
     if (req.body.menuId && !(await Menu.findOne({ _id: req.body.menuId }))) {
@@ -112,12 +108,8 @@ const deleteOrder = async (req, res, next) => {
   try {
     const order = await Order.findOne({ _id: req.params._orderId });
 
-    if (!order) {
+    if (!order || order.deleted) {
       return next(new NotFoundError('Order not found'));
-    }
-
-    if (order.deleted) {
-      return next(new BadRequestError('Order is inactive.'));
     }
 
     order.deleted = true;
