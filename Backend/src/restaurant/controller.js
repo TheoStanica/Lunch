@@ -4,13 +4,9 @@ const Restaurant = require('./model');
 
 const createRestaurant = async (req, res, next) => {
   try {
-    const { name, cost } = req.body;
+    const { name, cost, cancelAt, notifyAfter } = req.body;
 
-    if (await Restaurant.findOne({ name })) {
-      return next(new BadRequestError('Restaurant already exists.'));
-    }
-
-    await Restaurant.create({ name, cost });
+    await Restaurant.create({ name, cost, cancelAt, notifyAfter });
 
     res.sendStatus(201);
   } catch (error) {
@@ -24,7 +20,7 @@ const getRestaurant = async (req, res, next) => {
 
     const restaurant = await Restaurant.findById({ _id });
 
-    if (!restaurant) {
+    if (!restaurant || restaurant.deleted) {
       return next(new NotFoundError("Restaurant doesn't exist."));
     }
 
@@ -36,7 +32,7 @@ const getRestaurant = async (req, res, next) => {
 
 const getAllRestaurants = async (req, res, next) => {
   try {
-    const restaurants = await Restaurant.find({});
+    const restaurants = await Restaurant.find({ deleted: false });
     res.send(restaurants);
   } catch (error) {
     return next(error);
@@ -46,16 +42,12 @@ const getAllRestaurants = async (req, res, next) => {
 const updateRestaurant = async (req, res, next) => {
   try {
     const { _id } = req.params;
-    const { name, cost, status } = req.body;
+    const { name, cost, status, cancelAt, notifyAfter } = req.body;
 
     const restaurant = await Restaurant.findById(_id);
 
-    if (!restaurant) {
+    if (!restaurant || restaurant.deleted) {
       return next(new NotFoundError("Restaurant doesn't exist."));
-    }
-
-    if (name && (await Restaurant.findOne({ name }))) {
-      return next(new BadRequestError('Restaurant name already exists.'));
     }
 
     const updatedRestaurant = await Restaurant.findByIdAndUpdate(
@@ -64,6 +56,8 @@ const updateRestaurant = async (req, res, next) => {
         name: name || restaurant.name,
         cost: cost || restaurant.cost,
         status: status || restaurant.status,
+        notifyAfter: notifyAfter || restaurant.notifyAfter,
+        cancelAt: cancelAt || restaurant.cancelAt,
       },
       { new: true }
     );
@@ -80,11 +74,11 @@ const deleteRestaurant = async (req, res, next) => {
 
     const restaurant = await Restaurant.findOne({ _id });
 
-    if (!restaurant) {
+    if (!restaurant || restaurant.deleted) {
       return next(new NotFoundError("Restaurant doesn't exist"));
     }
 
-    await Restaurant.findByIdAndDelete(_id);
+    await Restaurant.findByIdAndUpdate(_id, { deleted: true });
 
     res.sendStatus(204);
   } catch (error) {

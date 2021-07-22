@@ -1,7 +1,7 @@
 const CustomError = require('./customError');
 
 class RequestValidationError extends CustomError {
-  statusCode = 403;
+  statusCode = 400;
 
   constructor(message) {
     super(JSON.stringify(message));
