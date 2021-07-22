@@ -12,15 +12,15 @@ const createRestaurantValidationSchema = [
   check('cancelAt')
     .notEmpty()
     .bail()
-    .withMessage('cancelAt is required')
-    .isISO8601()
-    .withMessage('cancelAt must be a valid date'),
+    .withMessage('Cancel At is required')
+    .matches(/^((1[0-2]|[1-9]):([0-5][0-9]) ([AP][M]))$/)
+    .withMessage('Cancel At must match the HH:MM AM/PM format.'),
   check('notifyAfter')
     .notEmpty()
     .bail()
-    .withMessage('notifyAfter is required')
-    .isISO8601()
-    .withMessage('notifyAfter must be a valid date'),
+    .withMessage('Notify After is required')
+    .matches(/^((1[0-2]|[1-9]):([0-5][0-9]) ([AP][M]))$/)
+    .withMessage('Notify After must match the HH:MM AM/PM format.'),
 ];
 
 const restaurantIdValidationSchema = [
@@ -43,16 +43,16 @@ const updateRestaurantValidationSchema = [
   check('cancelAt')
     .notEmpty()
     .bail()
-    .withMessage('cancelAt is required')
-    .isISO8601()
-    .withMessage('cancelAt must be a valid date')
+    .withMessage('Cancel At is required')
+    .matches(/^((1[0-2]|[1-9]):([0-5][0-9]) ([AP][M]))$/)
+    .withMessage('Cancel At must match the HH:MM AM/PM format.')
     .optional(),
   check('notifyAfter')
     .notEmpty()
     .bail()
-    .withMessage('notifyAfter is required')
-    .isISO8601()
-    .withMessage('notifyAfter must be a valid date')
+    .withMessage('Notify After is required')
+    .matches(/^((1[0-2]|[1-9]):([0-5][0-9]) ([AP][M]))$/)
+    .withMessage('Notify After must match the HH:MM AM/PM format.')
     .optional(),
 ];
 

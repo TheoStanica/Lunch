@@ -12,11 +12,11 @@ const restaurantSchema = new mongoose.Schema(
       required: true,
     },
     cancelAt: {
-      type: Date,
+      type: String,
       required: true,
     },
     notifyAfter: {
-      type: Date,
+      type: String,
       required: true,
     },
     status: {
