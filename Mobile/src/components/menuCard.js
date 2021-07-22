@@ -8,23 +8,28 @@ const MenuCard = ({onPress, title}) => {
       <Card.Cover
         style={styles.photo}
         resizeMode="contain"
-        source={require('../assets/images/caphyon.png')}
+        source={require('../assets/images/eating.png')}
       />
-      <Card.Title title={title} />
+      <Card.Title title={title} style={styles.title} />
     </Card>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 15,
     marginVertical: 5,
+    borderRadius: 15,
+  },
+  title: {
+    borderBottomRightRadius: 15,
+    borderBottomLeftRadius: 15,
+    backgroundColor: '#FCBB00',
   },
   photo: {
     height: 160,
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
-    backgroundColor: '#0004',
+    backgroundColor: '#FFF1CA',
   },
 });
 
