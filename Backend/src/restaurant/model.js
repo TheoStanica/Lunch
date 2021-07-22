@@ -6,11 +6,17 @@ const restaurantSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      unique: true,
-      dropdups: true,
     },
     cost: {
       type: Number,
+      required: true,
+    },
+    cancelAt: {
+      type: Date,
+      required: true,
+    },
+    notifyAfter: {
+      type: Date,
       required: true,
     },
     status: {
@@ -40,6 +46,7 @@ restaurantSchema.options.toJSON = {
     delete ret.__v;
     delete ret.createdAt;
     delete ret.updatedAt;
+    delete ret.deleted;
     return ret;
   },
 };

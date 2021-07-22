@@ -19,9 +19,14 @@ const courseRequiredType = Object.freeze({
   both: 'both',
 });
 
+
 const orderStatus = Object.freeze({
   active: 'active',
   cancelled: 'cancelled',
+
+const courseTypes = Object.freeze({
+  description: 'description',
+  requiredType: 'requiredType',
 });
 
 module.exports = {
@@ -30,4 +35,5 @@ module.exports = {
   restaurantStatus,
   courseRequiredType,
   orderStatus,
+  courseTypes,
 };

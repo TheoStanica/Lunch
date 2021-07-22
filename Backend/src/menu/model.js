@@ -2,19 +2,17 @@ const mongoose = require('mongoose');
 
 const menuSchema = new mongoose.Schema(
   {
-    appetizer: {},
-    mainCourse: {},
-    dessert: {},
+    menu: {
+      type: {},
+    },
     restaurantId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Restaurat',
+      ref: 'Restaurant',
       required: true,
     },
-    cancelAt: {
-      type: Date,
-    },
-    notifyAfter: {
-      type: Date,
+    deleted: {
+      type: Boolean,
+      default: false,
     },
   },
   {
@@ -32,6 +30,7 @@ menuSchema.options.toJSON = {
     ret.id = ret._id;
     delete ret._id;
     delete ret.__v;
+    delete ret.deleted;
     return ret;
   },
 };
