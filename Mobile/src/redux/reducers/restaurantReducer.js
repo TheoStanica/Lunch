@@ -31,6 +31,12 @@ const restaurantReducer = (state = initialState, action) => {
             status: action.payload.status
               ? action.payload.status
               : state.restaurantsById[action.payload.id].status,
+            notifyAfter: action.payload.notifyAfter
+              ? action.payload.notifyAfter
+              : state.restaurantsById[action.payload.id].notifyAfter,
+            cancelAt: action.payload.cancelAt
+              ? action.payload.cancelAt
+              : state.restaurantsById[action.payload.id].cancelAt,
           },
         },
       };

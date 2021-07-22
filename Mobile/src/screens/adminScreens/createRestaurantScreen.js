@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Formik} from 'formik';
 import {useDispatch} from 'react-redux';
@@ -7,8 +7,12 @@ import ActionButton from '../../components/actionButton';
 import {restaurantValidationSchema} from '../../assets/bodyValidation/restaurantValidation';
 import HideKeyboard from '../../components/hideKeyboard';
 import {createRestaurant} from '../../redux/thunks/restaurantThunks';
+import DateTimePicker from '../../components/timePicker';
+import moment from 'moment';
 
 const CreateRestaurantScreen = ({navigation}) => {
+  const [notifyAfter, setNotifyAfter] = useState('12:00 PM');
+  const [cancelAt, setCancelAt] = useState('2:00 PM');
   const dispatch = useDispatch();
 
   return (
@@ -22,11 +26,14 @@ const CreateRestaurantScreen = ({navigation}) => {
           }}
           onSubmit={values => {
             dispatch(
-              createRestaurant({name: values.name, cost: values.cost}, () => {
-                navigation.replace('MessageScreen', {
-                  message: 'Restaurant Created!',
-                });
-              }),
+              createRestaurant(
+                {name: values.name, cost: values.cost, notifyAfter, cancelAt},
+                () => {
+                  navigation.replace('MessageScreen', {
+                    message: 'Restaurant Created!',
+                  });
+                },
+              ),
             );
           }}>
           {({values, handleChange, errors, handleSubmit}) => (
@@ -46,6 +53,20 @@ const CreateRestaurantScreen = ({navigation}) => {
                   handleChange={handleChange}
                   field="cost"
                   keyboardType="numeric"
+                />
+                <DateTimePicker
+                  title="Notify After"
+                  description={notifyAfter}
+                  mode="time"
+                  date={new Date(`01/01/1970 ${notifyAfter}`)}
+                  onConfirm={date => setNotifyAfter(moment(date).format('LT'))}
+                />
+                <DateTimePicker
+                  title="Cancel At"
+                  description={cancelAt}
+                  mode="time"
+                  date={new Date(`01/01/1970 ${cancelAt}`)}
+                  onConfirm={date => setCancelAt(moment(date).format('LT'))}
                 />
               </View>
               <ActionButton text="Add Restaurant" onPress={handleSubmit} />

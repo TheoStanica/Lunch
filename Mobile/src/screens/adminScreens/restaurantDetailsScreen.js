@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Formik} from 'formik';
 import {Switch, List} from 'react-native-paper';
@@ -8,11 +8,24 @@ import ActionButton from '../../components/actionButton';
 import {restaurantValidationSchema} from '../../assets/bodyValidation/restaurantValidation';
 import HideKeyboard from '../../components/hideKeyboard';
 import {updateRestaurant} from '../../redux/thunks/restaurantThunks';
+import DateTimePicker from '../../components/timePicker';
+import moment from 'moment';
 
 const RestaurantDetailsScreen = ({route, navigation}) => {
   const {restaurantId} = route.params;
   const {restaurantsById} = useSelector(state => state.restaurantReducer);
+  const [notifyAfter, setNotifyAfter] = useState(
+    restaurantsById[restaurantId].notifyAfter,
+  );
+  const [cancelAt, setCancelAt] = useState(
+    restaurantsById[restaurantId].cancelAt,
+  );
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setNotifyAfter(restaurantsById[restaurantId].notifyAfter);
+    setCancelAt(restaurantsById[restaurantId].cancelAt);
+  }, [restaurantsById[restaurantId]]);
 
   return (
     <HideKeyboard>
@@ -33,12 +46,14 @@ const RestaurantDetailsScreen = ({route, navigation}) => {
                   : undefined,
               cost:
                 values.cost !== restaurantsById[restaurantId].cost
-                  ? values.cost
+                  ? parseInt(values.cost)
                   : undefined,
               status:
                 values.status !== restaurantsById[restaurantId].status
                   ? values.status
                   : undefined,
+              notifyAfter,
+              cancelAt,
             };
             dispatch(
               updateRestaurant(data, () =>
@@ -80,6 +95,21 @@ const RestaurantDetailsScreen = ({route, navigation}) => {
                     />
                   )}
                 />
+
+                <DateTimePicker
+                  title="Notify After"
+                  description={notifyAfter}
+                  mode="time"
+                  date={new Date(`01/01/1970 ${notifyAfter}`)}
+                  onConfirm={date => setNotifyAfter(moment(date).format('LT'))}
+                />
+                <DateTimePicker
+                  title="Cancel At"
+                  description={cancelAt}
+                  mode="time"
+                  date={new Date(`01/01/1970 ${cancelAt}`)}
+                  onConfirm={date => setCancelAt(moment(date).format('LT'))}
+                />
               </View>
               <ActionButton text="Update" onPress={handleSubmit} />
             </View>
@@ -103,6 +133,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 10,
     textAlign: 'center',
+  },
+  icon: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

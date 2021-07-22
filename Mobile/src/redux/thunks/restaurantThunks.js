@@ -34,12 +34,21 @@ export const getRestaurants = callback => async dispatch => {
   }
 };
 export const updateRestaurant =
-  ({id, name, cost, status}, callback) =>
+  ({id, name, cost, status, notifyAfter, cancelAt}, callback) =>
   async dispatch => {
     try {
-      await restaurantUpdateRequest({id, name, cost, status});
+      await restaurantUpdateRequest({
+        id,
+        name,
+        cost,
+        status,
+        notifyAfter,
+        cancelAt,
+      });
 
-      dispatch(updateRestaurantAction({id, name, cost, status}));
+      dispatch(
+        updateRestaurantAction({id, name, cost, status, notifyAfter, cancelAt}),
+      );
 
       if (typeof callback == 'function') callback();
     } catch (error) {
@@ -59,10 +68,10 @@ export const deleteRestaurant =
   };
 
 export const createRestaurant =
-  ({name, cost}, callback) =>
+  ({name, cost, notifyAfter, cancelAt}, callback) =>
   async dispatch => {
     try {
-      await restaurantCreateRequest({name, cost});
+      await restaurantCreateRequest({name, cost, notifyAfter, cancelAt});
       if (typeof callback == 'function') callback();
     } catch (error) {
       dispatch(handleError(error));

@@ -9,7 +9,14 @@ export const setRestaurantsAction = ({restaurants, restaurantsById}) => {
     },
   };
 };
-export const updateRestaurantAction = ({id, name, cost, status}) => {
+export const updateRestaurantAction = ({
+  id,
+  name,
+  cost,
+  status,
+  notifyAfter,
+  cancelAt,
+}) => {
   return {
     type: UPDATE_RESTAURANT,
     payload: {
@@ -17,6 +24,8 @@ export const updateRestaurantAction = ({id, name, cost, status}) => {
       name,
       cost,
       status,
+      notifyAfter,
+      cancelAt,
     },
   };
 };
