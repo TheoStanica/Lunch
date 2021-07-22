@@ -38,9 +38,14 @@ const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
 
-    if (!user) {
+    if (!user || user.deleted) {
       return next(new BadRequestError('Invalid credentials'));
     }
+
+    if (user.deleted) {
+      return next(new BadRequestError('Account is inactive.'));
+    }
+
     if (user.status === accountStatus.pending) {
       sendActivationEmail(user);
       return next(new AccountNotActivatedError());
@@ -93,7 +98,12 @@ const activateAccount = async (req, res, next) => {
 const refreshTokens = async (req, res, next) => {
   try {
     let { refreshToken } = req.body,
-      payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+      payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET),
+      user = await User.findOne({ _id: payload.id });
+
+    if (!user || user.deleted) {
+      return next(new NotFoundError('User not found'));
+    }
 
     const accessToken = jwt.sign(
       { id: payload.id, role: payload.role },
@@ -175,7 +185,7 @@ const getUser = async (req, res, next) => {
 
 const getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.find({});
+    const users = await User.find({ deleted: false });
 
     res.send({ users });
   } catch (error) {
@@ -200,9 +210,10 @@ const updateUser = async (req, res, next) => {
     }
 
     user.email = req.body.email || user.email;
+    user.fullname = req.body.fullname || user.fullname;
+
     if (req.body.password)
       user.password = bcrypt.hashSync(req.body.password) || user.password;
-    user.fullname = req.body.fullname || user.fullname;
 
     if (req.user.role === accountRole.admin) {
       user.role = req.body.role || user.role;
@@ -224,7 +235,9 @@ const deleteUser = async (req, res, next) => {
     if (!user) {
       return next(new NotFoundError('User not found'));
     }
-    await user.delete();
+
+    user.deleted = true;
+    await user.save();
 
     res.status(204).send();
   } catch (error) {

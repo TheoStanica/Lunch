@@ -24,6 +24,10 @@ const getRestaurant = async (req, res, next) => {
       return next(new NotFoundError("Restaurant doesn't exist."));
     }
 
+    if (restaurant.deleted) {
+      return next(new BadRequestError('Restaurant is inactive.'));
+    }
+
     res.send(restaurant);
   } catch (error) {
     return next(error);
@@ -70,9 +74,7 @@ const updateRestaurant = async (req, res, next) => {
 
 const deleteRestaurant = async (req, res, next) => {
   try {
-    const { _id } = req.params;
-
-    const restaurant = await Restaurant.findOne({ _id });
+    const restaurant = await Restaurant.findOne({ _id: req.params._id });
 
     if (!restaurant || restaurant.deleted) {
       return next(new NotFoundError("Restaurant doesn't exist"));
@@ -80,7 +82,7 @@ const deleteRestaurant = async (req, res, next) => {
 
     await Restaurant.findByIdAndUpdate(_id, { deleted: true });
 
-    res.sendStatus(204);
+    res.status(204).send();
   } catch (error) {
     return next(error);
   }
