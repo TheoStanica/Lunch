@@ -8,6 +8,7 @@ import ManageRestaurantsScreen from '../screens/adminScreens/manageRestaurantsSc
 import UserDetailsScreen from '../screens/adminScreens/userDetailsScreen';
 import RestaurantDetailsScreen from '../screens/adminScreens/restaurantDetailsScreen';
 import CreateRestaurantScreen from '../screens/adminScreens/createRestaurantScreen';
+import MenuDetailsScreen from '../screens/userScreens/menuDetailsScreen';
 import MessageScreen from '../screens/messageScreen';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -86,6 +87,23 @@ const AdminStack = () => {
   );
 };
 
+const HomeStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{...screenOptions}}>
+      <Stack.Screen
+        name="HomeScreen"
+        component={HomeScreen}
+        options={{title: 'Home', headerShown: false}}
+      />
+      <Stack.Screen
+        name="MenuDetailsScreen"
+        component={MenuDetailsScreen}
+        options={{title: 'Menu Details'}}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const TabNavigatorRoutes = () => {
   const userReducer = useSelector(state => state.userReducer);
 
@@ -99,8 +117,8 @@ const TabNavigatorRoutes = () => {
       }}
       screenOptions={{unmountOnBlur: true}}>
       <Tab.Screen
-        name="HomeScreen"
-        component={HomeScreen}
+        name="HomeStack"
+        component={HomeStack}
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({color}) => <Icon name="home" size={25} color={color} />,
