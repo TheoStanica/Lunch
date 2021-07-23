@@ -44,6 +44,7 @@ const HomeScreen = ({navigation}) => {
               onPress={() =>
                 navigation.navigate('MenuDetailsScreen', {
                   menu: menusById[_menuId].menu,
+                  menuId: _menuId,
                 })
               }
             />
