@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionButton from '../../components/actionButton';
 
 const MenuDetailsScreen = ({navigation, route}) => {
-  const {menu, menuId} = route.params;
+  const {menu, restaurant, menuId} = route.params;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -24,7 +24,7 @@ const MenuDetailsScreen = ({navigation, route}) => {
       />
       <View style={styles.body}>
         <View style={styles.title}>
-          <Title style={styles.title}> Epoca Business Menu </Title>
+          <Title style={styles.title}>{restaurant}</Title>
         </View>
         <Divider style={styles.divider} />
         <FlatList
