@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {Title, Divider} from 'react-native-paper';
 
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionButton from '../../components/actionButton';
 
 const MenuDetailsScreen = ({navigation, route}) => {
@@ -32,12 +33,16 @@ const MenuDetailsScreen = ({navigation, route}) => {
           renderItem={({item}) => {
             return (
               <View>
-                <Text>{item.courseCategory}</Text>
+                <Text style={styles.courseCategory}>{item.courseCategory}</Text>
                 <FlatList
                   data={item.courses}
                   keyExtractor={item => item.description}
                   renderItem={({item}) => {
-                    return <Text>{item.description}</Text>;
+                    return (
+                      <Text style={styles.courseDescription}>
+                        {item.description}
+                      </Text>
+                    );
                   }}
                 />
               </View>
@@ -45,9 +50,15 @@ const MenuDetailsScreen = ({navigation, route}) => {
           }}
           showsVerticalScrollIndicator={false}
         />
-
         <Divider style={styles.divider} />
-        <Title>Going</Title>
+        <View style={styles.going}>
+          <Title>Going</Title>
+          <Icon
+            name="information"
+            size={30}
+            style={{justifyContent: 'center'}}
+          />
+        </View>
         <View style={styles.buttons}>
           <ActionButton
             text="Restaurant"
@@ -100,6 +111,21 @@ const styles = StyleSheet.create({
   divider: {
     borderBottomWidth: 1,
     borderBottomColor: '#FBBC00',
+    marginBottom: 10,
+  },
+  going: {
+    flexDirection: 'row',
+    marginLeft: 25,
+  },
+  courseCategory: {
+    marginLeft: 25,
+    marginBottom: 10,
+    marginTop: 10,
+    fontSize: 20,
+  },
+  courseDescription: {
+    marginLeft: 50,
+    fontSize: 15,
     marginBottom: 10,
   },
 });
