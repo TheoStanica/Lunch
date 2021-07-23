@@ -1,9 +1,36 @@
 const mongoose = require('mongoose');
 
+const { courseRequiredType } = require('../utils/enums');
+
+const courseSchema = new mongoose.Schema({
+  courseCategory: {
+    type: String,
+  },
+  courses: {
+    type: [
+      {
+        description: {
+          type: String,
+        },
+        requiredType: {
+          type: String,
+          enum: [courseRequiredType],
+        },
+      },
+    ],
+  },
+});
+
+const oneMenuSchema = new mongoose.Schema({
+  menu: {
+    type: [courseSchema],
+  },
+});
+
 const menuSchema = new mongoose.Schema(
   {
     menu: {
-      type: {},
+      type: { oneMenuSchema },
     },
     restaurantId: {
       type: mongoose.Schema.Types.ObjectId,
