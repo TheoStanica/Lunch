@@ -53,11 +53,7 @@ const MenuDetailsScreen = ({navigation, route}) => {
         <Divider style={styles.divider} />
         <View style={styles.going}>
           <Title>Going</Title>
-          <Icon
-            name="information"
-            size={30}
-            style={{justifyContent: 'center'}}
-          />
+          <Icon name="information" size={30} />
         </View>
         <View style={styles.buttons}>
           <ActionButton
@@ -121,7 +117,8 @@ const styles = StyleSheet.create({
     marginLeft: 25,
     marginBottom: 10,
     marginTop: 10,
-    fontSize: 20,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   courseDescription: {
     marginLeft: 50,
