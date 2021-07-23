@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {SafeAreaView, StyleSheet, FlatList} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {getUser} from '../../redux/thunks/userThunks';
 import {getMenus} from '../../redux/thunks/menuThunks';
+import {useFocusEffect} from '@react-navigation/native';
 import MenuCard from '../../components/menuCard';
 
 const HomeScreen = ({navigation}) => {
@@ -23,7 +24,11 @@ const HomeScreen = ({navigation}) => {
     );
   };
 
-  useEffect(() => onRefresh(), []);
+  useFocusEffect(
+    useCallback(() => {
+      onRefresh();
+    }, []),
+  );
 
   return (
     <SafeAreaView style={styles.container}>

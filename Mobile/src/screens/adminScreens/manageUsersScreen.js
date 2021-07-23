@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {SafeAreaView, StyleSheet, FlatList} from 'react-native';
 import {getAllUsers, deleteUser} from '../../redux/thunks/userThunks';
 import {useDispatch, useSelector} from 'react-redux';
+import {useFocusEffect} from '@react-navigation/native';
 
 import AdminField from '../../components/adminField';
 
@@ -17,7 +18,11 @@ const ManageUsersScreen = ({navigation}) => {
     setIsFetching(true);
     dispatch(getAllUsers(() => setIsFetching(false)));
   };
-  useEffect(() => onRefresh(), []);
+  useFocusEffect(
+    useCallback(() => {
+      onRefresh();
+    }, []),
+  );
 
   return (
     <SafeAreaView style={styles.container}>
