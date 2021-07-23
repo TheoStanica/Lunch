@@ -23,8 +23,6 @@ const ManageUsersScreen = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       <FlatList
         data={allUsers}
-        onRefresh={onRefresh}
-        refreshing={isFetching}
         keyExtractor={item => item}
         renderItem={({item: _userId}) => {
           return _userId !== userReducer.id ? (
@@ -48,6 +46,9 @@ const ManageUsersScreen = ({navigation}) => {
             <></>
           );
         }}
+        onRefresh={onRefresh}
+        refreshing={isFetching}
+        showsVerticalScrollIndicator={false}
       />
     </SafeAreaView>
   );

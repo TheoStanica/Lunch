@@ -63,6 +63,7 @@ const ManageRestaurantsScreen = ({navigation}) => {
           )}
           onRefresh={onRefresh}
           refreshing={isFetching}
+          showsVerticalScrollIndicator={false}
         />
         <FAB
           style={styles.fab}
