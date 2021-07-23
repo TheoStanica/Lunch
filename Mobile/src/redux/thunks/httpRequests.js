@@ -83,3 +83,15 @@ export const restaurantCreateRequest = async ({
 }) => {
   return await api.post('/restaurant', {name, cost, notifyAfter, cancelAt});
 };
+
+export const menuGetRequest = async ({filter}) => {
+  return await api.get('/menu', {params: {filter}});
+};
+
+export const menuPostRequest = async ({menu, restaurantId}) => {
+  return await api.post('/menu', {menu, restaurantId});
+};
+
+export const menuDeleteRequest = async ({_menuId}) => {
+  return await api.delete(`/menu/${_menuId}`);
+};
