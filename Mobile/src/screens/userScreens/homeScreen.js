@@ -1,30 +1,51 @@
-import React, {useEffect} from 'react';
-import {SafeAreaView, StyleSheet, ScrollView} from 'react-native';
-import {useDispatch} from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {SafeAreaView, StyleSheet, FlatList} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import {getUser} from '../../redux/thunks/userThunks';
+import {getMenus} from '../../redux/thunks/menuThunks';
 import MenuCard from '../../components/menuCard';
 
 const HomeScreen = ({navigation}) => {
+  const {menus, menusById} = useSelector(state => state.menuReducer);
+  const [isFetching, setIsFetching] = useState(true);
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  const onRefresh = () => {
+    setIsFetching(true);
     dispatch(getUser());
-  }, []);
+    dispatch(
+      getMenus({
+        filter: {},
+        callback: () => {
+          setIsFetching(false);
+        },
+      }),
+    );
+  };
+
+  useEffect(() => onRefresh(), []);
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={styles.scrollContainer}
-        showsVerticalScrollIndicator={false}>
-        <MenuCard
-          title="Meniu something"
-          onPress={() =>
-            navigation.navigate('MenuDetailsScreen', {menuId: '123123'})
-          }
-        />
-        <MenuCard title="Meniu something" />
-        <MenuCard title="Meniu something" />
-      </ScrollView>
+      <FlatList
+        data={menus}
+        onRefresh={onRefresh}
+        refreshing={isFetching}
+        keyExtractor={item => item}
+        renderItem={({item: _menuId}) => {
+          return (
+            <MenuCard
+              title={menusById[_menuId].restaurantId.name}
+              onPress={() =>
+                navigation.navigate('MenuDetailsScreen', {
+                  menu: menusById[_menuId].menu,
+                })
+              }
+            />
+          );
+        }}
+        showsVerticalScrollIndicator={false}
+      />
     </SafeAreaView>
   );
 };
@@ -32,9 +53,6 @@ const HomeScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  scrollContainer: {
-    marginHorizontal: 15,
   },
 });
 

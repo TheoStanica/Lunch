@@ -7,12 +7,13 @@ import {setMenusAction, deleteMenuAction} from '../actions/menuActions';
 import {handleError} from './errorThunks';
 
 export const getMenus =
-  ({filter}) =>
+  ({filter, callback}) =>
   async dispatch => {
     try {
       const response = await menuGetRequest({filter});
 
       dispatch(setMenusAction({menus: response.data.menus}));
+      if (typeof callback == 'function') callback();
     } catch (error) {
       dispatch(handleError(error));
     }

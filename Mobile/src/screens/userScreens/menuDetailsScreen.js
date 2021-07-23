@@ -2,7 +2,7 @@ import React from 'react';
 import {SafeAreaView, Text, StyleSheet} from 'react-native';
 
 const MenuDetailsScreen = ({route}) => {
-  const {menuId} = route.params;
+  const {menu} = route.params;
 
   return (
     <SafeAreaView style={styles.container}>

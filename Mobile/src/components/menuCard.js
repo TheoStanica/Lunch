@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 5,
     borderRadius: 15,
+    marginHorizontal: 15,
   },
   title: {
     borderBottomRightRadius: 15,
