@@ -1,9 +1,15 @@
-import React, {useCallback, useState} from 'react';
-import {SafeAreaView, StyleSheet, FlatList} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  FlatList,
+  View,
+  Text,
+  StatusBar,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {getUser} from '../../redux/thunks/userThunks';
 import {getMenus} from '../../redux/thunks/menuThunks';
-import {useFocusEffect} from '@react-navigation/native';
 import MenuCard from '../../components/menuCard';
 
 const HomeScreen = ({navigation}) => {
@@ -24,42 +30,51 @@ const HomeScreen = ({navigation}) => {
     );
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      onRefresh();
-    }, []),
-  );
+  useEffect(() => {
+    onRefresh();
+  }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={menus}
-        onRefresh={onRefresh}
-        refreshing={isFetching}
-        keyExtractor={item => item}
-        renderItem={({item: _menuId}) => {
-          return (
-            <MenuCard
-              title={menusById[_menuId].restaurantId.name}
-              onPress={() =>
-                navigation.navigate('MenuDetailsScreen', {
-                  menu: menusById[_menuId].menu,
-                  restaurant: menusById[_menuId].restaurantId.name,
-                  menuId: _menuId,
-                })
-              }
-            />
-          );
-        }}
-        showsVerticalScrollIndicator={false}
-      />
-    </SafeAreaView>
+    <>
+      <StatusBar backgroundColor="#FFF1CA" barStyle="dark-content" />
+      <SafeAreaView style={styles.container}>
+        <View style={styles.body}>
+          <Text style={styles.title}>Menus</Text>
+          <FlatList
+            data={menus}
+            onRefresh={onRefresh}
+            refreshing={isFetching}
+            keyExtractor={item => item}
+            renderItem={({item: _menuId}) => {
+              return (
+                <MenuCard
+                  title={menusById[_menuId].restaurantId?.name}
+                  onPress={() =>
+                    navigation.navigate('MenuDetailsScreen', {
+                      menuId: _menuId,
+                    })
+                  }
+                />
+              );
+            }}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
+      </SafeAreaView>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFF1CA',
+  },
+  title: {
+    fontSize: 28,
+  },
+  body: {
+    padding: 15,
   },
 });
 
