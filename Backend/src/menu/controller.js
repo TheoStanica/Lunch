@@ -47,7 +47,7 @@ const createMenu = async (req, res, next) => {
 const getMenus = async (req, res, next) => {
   try {
     const query = req.query.filter
-        ? convertFilterToQuery(JSON.parse(req?.query?.filter))
+        ? convertFilterToQuery(JSON.parse(req.query.filter))
         : { deleted: false },
       menus = await Menu.find(query).populate('restaurantId');
 
