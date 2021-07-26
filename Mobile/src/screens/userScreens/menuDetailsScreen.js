@@ -19,29 +19,41 @@ const MenuDetailsScreen = ({navigation, route}) => {
   const {menusById} = useSelector(state => state.menuReducer);
   const offset = useRef(new Animated.Value(0)).current;
 
-  const renderCourses = courses => {
-    return courses.map((course, idx) => (
+  const renderCourses = courses =>
+    courses.map((course, idx) => (
       <View
         style={styles.courseDetails}
         key={`${menuId}-${course.courseCategory}-${idx}`}>
-        <Paragraph>{course.description}</Paragraph>
-        {course.requiredType === 'takeaway' ? (
+        <Paragraph style={styles.capitalizedText}>
+          {course.description}
+        </Paragraph>
+        {course.requiredType === 'takeaway' ||
+        course.requiredType === 'restaurant' ? (
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <Icon size={24} name="package-variant" color="#4A6572" />
+            <Icon
+              style={styles.icon}
+              size={24}
+              name={
+                course.requiredType === 'takeaway'
+                  ? 'package-variant'
+                  : 'food-fork-drink'
+              }
+              color="#4A6572"
+            />
           </View>
         ) : null}
       </View>
     ));
-  };
 
-  const renderCourseTypes = () => {
-    return menusById[menuId].menu.map((menuCourse, idx) => (
+  const renderCourseTypes = () =>
+    menusById[menuId].menu.map((menuCourse, idx) => (
       <View style={styles.courseTypeContainer} key={`${menuId}-${idx}`}>
-        <Headline>{menuCourse.courseCategory}</Headline>
+        <Headline style={styles.capitalizedText}>
+          {menuCourse.courseCategory}
+        </Headline>
         {renderCourses(menuCourse.courses)}
       </View>
     ));
-  };
 
   return (
     <SafeAreaProvider>
@@ -59,27 +71,29 @@ const MenuDetailsScreen = ({navigation, route}) => {
             {useNativeDriver: false},
           )}>
           <View style={styles.body}>
-            {renderCourseTypes()}
-            <View style={styles.going}>
-              <Title>Going</Title>
-              <Icon name="information" size={30} />
+            <View>
+              {renderCourseTypes()}
+              <View style={styles.going}>
+                <Title>Going</Title>
+                <Icon name="information" size={30} />
+              </View>
+            </View>
+            <View style={styles.buttons}>
+              <ActionButton
+                text="Restaurant"
+                style={styles.leftButton}
+                onPress={() => navigation.navigate('HomeScreen')}
+              />
+              <ActionButton
+                text="Takeaway"
+                style={styles.rightButton}
+                onPress={() =>
+                  navigation.navigate('MenuTakeawayOrderScreen', {menuId})
+                }
+              />
             </View>
           </View>
         </ScrollView>
-        <View style={styles.buttons}>
-          <ActionButton
-            text="Restaurant"
-            style={styles.leftButton}
-            onPress={() => navigation.navigate('HomeScreen')}
-          />
-          <ActionButton
-            text="Takeaway"
-            style={styles.rightButton}
-            onPress={() =>
-              navigation.navigate('MenuTakeawayOrderScreen', {menuId})
-            }
-          />
-        </View>
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -93,7 +107,6 @@ const styles = StyleSheet.create({
   buttons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    margin: 15,
   },
   leftButton: {
     flex: 1,
@@ -105,7 +118,9 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
+    flexGrow: 1,
     margin: 15,
+    justifyContent: 'space-between',
   },
   going: {
     flexDirection: 'row',
@@ -126,6 +141,13 @@ const styles = StyleSheet.create({
   },
   scrollViewContainer: {
     paddingTop: 220,
+    flexGrow: 1,
+  },
+  icon: {
+    marginLeft: 10,
+  },
+  capitalizedText: {
+    textTransform: 'capitalize',
   },
 });
 
