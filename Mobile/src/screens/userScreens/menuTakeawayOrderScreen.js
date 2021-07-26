@@ -54,10 +54,14 @@ const MenuTakeawayOrderScreen = ({route}) => {
       </View>
     ));
 
-  const validateOptions = menuOptions =>
-    menusById[menuId].menu.some(
-      courseType => menuOptions[courseType.courseCategory],
+  const validateOptions = menuOptions => {
+    const courseCategories = menusById[menuId].menu.map(
+      category => category.courseCategory,
     );
+    return courseCategories.some(
+      courseCategory => !menuOptions.hasOwnProperty(courseCategory),
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -70,11 +74,12 @@ const MenuTakeawayOrderScreen = ({route}) => {
           selectedMenu: {},
         }}
         onSubmit={values => {
-          if (!validateOptions(values.selectedMenu)) {
+          if (validateOptions(values.selectedMenu)) {
             setErrors(
               'Please select one dish from each course to submit your order',
             );
           } else {
+            setErrors('');
             console.log('submit', values.selectedMenu);
           }
         }}>
