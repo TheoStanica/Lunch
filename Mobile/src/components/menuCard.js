@@ -10,7 +10,11 @@ const MenuCard = ({onPress, title}) => {
         resizeMode="contain"
         source={require('../assets/images/eating.png')}
       />
-      <Card.Title title={title} style={styles.title} />
+      <Card.Title
+        title={title}
+        style={styles.title}
+        titleStyle={styles.titleStyle}
+      />
     </Card>
   );
 };
@@ -19,18 +23,20 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 5,
     borderRadius: 15,
-    marginHorizontal: 15,
   },
   title: {
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 15,
-    backgroundColor: '#FCBB00',
+    backgroundColor: '#4A6572',
   },
   photo: {
     height: 160,
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
-    backgroundColor: '#FFF1CA',
+    backgroundColor: '#FFF1CA55',
+  },
+  titleStyle: {
+    color: 'white',
   },
 });
 

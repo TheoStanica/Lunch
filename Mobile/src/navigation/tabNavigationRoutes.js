@@ -98,7 +98,7 @@ const HomeStack = () => {
       <Stack.Screen
         name="MenuDetailsScreen"
         component={MenuDetailsScreen}
-        options={{title: 'Menu Details'}}
+        options={{title: ''}}
       />
     </Stack.Navigator>
   );

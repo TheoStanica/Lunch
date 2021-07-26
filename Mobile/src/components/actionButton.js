@@ -12,12 +12,13 @@ const ActionButton = ({text, onPress, style = {}}) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#FBBC00',
+    backgroundColor: '#4A6572',
   },
   buttonText: {
     fontSize: 18,
     textTransform: 'capitalize',
     lineHeight: 40,
+    color: 'white',
   },
 });
 
