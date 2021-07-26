@@ -1,129 +1,128 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {
   SafeAreaView,
-  Text,
   View,
   StyleSheet,
-  FlatList,
-  Image,
+  ScrollView,
+  Animated,
 } from 'react-native';
-import {Title, Divider} from 'react-native-paper';
+import {Title, Headline, Paragraph} from 'react-native-paper';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useSelector} from 'react-redux';
 import ActionButton from '../../components/actionButton';
+import AnimatedHeader from '../../components/animatedHeader';
 
 const MenuDetailsScreen = ({navigation, route}) => {
-  const {menu, restaurant, menuId} = route.params;
+  const {menuId} = route.params;
+  const {menusById} = useSelector(state => state.menuReducer);
+  const offset = useRef(new Animated.Value(0)).current;
+
+  const renderCourses = courses => {
+    return courses.map((course, idx) => (
+      <View
+        style={styles.courseDetails}
+        key={`${menuId}-${course.courseCategory}-${idx}`}>
+        <Paragraph>{course.description}</Paragraph>
+        {course.requiredType === 'takeaway' ? (
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <Icon size={24} name="package-variant" color="#4A6572" />
+          </View>
+        ) : null}
+      </View>
+    ));
+  };
+
+  const renderCourseTypes = () => {
+    return menusById[menuId].menu.map((menuCourse, idx) => (
+      <View style={styles.courseTypeContainer} key={`${menuId}-${idx}`}>
+        <Headline>{menuCourse.courseCategory}</Headline>
+        {renderCourses(menuCourse.courses)}
+      </View>
+    ));
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Image
-        source={require('../../assets/images/eating.png')}
-        style={styles.image}
-        resizeMode="contain"
-      />
-      <View style={styles.body}>
-        <View style={styles.title}>
-          <Title style={styles.title}>{restaurant}</Title>
-        </View>
-        <Divider style={styles.divider} />
-        <FlatList
-          data={menu}
-          keyExtractor={item => item.courseCategory}
-          renderItem={({item}) => {
-            return (
-              <View>
-                <Text style={styles.courseCategory}>{item.courseCategory}</Text>
-                <FlatList
-                  data={item.courses}
-                  keyExtractor={item => item.description}
-                  renderItem={({item}) => {
-                    return (
-                      <Text style={styles.courseDescription}>
-                        {item.description}
-                      </Text>
-                    );
-                  }}
-                />
-              </View>
-            );
-          }}
-          showsVerticalScrollIndicator={false}
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <AnimatedHeader
+          animatedValue={offset}
+          title={menusById[menuId].restaurantId.name}
         />
-        <Divider style={styles.divider} />
-        <View style={styles.going}>
-          <Title>Going</Title>
-          <Icon name="information" size={30} />
-        </View>
+        <ScrollView
+          contentContainerStyle={styles.scrollViewContainer}
+          scrollEventThrottle={16}
+          onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {y: offset}}}],
+            {useNativeDriver: false},
+          )}>
+          <View style={styles.body}>
+            {renderCourseTypes()}
+            <View style={styles.going}>
+              <Title>Going</Title>
+              <Icon name="information" size={30} />
+            </View>
+          </View>
+        </ScrollView>
         <View style={styles.buttons}>
           <ActionButton
             text="Restaurant"
-            style={styles.firstButton}
+            style={styles.leftButton}
             onPress={() => navigation.navigate('HomeScreen')}
           />
           <ActionButton
             text="Takeaway"
-            style={styles.secondButton}
+            style={styles.rightButton}
             onPress={() => navigation.navigate('HomeScreen')}
           />
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFF1CA',
   },
   buttons: {
     flexDirection: 'row',
-    alignSelf: 'center',
-    marginBottom: 20,
-    marginTop: 30,
+    justifyContent: 'space-between',
+    margin: 15,
   },
-  firstButton: {
-    marginRight: 30,
-  },
-  secondButton: {
-    marginLeft: 30,
-  },
-  title: {
-    alignItems: 'center',
-    marginVertical: 5,
-    fontSize: 25,
-  },
-  image: {
+  leftButton: {
     flex: 1,
-    height: '100%',
-    width: '100%',
-    borderTopRightRadius: 15,
-    borderTopLeftRadius: 15,
-    backgroundColor: '#FFF1CA',
+    marginRight: 7.5,
+  },
+  rightButton: {
+    flex: 1,
+    marginLeft: 7.5,
   },
   body: {
-    flex: 3,
-  },
-  divider: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#FBBC00',
-    marginBottom: 10,
+    flex: 1,
+    margin: 15,
   },
   going: {
     flexDirection: 'row',
-    marginLeft: 25,
   },
   courseCategory: {
-    marginLeft: 25,
+    marginLeft: 15,
     marginBottom: 10,
     marginTop: 10,
     fontSize: 18,
     fontWeight: 'bold',
   },
-  courseDescription: {
-    marginLeft: 50,
-    fontSize: 15,
-    marginBottom: 10,
+  courseTypeContainer: {
+    marginBottom: 20,
+  },
+  courseDetails: {
+    flexDirection: 'row',
+    marginLeft: 15,
+  },
+  scrollViewContainer: {
+    paddingTop: 220,
   },
 });
 
