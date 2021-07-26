@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   Text,
   View,
@@ -17,32 +17,47 @@ const MenuTakeawayOrderScreen = ({route}) => {
   const {menuId} = route.params;
   const {menusById} = useSelector(state => state.menuReducer);
   const offset = useRef(new Animated.Value(0)).current;
-  const [value, setValue] = React.useState(0);
+  const [errors, setErrors] = useState('');
 
-  const renderCourses = courses => {
-    return courses.map((course, idx) => (
-      <View
-        style={styles.courseDetails}
-        key={`${menuId}-${course.courseCategory}-${idx}`}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <RadioButton value={idx} color="#4A6572" />
-          <Text>{course.description}</Text>
-        </View>
-      </View>
-    ));
-  };
+  const renderCourses = courses =>
+    courses.map((course, idx) => {
+      if (course.requiredType !== 'restaurant') {
+        return (
+          <View
+            style={styles.courseDetails}
+            key={`${menuId}-${course.courseCategory}-${idx}`}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <RadioButton value={idx} color="#4A6572" />
+              <Text style={styles.capitalizedText}>{course.description}</Text>
+            </View>
+          </View>
+        );
+      }
+    });
 
-  const renderCourseTypes = () =>
+  const renderCourseTypes = (values, setFieldValue) =>
     menusById[menuId].menu.map((menuCourse, idx) => (
       <View key={`${menuId}-${idx}`}>
-        <Headline>{menuCourse.courseCategory}</Headline>
+        <Headline style={styles.capitalizedText}>
+          {menuCourse.courseCategory}
+        </Headline>
         <RadioButton.Group
-          onValueChange={newValue => setValue(newValue)}
-          value={value}>
+          onValueChange={newValue => {
+            setFieldValue(
+              `selectedMenu[${menuCourse.courseCategory}]`,
+              newValue,
+            );
+          }}
+          value={values.selectedMenu[menuCourse.courseCategory]}>
           {renderCourses(menuCourse.courses)}
         </RadioButton.Group>
       </View>
     ));
+
+  const validateOptions = menuOptions =>
+    menusById[menuId].menu.some(
+      courseType => menuOptions[courseType.courseCategory],
+    );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -50,13 +65,20 @@ const MenuTakeawayOrderScreen = ({route}) => {
         animatedValue={offset}
         title={menusById[menuId].restaurantId.name}
       />
-
       <Formik
         initialValues={{
-          menu: {},
+          selectedMenu: {},
         }}
-        onSubmit={values => console.log('submit', values)}>
-        {({values, handleChange, errors, handleSubmit}) => (
+        onSubmit={values => {
+          if (!validateOptions(values.selectedMenu)) {
+            setErrors(
+              'Please select one dish from each course to submit your order',
+            );
+          } else {
+            console.log('submit', values.selectedMenu);
+          }
+        }}>
+        {({values, handleSubmit, setFieldValue}) => (
           <>
             <ScrollView
               contentContainerStyle={styles.scrollViewContainer}
@@ -69,16 +91,14 @@ const MenuTakeawayOrderScreen = ({route}) => {
               <View
                 style={{
                   flexGrow: 1,
-                  justifyContent: 'space-between',
                 }}>
-                <View>{renderCourseTypes()}</View>
+                <View>{renderCourseTypes(values, setFieldValue)}</View>
               </View>
+              {errors ? (
+                <Text style={styles.errorMessage}>{errors}</Text>
+              ) : null}
+              <ActionButton text="Submit Order" onPress={handleSubmit} />
             </ScrollView>
-            <ActionButton
-              style={styles.submitButton}
-              text="Submit Order"
-              onPress={handleSubmit}
-            />
           </>
         )}
       </Formik>
@@ -99,11 +119,14 @@ const styles = StyleSheet.create({
   },
   courseDetails: {
     flexDirection: 'row',
-    marginLeft: 15,
   },
-  submitButton: {
-    margin: 15,
-    marginTop: 5,
+  errorMessage: {
+    fontSize: 16,
+    color: 'red',
+    marginVertical: 10,
+  },
+  capitalizedText: {
+    textTransform: 'capitalize',
   },
 });
 
