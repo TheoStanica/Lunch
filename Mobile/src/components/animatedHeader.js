@@ -19,13 +19,13 @@ const AnimatedHeader = ({animatedValue, title}) => {
   );
 
   const titleBackground = animatedValue.interpolate({
-    inputRange: [0, HEADER_HEIGHT],
-    outputRange: ['#4A6572', '#FFF1CA'],
+    inputRange: [0, HEADER_HEIGHT - 50, HEADER_HEIGHT],
+    outputRange: ['#4A6572', '#4A6572', '#FFF1CA'],
     extrapolate: 'clamp',
   });
   const textColor = animatedValue.interpolate({
-    inputRange: [0, HEADER_HEIGHT],
-    outputRange: ['white', 'black'],
+    inputRange: [0, HEADER_HEIGHT - 50, HEADER_HEIGHT],
+    outputRange: ['white', 'white', 'black'],
     extrapolate: 'clamp',
   });
   const minWidth = animatedValue.interpolate({
