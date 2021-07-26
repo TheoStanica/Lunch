@@ -95,3 +95,12 @@ export const menuPostRequest = async ({menu, restaurantId}) => {
 export const menuDeleteRequest = async ({_menuId}) => {
   return await api.delete(`/menu/${_menuId}`);
 };
+
+export const orderCreateRequest = async ({
+  menuId,
+  userId,
+  type,
+  menuOptions,
+}) => {
+  return await api.post('/order', {menuId, userId, type, menuOptions});
+};

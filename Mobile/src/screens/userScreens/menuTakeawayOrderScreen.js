@@ -7,17 +7,20 @@ import {
   SafeAreaView,
   ScrollView,
 } from 'react-native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import AnimatedHeader from '../../components/animatedHeader';
 import {Formik} from 'formik';
 import {Headline, RadioButton} from 'react-native-paper';
 import ActionButton from '../../components/actionButton';
+import {createOrder} from '../../redux/thunks/orderThunks';
 
-const MenuTakeawayOrderScreen = ({route}) => {
+const MenuTakeawayOrderScreen = ({route, navigation}) => {
   const {menuId} = route.params;
   const {menusById} = useSelector(state => state.menuReducer);
+  const {id} = useSelector(state => state.userReducer);
   const offset = useRef(new Animated.Value(0)).current;
   const [errors, setErrors] = useState('');
+  const dispatch = useDispatch();
 
   const renderCourses = courses =>
     courses.map((course, idx) => {
@@ -80,7 +83,26 @@ const MenuTakeawayOrderScreen = ({route}) => {
             );
           } else {
             setErrors('');
-            console.log('submit', values.selectedMenu);
+            dispatch(
+              createOrder(
+                {
+                  menuId: menuId,
+                  userId: id,
+                  type: 'restaurant',
+                  menuOptions: values.selectedMenu,
+                },
+                () =>
+                  navigation.reset({
+                    routes: [
+                      {name: 'HomeScreen'},
+                      {
+                        name: 'MessageScreen',
+                        params: {message: 'Order created!'},
+                      },
+                    ],
+                  }),
+              ),
+            );
           }
         }}>
         {({values, handleSubmit, setFieldValue}) => (
