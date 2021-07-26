@@ -15,6 +15,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useSelector} from 'react-redux';
+import MenuTakeawayOrderScreen from '../screens/userScreens/menuTakeawayOrderScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -99,6 +100,11 @@ const HomeStack = () => {
         name="MenuDetailsScreen"
         component={MenuDetailsScreen}
         options={{title: ''}}
+      />
+      <Stack.Screen
+        name="MenuTakeawayOrderScreen"
+        component={MenuTakeawayOrderScreen}
+        options={{title: 'Order'}}
       />
     </Stack.Navigator>
   );

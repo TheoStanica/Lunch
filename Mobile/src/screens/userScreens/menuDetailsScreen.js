@@ -53,6 +53,7 @@ const MenuDetailsScreen = ({navigation, route}) => {
         <ScrollView
           contentContainerStyle={styles.scrollViewContainer}
           scrollEventThrottle={16}
+          showsVerticalScrollIndicator={false}
           onScroll={Animated.event(
             [{nativeEvent: {contentOffset: {y: offset}}}],
             {useNativeDriver: false},
@@ -74,7 +75,9 @@ const MenuDetailsScreen = ({navigation, route}) => {
           <ActionButton
             text="Takeaway"
             style={styles.rightButton}
-            onPress={() => navigation.navigate('HomeScreen')}
+            onPress={() =>
+              navigation.navigate('MenuTakeawayOrderScreen', {menuId})
+            }
           />
         </View>
       </SafeAreaView>
