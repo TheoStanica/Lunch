@@ -8,16 +8,18 @@ import {
 } from 'react-native';
 import {Title, Headline, Paragraph} from 'react-native-paper';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-
+import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useSelector} from 'react-redux';
 import ActionButton from '../../components/actionButton';
 import AnimatedHeader from '../../components/animatedHeader';
+import {createOrder} from '../../redux/thunks/orderThunks';
 
 const MenuDetailsScreen = ({navigation, route}) => {
   const {menuId} = route.params;
   const {menusById} = useSelector(state => state.menuReducer);
+  const {id} = useSelector(state => state.userReducer);
   const offset = useRef(new Animated.Value(0)).current;
+  const dispatch = useDispatch();
 
   const renderCourses = courses =>
     courses.map((course, idx) => (
@@ -82,7 +84,28 @@ const MenuDetailsScreen = ({navigation, route}) => {
               <ActionButton
                 text="Restaurant"
                 style={styles.leftButton}
-                onPress={() => navigation.navigate('HomeScreen')}
+                onPress={() => {
+                  dispatch(
+                    createOrder(
+                      {
+                        menuId: menuId,
+                        userId: id,
+                        type: 'restaurant',
+                        menuOptions: undefined,
+                      },
+                      () =>
+                        navigation.reset({
+                          routes: [
+                            {name: 'HomeScreen'},
+                            {
+                              name: 'MessageScreen',
+                              params: {message: 'Order created!'},
+                            },
+                          ],
+                        }),
+                    ),
+                  );
+                }}
               />
               <ActionButton
                 text="Takeaway"

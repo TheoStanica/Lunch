@@ -106,6 +106,11 @@ const HomeStack = () => {
         component={MenuTakeawayOrderScreen}
         options={{title: 'Order'}}
       />
+      <Stack.Screen
+        name="MessageScreen"
+        component={MessageScreen}
+        options={{title: '', headerStyle: {backgroundColor: '#FCBB00'}}}
+      />
     </Stack.Navigator>
   );
 };
