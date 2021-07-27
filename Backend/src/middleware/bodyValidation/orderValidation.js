@@ -17,8 +17,12 @@ const createValidationSchema = [
     .withMessage('Type is required.')
     .isIn([courseRequiredType.restaurant, courseRequiredType.takeaway])
     .withMessage('Type should be restaurant or takeaway'),
-  check('menuOptions').notEmpty().withMessage('Menu options are required'),
+  check('menuOptions')
+    .if(check('type').equals(courseRequiredType.takeaway))
+    .notEmpty()
+    .withMessage('Menu options are required'),
   check('menuOptions.*')
+    .if(check('type').equals(courseRequiredType.takeaway))
     .isNumeric()
     .withMessage('Menu option should be a number'),
 ];
@@ -49,10 +53,12 @@ const updateValidationSchema = [
     .withMessage('Status should be active or cancelled')
     .optional(),
   check('menuOptions')
+    .if(check('type').equals(courseRequiredType.takeaway))
     .notEmpty()
     .withMessage('Menu options are required')
     .optional(),
   check('menuOptions.*')
+    .if(check('type').equals(courseRequiredType.takeaway))
     .isNumeric()
     .withMessage('Menu option should be a number'),
 ];
