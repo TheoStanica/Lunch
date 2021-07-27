@@ -24,9 +24,7 @@ const CourseAccordion = () => {
                 {
                   text: 'Yes',
                   onPress: () =>
-                    setCourses(
-                      setCourses(courses.filter((c, index) => idx !== index)),
-                    ),
+                    setCourses(courses.filter((c, index) => idx !== index)),
                 },
                 {text: 'No'},
               ],
