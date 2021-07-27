@@ -88,7 +88,7 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
                 {
                   menuId: menuId,
                   userId: id,
-                  type: 'restaurant',
+                  type: 'takeaway',
                   menuOptions: values.selectedMenu,
                 },
                 () =>
