@@ -16,6 +16,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useSelector} from 'react-redux';
 import MenuTakeawayOrderScreen from '../screens/userScreens/menuTakeawayOrderScreen';
+import CreateMenuScreen from '../screens/adminScreens/createMenuScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -110,6 +111,14 @@ const HomeStack = () => {
         name="MessageScreen"
         component={MessageScreen}
         options={{title: '', headerStyle: {backgroundColor: '#FCBB00'}}}
+      />
+      <Stack.Screen
+        name="CreateMenuScreen"
+        component={CreateMenuScreen}
+        options={{
+          title: 'Create Menu',
+          headerStyle: {backgroundColor: '#FFF1CA'},
+        }}
       />
     </Stack.Navigator>
   );
