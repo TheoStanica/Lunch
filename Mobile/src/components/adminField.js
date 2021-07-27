@@ -31,14 +31,10 @@ const AdminField = ({
         <RectButton
           style={[styles.swipeableButton, styles.swipeableDelete]}
           onPress={() =>
-            Alert.alert(
-              'Are you sure?',
-              `Are you sure you want to remove ${title}?`,
-              [
-                {text: 'Yes', onPress: () => (onDelete ? onDelete() : null)},
-                {text: 'No'},
-              ],
-            )
+            Alert.alert('Delete', `Are you sure you want to remove ${title}?`, [
+              {text: 'Yes', onPress: () => (onDelete ? onDelete() : null)},
+              {text: 'No'},
+            ])
           }>
           <Animated.Text
             style={[styles.actionText, styles.swipeableDeleteText]}>
