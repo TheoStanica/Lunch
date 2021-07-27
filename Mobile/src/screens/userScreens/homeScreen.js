@@ -7,6 +7,7 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
+import {FAB} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {getUser} from '../../redux/thunks/userThunks';
 import {getMenus} from '../../redux/thunks/menuThunks';
@@ -14,7 +15,9 @@ import MenuCard from '../../components/menuCard';
 
 const HomeScreen = ({navigation}) => {
   const {menus, menusById} = useSelector(state => state.menuReducer);
+  const {role} = useSelector(state => state.userReducer);
   const [isFetching, setIsFetching] = useState(true);
+  const [fabVisible, setFabVisible] = useState(false);
   const dispatch = useDispatch();
 
   const onRefresh = () => {
@@ -32,6 +35,7 @@ const HomeScreen = ({navigation}) => {
 
   useEffect(() => {
     onRefresh();
+    setFabVisible(true);
   }, []);
 
   return (
@@ -59,6 +63,16 @@ const HomeScreen = ({navigation}) => {
             }}
             showsVerticalScrollIndicator={false}
           />
+          {role === 'admin' ? (
+            <FAB
+              style={styles.fab}
+              icon="plus"
+              color="white"
+              visible={fabVisible}
+              animated={true}
+              onPress={() => navigation.navigate('CreateMenuScreen')}
+            />
+          ) : null}
         </View>
       </SafeAreaView>
     </>
@@ -75,6 +89,13 @@ const styles = StyleSheet.create({
   },
   body: {
     padding: 15,
+    flexGrow: 1,
+  },
+  fab: {
+    position: 'absolute',
+    margin: 40,
+    right: 0,
+    bottom: 0,
   },
 });
 
