@@ -39,18 +39,18 @@ const CreateMenuScreen = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#FFF1CA" barStyle="dark-content" />
       <View style={styles.body}>
-        <Subheading>Select a restaurant:</Subheading>
-        <DropDownPicker
-          open={openDropDown}
-          value={selectedRestaurant}
-          setValue={setSelectedRestaurant}
-          setOpen={setOpenDropDown}
-          items={generateRestaurantItems()}
-          style={styles.dropDownPicker}
-          dropDownContainerStyle={styles.dropDownContainerStyle}
-          placeholder="Select a restaurant"
-        />
         <ScrollView contentContainerStyle={{flexGrow: 1}}>
+          <Subheading>Select a restaurant:</Subheading>
+          <DropDownPicker
+            open={openDropDown}
+            value={selectedRestaurant}
+            setValue={setSelectedRestaurant}
+            setOpen={setOpenDropDown}
+            items={generateRestaurantItems()}
+            style={styles.dropDownPicker}
+            dropDownContainerStyle={styles.dropDownContainerStyle}
+            placeholder="Select a restaurant"
+          />
           <CourseAccordion />
         </ScrollView>
       </View>
