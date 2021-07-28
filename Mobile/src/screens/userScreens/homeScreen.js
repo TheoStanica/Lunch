@@ -42,38 +42,37 @@ const HomeScreen = ({navigation}) => {
     <>
       <StatusBar backgroundColor="#FFF1CA" barStyle="dark-content" />
       <SafeAreaView style={styles.container}>
-        <View style={styles.body}>
-          <Text style={styles.title}>Menus</Text>
-          <FlatList
-            data={menus}
-            onRefresh={onRefresh}
-            refreshing={isFetching}
-            keyExtractor={item => item}
-            renderItem={({item: _menuId}) => {
-              return (
-                <MenuCard
-                  title={menusById[_menuId].restaurantId?.name}
-                  onPress={() =>
-                    navigation.navigate('MenuDetailsScreen', {
-                      menuId: _menuId,
-                    })
-                  }
-                />
-              );
-            }}
-            showsVerticalScrollIndicator={false}
+        <Text style={styles.title}>Menus</Text>
+        <FlatList
+          style={styles.body}
+          data={menus}
+          onRefresh={onRefresh}
+          refreshing={isFetching}
+          keyExtractor={item => item}
+          renderItem={({item: _menuId}) => {
+            return (
+              <MenuCard
+                title={menusById[_menuId].restaurantId?.name}
+                onPress={() =>
+                  navigation.navigate('MenuDetailsScreen', {
+                    menuId: _menuId,
+                  })
+                }
+              />
+            );
+          }}
+          showsVerticalScrollIndicator={false}
+        />
+        {role === 'admin' ? (
+          <FAB
+            style={styles.fab}
+            icon="plus"
+            color="white"
+            visible={fabVisible}
+            animated={true}
+            onPress={() => navigation.navigate('CreateMenuScreen')}
           />
-          {role === 'admin' ? (
-            <FAB
-              style={styles.fab}
-              icon="plus"
-              color="white"
-              visible={fabVisible}
-              animated={true}
-              onPress={() => navigation.navigate('CreateMenuScreen')}
-            />
-          ) : null}
-        </View>
+        ) : null}
       </SafeAreaView>
     </>
   );
@@ -86,10 +85,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
+    marginHorizontal: 15,
   },
   body: {
-    padding: 15,
-    flexGrow: 1,
+    marginHorizontal: 15,
   },
   fab: {
     position: 'absolute',
