@@ -1,21 +1,16 @@
-import React, {useState} from 'react';
-import {StyleSheet, View, Animated, Alert, Text} from 'react-native';
-import {
-  List,
-  IconButton,
-  Subheading,
-  RadioButton,
-  Button,
-} from 'react-native-paper';
+import React from 'react';
+import {StyleSheet, View, Animated, Alert, ScrollView} from 'react-native';
+import {List, IconButton, Subheading} from 'react-native-paper';
 import TextInputField from './textInputField';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {RectButton} from 'react-native-gesture-handler';
 import {Formik} from 'formik';
+import ActionButton from './actionButton';
 
-const EMPTY_COURSE = {courseCategory: 'New Course', courses: []};
-const EMPTY_DISH = {description: 'New Dish'};
+const EMPTY_COURSE = {courseCategory: '', courses: []};
+const EMPTY_DISH = {description: ''};
 
-const CourseAccordion = () => {
+const CourseAccordion = ({onSubmit}) => {
   const renderActions = (idx, setFieldValue, values) => {
     return (
       <>
@@ -63,9 +58,9 @@ const CourseAccordion = () => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <View style={{flexGrow: 1}}>
+          <View style={styles.flexGrowContainer}>
             <TextInputField
-              label="Dish Description"
+              label="Dish Name"
               handleChange={handleChange}
               value={values.createdMenu[courseIdx].courses[idx].description}
               field={`createdMenu[${courseIdx}].courses[${idx}].description`}
@@ -99,48 +94,43 @@ const CourseAccordion = () => {
     });
   };
 
-  const renderCourses = () => {
-    return (
-      <Formik
-        initialValues={{
-          createdMenu: [],
-        }}
-        onSubmit={values => console.log(values)}>
-        {({
-          values,
-          handleChange,
-          errors,
-          isValid,
-          handleSubmit,
-          setFieldValue,
-        }) => (
-          <>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <Subheading>Courses:</Subheading>
-              <IconButton
-                icon="plus"
-                onPress={() =>
-                  setFieldValue('createdMenu', [
-                    ...values.createdMenu,
-                    EMPTY_COURSE,
-                  ])
-                }
-              />
-            </View>
-            {values.createdMenu.length > 0
-              ? values.createdMenu.map((item, idx) => (
+  return (
+    <Formik
+      initialValues={{
+        createdMenu: [],
+      }}
+      onSubmit={values => onSubmit(values)}>
+      {({values, handleChange, errors, handleSubmit, setFieldValue}) => (
+        <>
+          <View style={styles.coursesHeaderContainer}>
+            <Subheading>Courses:</Subheading>
+            <IconButton
+              icon="plus"
+              onPress={() =>
+                setFieldValue('createdMenu', [
+                  ...values.createdMenu,
+                  EMPTY_COURSE,
+                ])
+              }
+            />
+          </View>
+          <View style={styles.contentContainer}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              {values.createdMenu.length > 0 ? (
+                values.createdMenu.map((item, idx) => (
                   <Swipeable
                     key={idx}
                     renderRightActions={() =>
                       renderActions(idx, setFieldValue, values)
                     }
                     friction={1.5}>
-                    <List.Accordion title={item.courseCategory}>
+                    <List.Accordion
+                      style={styles.accordionItem}
+                      titleStyle={styles.accordionItemTitle}
+                      theme={{colors: {primary: 'white', text: 'white'}}}
+                      title={
+                        item.courseCategory ? item.courseCategory : 'New Course'
+                      }>
                       <View style={styles.body}>
                         <TextInputField
                           label="Course Title"
@@ -148,12 +138,7 @@ const CourseAccordion = () => {
                           handleChange={handleChange}
                           field={`createdMenu[${idx}].courseCategory`}
                         />
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                          }}>
+                        <View style={styles.dishesContainer}>
                           <Subheading>Dishes </Subheading>
                           <IconButton
                             icon="plus"
@@ -181,15 +166,23 @@ const CourseAccordion = () => {
                     </List.Accordion>
                   </Swipeable>
                 ))
-              : null}
-            <Button onPress={handleSubmit}>Submit</Button>
-          </>
-        )}
-      </Formik>
-    );
-  };
-
-  return <>{renderCourses()}</>;
+              ) : (
+                <View style={styles.alignCenter}>
+                  <Subheading>Add a course to create the menu</Subheading>
+                </View>
+              )}
+            </ScrollView>
+          </View>
+          <ActionButton
+            style={styles.button}
+            text="create menu"
+            onPress={handleSubmit}>
+            Submit
+          </ActionButton>
+        </>
+      )}
+    </Formik>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -199,8 +192,13 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     padding: 5,
-    minHeight: 150,
-    backgroundColor: 'pink',
+    backgroundColor: '#fffa',
+  },
+  accordionItem: {
+    backgroundColor: '#4A6572',
+  },
+  accordionItemTitle: {
+    color: 'white',
   },
   swipeableButton: {
     justifyContent: 'center',
@@ -217,6 +215,31 @@ const styles = StyleSheet.create({
     width: 80,
     textAlign: 'center',
     textAlignVertical: 'center',
+  },
+  coursesHeaderContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  contentContainer: {
+    flex: 1,
+    flexGrow: 1,
+    justifyContent: 'space-between',
+  },
+  dishesContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginLeft: 10,
+  },
+  flexGrowContainer: {
+    flexGrow: 1,
+  },
+  alignCenter: {
+    alignItems: 'center',
+  },
+  button: {
+    marginBottom: 15,
   },
 });
 
