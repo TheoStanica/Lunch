@@ -1,17 +1,19 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, SafeAreaView, StatusBar} from 'react-native';
+import {View, StyleSheet, SafeAreaView, StatusBar, Text} from 'react-native';
 import {Subheading} from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {useDispatch, useSelector} from 'react-redux';
 import {getRestaurants} from '../../redux/thunks/restaurantThunks';
 import CourseAccordion from '../../components/courseAccordion';
+import {createMenu} from '../../redux/thunks/menuThunks';
 
-const CreateMenuScreen = () => {
+const CreateMenuScreen = ({navigation}) => {
   const [openDropDown, setOpenDropDown] = useState(false);
   const {restaurants, restaurantsById} = useSelector(
     state => state.restaurantReducer,
   );
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+  const [errors, setErrors] = useState('');
   const dispatch = useDispatch();
 
   const generateRestaurantItems = () => {
@@ -28,6 +30,10 @@ const CreateMenuScreen = () => {
   useEffect(() => {
     dispatch(getRestaurants());
   }, []);
+
+  useEffect(() => {
+    if (selectedRestaurant) setErrors('');
+  }, [selectedRestaurant]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -56,7 +62,28 @@ const CreateMenuScreen = () => {
             borderWidth: 0.3,
           }}
         />
-        <CourseAccordion onSubmit={values => console.log(values)} />
+        {errors ? <Text style={styles.errorMessage}>{errors}</Text> : null}
+        <CourseAccordion
+          onSubmit={menu => {
+            if (!selectedRestaurant) {
+              setErrors('Please select a restaurant');
+            } else {
+              dispatch(
+                createMenu({menu, restaurantId: selectedRestaurant}, () =>
+                  navigation.reset({
+                    routes: [
+                      {name: 'HomeScreen'},
+                      {
+                        name: 'MessageScreen',
+                        params: {message: 'Menu created!'},
+                      },
+                    ],
+                  }),
+                ),
+              );
+            }
+          }}
+        />
       </View>
     </SafeAreaView>
   );
@@ -70,6 +97,11 @@ const styles = StyleSheet.create({
   body: {
     flexGrow: 1,
     paddingHorizontal: 15,
+  },
+  errorMessage: {
+    fontSize: 16,
+    color: 'red',
+    marginVertical: 10,
   },
 });
 

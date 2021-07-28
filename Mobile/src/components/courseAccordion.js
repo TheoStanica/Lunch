@@ -99,7 +99,7 @@ const CourseAccordion = ({onSubmit}) => {
       initialValues={{
         createdMenu: [],
       }}
-      onSubmit={values => onSubmit(values)}>
+      onSubmit={values => onSubmit(values.createdMenu)}>
       {({values, handleChange, errors, handleSubmit, setFieldValue}) => (
         <>
           <View style={styles.coursesHeaderContainer}>

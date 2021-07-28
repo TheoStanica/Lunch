@@ -20,10 +20,11 @@ export const getMenus =
   };
 
 export const createMenu =
-  ({menu, restaurantId}) =>
+  ({menu, restaurantId}, callback) =>
   async dispatch => {
     try {
       await menuPostRequest({menu, restaurantId});
+      if (typeof callback == 'function') callback();
     } catch (error) {
       dispatch(handleError(error));
     }
