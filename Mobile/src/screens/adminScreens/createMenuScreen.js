@@ -1,11 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  StyleSheet,
-  SafeAreaView,
-  StatusBar,
-  ScrollView,
-} from 'react-native';
+import {View, StyleSheet, SafeAreaView, StatusBar} from 'react-native';
 import {Subheading} from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {useDispatch, useSelector} from 'react-redux';
@@ -39,20 +33,30 @@ const CreateMenuScreen = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#FFF1CA" barStyle="dark-content" />
       <View style={styles.body}>
-        <ScrollView contentContainerStyle={{flexGrow: 1}}>
-          <Subheading>Select a restaurant:</Subheading>
-          <DropDownPicker
-            open={openDropDown}
-            value={selectedRestaurant}
-            setValue={setSelectedRestaurant}
-            setOpen={setOpenDropDown}
-            items={generateRestaurantItems()}
-            style={styles.dropDownPicker}
-            dropDownContainerStyle={styles.dropDownContainerStyle}
-            placeholder="Select a restaurant"
-          />
-          <CourseAccordion />
-        </ScrollView>
+        <Subheading>Select a restaurant:</Subheading>
+        <DropDownPicker
+          open={openDropDown}
+          value={selectedRestaurant}
+          setValue={setSelectedRestaurant}
+          setOpen={setOpenDropDown}
+          items={generateRestaurantItems()}
+          style={styles.dropDownPicker}
+          dropDownContainerStyle={styles.dropDownContainerStyle}
+          placeholder="Select a restaurant"
+          style={{
+            backgroundColor: 'transparent',
+            borderColor: '#0007',
+            borderWidth: 0.3,
+          }}
+          selectedItemContainerStyle={{backgroundColor: '#4A6572'}}
+          selectedItemLabelStyle={{color: 'white'}}
+          dropDownContainerStyle={{
+            backgroundColor: '#FFF1CA',
+            borderColor: '#0007',
+            borderWidth: 0.3,
+          }}
+        />
+        <CourseAccordion onSubmit={values => console.log(values)} />
       </View>
     </SafeAreaView>
   );
