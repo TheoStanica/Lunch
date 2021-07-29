@@ -63,7 +63,10 @@ const CreateMenuScreen = ({navigation}) => {
         />
         {errors ? <Text style={styles.errorMessage}>{errors}</Text> : null}
       </View>
-      <ScrollView style={styles.body} contentContainerStyle={{flexGrow: 1}}>
+      <ScrollView
+        style={styles.body}
+        contentContainerStyle={{flexGrow: 1}}
+        showsVerticalScrollIndicator={false}>
         <MenuCreator
           onSubmit={menu => {
             if (!selectedRestaurant) {
