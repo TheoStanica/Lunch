@@ -18,7 +18,7 @@ import ActionButton from './actionButton';
 const EMPTY_COURSE = {courseCategory: '', courses: []};
 const EMPTY_DISH = {description: ''};
 
-const CourseAccordion = ({onSubmit}) => {
+const MenuCreator = ({onSubmit}) => {
   const renderActions = (idx, setFieldValue, values) => {
     return (
       <RectButton
@@ -294,4 +294,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CourseAccordion;
+export default MenuCreator;

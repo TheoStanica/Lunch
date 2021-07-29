@@ -10,7 +10,7 @@ import {Title} from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {useDispatch, useSelector} from 'react-redux';
 import {getRestaurants} from '../../redux/thunks/restaurantThunks';
-import CourseAccordion from '../../components/courseAccordion';
+import MenuCreator from '../../components/menuCreator';
 import {createMenu} from '../../redux/thunks/menuThunks';
 
 const CreateMenuScreen = ({navigation}) => {
@@ -61,7 +61,7 @@ const CreateMenuScreen = ({navigation}) => {
           dropDownContainerStyle={styles.dropdownContainer}
         />
         {errors ? <Text style={styles.errorMessage}>{errors}</Text> : null}
-        <CourseAccordion
+        <MenuCreator
           onSubmit={menu => {
             if (!selectedRestaurant) {
               setErrors('Please select a restaurant');
