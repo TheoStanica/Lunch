@@ -12,10 +12,10 @@ import AnimatedHeader from '../../components/animatedHeader';
 import {Formik} from 'formik';
 import {Headline, RadioButton} from 'react-native-paper';
 import ActionButton from '../../components/actionButton';
-import {createOrder} from '../../redux/thunks/orderThunks';
+import {createOrder, updateOrder} from '../../redux/thunks/orderThunks';
 
 const MenuTakeawayOrderScreen = ({route, navigation}) => {
-  const {menuId} = route.params;
+  const {menuId, orderId} = route.params;
   const {menusById} = useSelector(state => state.menuReducer);
   const {id} = useSelector(state => state.userReducer);
   const offset = useRef(new Animated.Value(0)).current;
@@ -66,6 +66,46 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
     );
   };
 
+  const submitOrder = menuOptions => {
+    if (!orderId) {
+      dispatch(
+        createOrder(
+          {
+            menuId,
+            userId: id,
+            type: 'takeaway',
+            menuOptions,
+          },
+          sendSuccessMessage,
+        ),
+      );
+    } else {
+      dispatch(
+        updateOrder(
+          {
+            orderId,
+            status: 'active',
+            type: 'takeaway',
+            menuOptions,
+          },
+          sendSuccessMessage,
+        ),
+      );
+    }
+  };
+
+  const sendSuccessMessage = () => {
+    navigation.reset({
+      routes: [
+        {name: 'HomeScreen'},
+        {
+          name: 'MessageScreen',
+          params: {message: 'Order created!'},
+        },
+      ],
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <AnimatedHeader
@@ -83,26 +123,7 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
             );
           } else {
             setErrors('');
-            dispatch(
-              createOrder(
-                {
-                  menuId: menuId,
-                  userId: id,
-                  type: 'takeaway',
-                  menuOptions: values.selectedMenu,
-                },
-                () =>
-                  navigation.reset({
-                    routes: [
-                      {name: 'HomeScreen'},
-                      {
-                        name: 'MessageScreen',
-                        params: {message: 'Order created!'},
-                      },
-                    ],
-                  }),
-              ),
-            );
+            submitOrder(values.selectedMenu);
           }
         }}>
         {({values, handleSubmit, setFieldValue}) => (
