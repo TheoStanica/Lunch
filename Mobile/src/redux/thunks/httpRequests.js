@@ -104,3 +104,24 @@ export const orderCreateRequest = async ({
 }) => {
   return await api.post('/order', {menuId, userId, type, menuOptions});
 };
+
+export const orderGetRequest = async ({filter}) => {
+  return await api.get('/order', {params: {filter}});
+};
+
+export const orderUpdateRequest = async ({
+  orderId,
+  type,
+  status,
+  userId,
+  menuId,
+  menuOptions,
+}) => {
+  return await api.put(`/order/${orderId}`, {
+    type,
+    status,
+    userId,
+    menuId,
+    menuOptions,
+  });
+};
