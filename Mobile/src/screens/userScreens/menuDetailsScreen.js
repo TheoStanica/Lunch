@@ -44,11 +44,15 @@ const MenuDetailsScreen = ({navigation, route}) => {
     );
   }, []);
 
-  const renderCourses = courses =>
+  const renderCourses = ({courseCategory, courses}) =>
     courses.map((course, idx) => (
       <View
         style={styles.courseDetails}
         key={`${menuId}-${course.courseCategory}-${idx}`}>
+        {order?.type === 'takeaway' &&
+        order?.menuOptions[courseCategory] === idx ? (
+          <Icon size={24} name="check" color="#4A6572" />
+        ) : null}
         <Paragraph style={styles.capitalizedText}>
           {course.description}
         </Paragraph>
@@ -76,7 +80,10 @@ const MenuDetailsScreen = ({navigation, route}) => {
         <Headline style={styles.capitalizedText}>
           {menuCourse.courseCategory}
         </Headline>
-        {renderCourses(menuCourse.courses)}
+        {renderCourses({
+          courses: menuCourse.courses,
+          courseCategory: menuCourse.courseCategory,
+        })}
       </View>
     ));
 
