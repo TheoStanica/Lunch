@@ -15,7 +15,7 @@ import ActionButton from '../../components/actionButton';
 import {createOrder, updateOrder} from '../../redux/thunks/orderThunks';
 
 const MenuTakeawayOrderScreen = ({route, navigation}) => {
-  const {menuId, orderId} = route.params;
+  const {menuId, order} = route.params;
   const {menusById} = useSelector(state => state.menuReducer);
   const {id} = useSelector(state => state.userReducer);
   const offset = useRef(new Animated.Value(0)).current;
@@ -67,7 +67,7 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
   };
 
   const submitOrder = menuOptions => {
-    if (!orderId) {
+    if (!order) {
       dispatch(
         createOrder(
           {
@@ -83,7 +83,7 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
       dispatch(
         updateOrder(
           {
-            orderId,
+            orderId: order.id,
             status: 'active',
             type: 'takeaway',
             menuOptions,
@@ -114,7 +114,7 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
       />
       <Formik
         initialValues={{
-          selectedMenu: {},
+          selectedMenu: order?.status === 'active' ? order.menuOptions : {},
         }}
         onSubmit={values => {
           if (validateOptions(values.selectedMenu)) {
