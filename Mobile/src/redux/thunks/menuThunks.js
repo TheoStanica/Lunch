@@ -7,7 +7,7 @@ import {setMenusAction, deleteMenuAction} from '../actions/menuActions';
 import {handleError} from './errorThunks';
 
 export const getMenus =
-  ({filter, callback}) =>
+  ({filter}, callback) =>
   async dispatch => {
     try {
       const response = await menuGetRequest({filter});

@@ -12,6 +12,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getUser} from '../../redux/thunks/userThunks';
 import {getMenus} from '../../redux/thunks/menuThunks';
 import MenuCard from '../../components/menuCard';
+import moment from 'moment';
 
 const HomeScreen = ({navigation}) => {
   const {menus, menusById} = useSelector(state => state.menuReducer);
@@ -24,12 +25,17 @@ const HomeScreen = ({navigation}) => {
     setIsFetching(true);
     dispatch(getUser());
     dispatch(
-      getMenus({
-        filter: {},
-        callback: () => {
+      getMenus(
+        {
+          filter: {
+            createdAt: moment().startOf('day'),
+            endedAt: moment().endOf('day'),
+          },
+        },
+        () => {
           setIsFetching(false);
         },
-      }),
+      ),
     );
   };
 
