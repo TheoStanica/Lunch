@@ -1,6 +1,14 @@
 import React from 'react';
-import {StyleSheet, View, Animated, Alert, ScrollView} from 'react-native';
-import {List, IconButton, Subheading} from 'react-native-paper';
+import {StyleSheet, View, Animated, Alert} from 'react-native';
+import {
+  List,
+  IconButton,
+  Title,
+  Subheading,
+  RadioButton,
+  Text,
+  Divider,
+} from 'react-native-paper';
 import TextInputField from './textInputField';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {RectButton} from 'react-native-gesture-handler';
@@ -13,32 +21,29 @@ const EMPTY_DISH = {description: ''};
 const CourseAccordion = ({onSubmit}) => {
   const renderActions = (idx, setFieldValue, values) => {
     return (
-      <>
-        <RectButton
-          style={[styles.swipeableButton, styles.swipeableDelete]}
-          onPress={() =>
-            Alert.alert(
-              'Delete',
-              `Are you sure you want to remove this course?`,
-              [
-                {
-                  text: 'Yes',
-                  onPress: () =>
-                    setFieldValue(
-                      `createdMenu`,
-                      values.createdMenu.filter((menu, index) => index !== idx),
-                    ),
-                },
-                {text: 'No'},
-              ],
-            )
-          }>
-          <Animated.Text
-            style={[styles.actionText, styles.swipeableDeleteText]}>
-            Delete
-          </Animated.Text>
-        </RectButton>
-      </>
+      <RectButton
+        style={[styles.swipeableButton, styles.swipeableDelete]}
+        onPress={() =>
+          Alert.alert(
+            'Delete',
+            `Are you sure you want to remove this course?`,
+            [
+              {
+                text: 'Yes',
+                onPress: () =>
+                  setFieldValue(
+                    `createdMenu`,
+                    values.createdMenu.filter((menu, index) => index !== idx),
+                  ),
+              },
+              {text: 'No'},
+            ],
+          )
+        }>
+        <Animated.Text style={[styles.actionText, styles.swipeableDeleteText]}>
+          Delete
+        </Animated.Text>
+      </RectButton>
     );
   };
 
@@ -51,44 +56,58 @@ const CourseAccordion = ({onSubmit}) => {
   }) => {
     return course.courses.map((dish, idx) => {
       return (
-        <View
-          key={`dish-${idx}`}
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <View style={styles.flexGrowContainer}>
-            <TextInputField
-              label="Dish Name"
-              handleChange={handleChange}
-              value={values.createdMenu[courseIdx].courses[idx].description}
-              field={`createdMenu[${courseIdx}].courses[${idx}].description`}
+        <View key={`dish-${idx}`}>
+          <Divider style={styles.divider} />
+          <View style={styles.dishContainer}>
+            <View style={styles.flexGrowContainer}>
+              <TextInputField
+                label="Dish Name"
+                handleChange={handleChange}
+                value={values.createdMenu[courseIdx].courses[idx].description}
+                field={`createdMenu[${courseIdx}].courses[${idx}].description`}
+                theme={{colors: {primary: '#4A6572'}}}
+                underlineColor="#0002"
+                style={styles.dishInputField}
+              />
+              <RadioButton.Group value="restaurant">
+                <Text style={styles.radioText}>Only: </Text>
+                <View style={styles.radioGroupContainer}>
+                  <View style={styles.radioContainer}>
+                    <RadioButton value="restaurant" color="#4A6572" />
+                    <Text>Restaurant</Text>
+                  </View>
+                  <View style={styles.radioContainer}>
+                    <RadioButton value="takeaway" color="#4A6572" />
+                    <Text>Takeaway</Text>
+                  </View>
+                </View>
+              </RadioButton.Group>
+            </View>
+
+            <IconButton
+              icon="delete"
+              color="red"
+              onPress={() =>
+                Alert.alert(
+                  'Delete',
+                  `Are you sure you want to remove this dish?`,
+                  [
+                    {
+                      text: 'Yes',
+                      onPress: () =>
+                        setFieldValue(
+                          `createdMenu[${courseIdx}].courses`,
+                          values.createdMenu[courseIdx].courses.filter(
+                            (dish, dishIdx) => idx !== dishIdx,
+                          ),
+                        ),
+                    },
+                    {text: 'No'},
+                  ],
+                )
+              }
             />
           </View>
-
-          <IconButton
-            icon="delete"
-            onPress={() =>
-              Alert.alert(
-                'Delete',
-                `Are you sure you want to remove this dish?`,
-                [
-                  {
-                    text: 'Yes',
-                    onPress: () =>
-                      setFieldValue(
-                        `createdMenu[${courseIdx}].courses`,
-                        values.createdMenu[courseIdx].courses.filter(
-                          (dish, dishIdx) => idx !== dishIdx,
-                        ),
-                      ),
-                  },
-                  {text: 'No'},
-                ],
-              )
-            }
-          />
         </View>
       );
     });
@@ -101,21 +120,21 @@ const CourseAccordion = ({onSubmit}) => {
       }}
       onSubmit={values => onSubmit(values.createdMenu)}>
       {({values, handleChange, errors, handleSubmit, setFieldValue}) => (
-        <>
-          <View style={styles.coursesHeaderContainer}>
-            <Subheading>Courses:</Subheading>
-            <IconButton
-              icon="plus"
-              onPress={() =>
-                setFieldValue('createdMenu', [
-                  ...values.createdMenu,
-                  EMPTY_COURSE,
-                ])
-              }
-            />
-          </View>
-          <View style={styles.contentContainer}>
-            <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.spaceBetweenContainer}>
+          <View>
+            <View style={styles.coursesHeaderContainer}>
+              <Title>Menu:</Title>
+              <IconButton
+                icon="plus"
+                onPress={() =>
+                  setFieldValue('createdMenu', [
+                    ...values.createdMenu,
+                    EMPTY_COURSE,
+                  ])
+                }
+              />
+            </View>
+            <View style={styles.contentContainer}>
               {values.createdMenu.length > 0 ? (
                 values.createdMenu.map((item, idx) => (
                   <Swipeable
@@ -123,6 +142,7 @@ const CourseAccordion = ({onSubmit}) => {
                     renderRightActions={() =>
                       renderActions(idx, setFieldValue, values)
                     }
+                    containerStyle={{marginBottom: 5}}
                     friction={1.5}>
                     <List.Accordion
                       style={styles.accordionItem}
@@ -171,7 +191,7 @@ const CourseAccordion = ({onSubmit}) => {
                   <Subheading>Add a course to create the menu</Subheading>
                 </View>
               )}
-            </ScrollView>
+            </View>
           </View>
           <ActionButton
             style={styles.button}
@@ -179,7 +199,7 @@ const CourseAccordion = ({onSubmit}) => {
             onPress={handleSubmit}>
             Submit
           </ActionButton>
-        </>
+        </View>
       )}
     </Formik>
   );
@@ -192,7 +212,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     padding: 5,
-    backgroundColor: '#fffa',
+    backgroundColor: '#fff7e0',
   },
   accordionItem: {
     backgroundColor: '#4A6572',
@@ -239,7 +259,38 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
-    marginBottom: 15,
+    marginVertical: 15,
+  },
+  radioContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  spaceBetweenContainer: {
+    justifyContent: 'space-between',
+    flexGrow: 1,
+  },
+  divider: {
+    backgroundColor: '#4A6572',
+    borderWidth: 1,
+  },
+  dishContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  radioGroupContainer: {
+    flexDirection: 'row',
+    marginLeft: 15,
+  },
+  radioText: {
+    marginLeft: 15,
+  },
+  dishInputField: {
+    backgroundColor: 'transparent',
+    borderWidth: 0.3,
+    borderColor: '#0007',
+    marginLeft: 15,
   },
 });
 

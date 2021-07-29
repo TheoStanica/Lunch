@@ -1,6 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, SafeAreaView, StatusBar, Text} from 'react-native';
-import {Subheading} from 'react-native-paper';
+import {
+  StyleSheet,
+  SafeAreaView,
+  StatusBar,
+  Text,
+  ScrollView,
+} from 'react-native';
+import {Title} from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {useDispatch, useSelector} from 'react-redux';
 import {getRestaurants} from '../../redux/thunks/restaurantThunks';
@@ -38,8 +44,8 @@ const CreateMenuScreen = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#FFF1CA" barStyle="dark-content" />
-      <View style={styles.body}>
-        <Subheading>Select a restaurant:</Subheading>
+      <ScrollView style={styles.body} contentContainerStyle={{flexGrow: 1}}>
+        <Title>Select a restaurant:</Title>
         <DropDownPicker
           open={openDropDown}
           value={selectedRestaurant}
@@ -49,18 +55,10 @@ const CreateMenuScreen = ({navigation}) => {
           style={styles.dropDownPicker}
           dropDownContainerStyle={styles.dropDownContainerStyle}
           placeholder="Select a restaurant"
-          style={{
-            backgroundColor: 'transparent',
-            borderColor: '#0007',
-            borderWidth: 0.3,
-          }}
+          style={styles.dropdownStyle}
           selectedItemContainerStyle={{backgroundColor: '#4A6572'}}
-          selectedItemLabelStyle={{color: 'white'}}
-          dropDownContainerStyle={{
-            backgroundColor: '#FFF1CA',
-            borderColor: '#0007',
-            borderWidth: 0.3,
-          }}
+          selectedItemLabelStyle={styles.selectedItemLabel}
+          dropDownContainerStyle={styles.dropdownContainer}
         />
         {errors ? <Text style={styles.errorMessage}>{errors}</Text> : null}
         <CourseAccordion
@@ -84,7 +82,7 @@ const CreateMenuScreen = ({navigation}) => {
             }
           }}
         />
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -96,12 +94,26 @@ const styles = StyleSheet.create({
   },
   body: {
     flexGrow: 1,
+    flex: 1,
     paddingHorizontal: 15,
   },
   errorMessage: {
     fontSize: 16,
     color: 'red',
     marginVertical: 10,
+  },
+  dropdownStyle: {
+    backgroundColor: 'transparent',
+    borderColor: '#0007',
+    borderWidth: 0.3,
+  },
+  selectedItemLabel: {
+    color: 'white',
+  },
+  dropdownContainer: {
+    backgroundColor: '#FFF1CA',
+    borderColor: '#0007',
+    borderWidth: 0.3,
   },
 });
 
