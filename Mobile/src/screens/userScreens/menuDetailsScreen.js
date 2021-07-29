@@ -92,19 +92,17 @@ const MenuDetailsScreen = ({navigation, route}) => {
           <ActionButton
             text="update order"
             style={styles.rightButton}
-            onPress={() =>
-              navigation.navigate('MenuTakeawayOrderScreen', {menuId})
-            }
+            onPress={() => navigateToOrderScreen(menuId, order.id)}
           />
         ) : null}
       </>
     );
   };
 
-  const renderCancelledOrderOptions = () => {
+  const renderOrderButtons = orderId => {
     return (
       <>
-        <Text>Update</Text>
+        {orderId ? <Text>update</Text> : null}
         <ActionButton
           text="Restaurant"
           style={styles.leftButton}
@@ -113,12 +111,14 @@ const MenuDetailsScreen = ({navigation, route}) => {
         <ActionButton
           text="Takeaway"
           style={styles.rightButton}
-          onPress={() =>
-            navigation.navigate('MenuTakeawayOrderScreen', {menuId})
-          }
+          onPress={() => navigateToOrderScreen(menuId, orderId)}
         />
       </>
     );
+  };
+
+  const navigateToOrderScreen = (menuId, orderId) => {
+    navigation.navigate('MenuTakeawayOrderScreen', {menuId, orderId});
   };
 
   const renderOrderOptions = () => {
@@ -126,7 +126,7 @@ const MenuDetailsScreen = ({navigation, route}) => {
       <View style={styles.buttons}>
         {order.status === 'active'
           ? renderActiveOrderOptions()
-          : renderCancelledOrderOptions()}
+          : renderOrderButtons(order.id)}
       </View>
     );
   };
@@ -151,7 +151,7 @@ const MenuDetailsScreen = ({navigation, route}) => {
             type: 'restaurant',
             menuOptions: undefined,
           },
-          () => sendSuccessMessage(),
+          sendSuccessMessage,
         ),
       );
     } else {
@@ -162,7 +162,7 @@ const MenuDetailsScreen = ({navigation, route}) => {
             status: 'active',
             type: 'restaurant',
           },
-          () => sendSuccessMessage(),
+          sendSuccessMessage,
         ),
       );
     }
@@ -205,20 +205,7 @@ const MenuDetailsScreen = ({navigation, route}) => {
                 </View>
               </View>
               {!order.status ? (
-                <View style={styles.buttons}>
-                  <ActionButton
-                    text="Restaurant"
-                    style={styles.leftButton}
-                    onPress={submitOrder}
-                  />
-                  <ActionButton
-                    text="Takeaway"
-                    style={styles.rightButton}
-                    onPress={() =>
-                      navigation.navigate('MenuTakeawayOrderScreen', {menuId})
-                    }
-                  />
-                </View>
+                <View style={styles.buttons}>{renderOrderButtons()}</View>
               ) : (
                 renderOrderOptions()
               )}
