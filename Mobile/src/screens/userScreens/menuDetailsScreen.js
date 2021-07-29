@@ -104,7 +104,7 @@ const MenuDetailsScreen = ({navigation, route}) => {
           <ActionButton
             text="update order"
             style={styles.rightButton}
-            onPress={() => navigateToOrderScreen(menuId, order.id)}
+            onPress={() => navigateToOrderScreen(menuId, order)}
           />
         ) : null}
       </>
@@ -114,7 +114,6 @@ const MenuDetailsScreen = ({navigation, route}) => {
   const renderOrderButtons = orderId => {
     return (
       <>
-        {orderId ? <Text>update</Text> : null}
         <ActionButton
           text="Restaurant"
           style={styles.leftButton}
@@ -123,14 +122,14 @@ const MenuDetailsScreen = ({navigation, route}) => {
         <ActionButton
           text="Takeaway"
           style={styles.rightButton}
-          onPress={() => navigateToOrderScreen(menuId, orderId)}
+          onPress={() => navigateToOrderScreen(menuId, order)}
         />
       </>
     );
   };
 
-  const navigateToOrderScreen = (menuId, orderId) => {
-    navigation.navigate('MenuTakeawayOrderScreen', {menuId, orderId});
+  const navigateToOrderScreen = (menuId, order) => {
+    navigation.navigate('MenuTakeawayOrderScreen', {menuId, order});
   };
 
   const renderOrderOptions = () => {
@@ -225,7 +224,7 @@ const MenuDetailsScreen = ({navigation, route}) => {
           </ScrollView>
         ) : (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator />
+            <ActivityIndicator color="#4A6572" />
           </View>
         )}
       </SafeAreaView>
