@@ -69,7 +69,24 @@ const MenuCreator = ({onSubmit}) => {
                 underlineColor="#0002"
                 style={styles.dishInputField}
               />
-              <RadioButton.Group value="restaurant">
+              <RadioButton.Group
+                value={values.createdMenu[courseIdx].courses[idx].requiredType}
+                onValueChange={newValue => {
+                  if (
+                    values.createdMenu[courseIdx].courses[idx].requiredType ===
+                    newValue
+                  ) {
+                    setFieldValue(
+                      `createdMenu[${courseIdx}].courses[${idx}].requiredType`,
+                      undefined,
+                    );
+                  } else {
+                    setFieldValue(
+                      `createdMenu[${courseIdx}].courses[${idx}].requiredType`,
+                      newValue,
+                    );
+                  }
+                }}>
                 <Text style={styles.radioText}>Only: </Text>
                 <View style={styles.radioGroupContainer}>
                   <View style={styles.radioContainer}>
@@ -264,6 +281,7 @@ const styles = StyleSheet.create({
   radioContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginRight: 10,
   },
   spaceBetweenContainer: {
     justifyContent: 'space-between',
