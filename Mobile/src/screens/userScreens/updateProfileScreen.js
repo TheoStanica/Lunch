@@ -18,8 +18,8 @@ const UpdateProfileScreen = () => {
   return (
     <HideKeyboard>
       <SafeAreaView style={styles.container}>
-        <ScrollView>
-          <View style={styles.contentContainer}>
+        <View style={styles.contentContainer}>
+          <ScrollView contentContainerStyle={styles.flex}>
             <Formik
               validationSchema={updateValidationSchema}
               initialValues={{
@@ -31,7 +31,6 @@ const UpdateProfileScreen = () => {
               onSubmit={values => {
                 if (values.email === userReducer.email)
                   values.email = undefined;
-
                 dispatch(
                   updateUser({
                     email: values.email,
@@ -39,61 +38,64 @@ const UpdateProfileScreen = () => {
                     fullname: values.fullname,
                   }),
                 );
-              }}>
+              }}
+              style={{backgroundColor: 'red'}}>
               {({values, handleChange, errors, handleSubmit}) => (
-                <>
-                  <TextInputField
-                    label="Email"
-                    value={values.email}
-                    errors={errors.email}
-                    handleChange={handleChange}
-                    field="email"
-                  />
-                  <TextInputField
-                    label="Password"
-                    value={values.password}
-                    errors={errors.password}
-                    handleChange={handleChange}
-                    secureTextEntry={hidePassword}
-                    right={
-                      <TextInput.Icon
-                        name={hidePassword ? 'eye-off' : 'eye'}
-                        size={20}
-                        onPress={() => setHidePassword(!hidePassword)}
-                      />
-                    }
-                    field="password"
-                  />
-                  <TextInputField
-                    label="Retype Password"
-                    value={values.retypePassword}
-                    errors={errors.retypePassword}
-                    handleChange={handleChange}
-                    secureTextEntry={hideRetypePassword}
-                    right={
-                      <TextInput.Icon
-                        name={hideRetypePassword ? 'eye-off' : 'eye'}
-                        size={20}
-                        onPress={() =>
-                          setHideRetypePassword(!hideRetypePassword)
-                        }
-                      />
-                    }
-                    field="retypePassword"
-                  />
-                  <TextInputField
-                    label="Full Name"
-                    value={values.fullname}
-                    errors={errors.fullname}
-                    handleChange={handleChange}
-                    field="fullname"
-                  />
+                <View style={styles.formContainer}>
+                  <View>
+                    <TextInputField
+                      label="Email"
+                      value={values.email}
+                      errors={errors.email}
+                      handleChange={handleChange}
+                      field="email"
+                    />
+                    <TextInputField
+                      label="Password"
+                      value={values.password}
+                      errors={errors.password}
+                      handleChange={handleChange}
+                      secureTextEntry={hidePassword}
+                      right={
+                        <TextInput.Icon
+                          name={hidePassword ? 'eye-off' : 'eye'}
+                          size={20}
+                          onPress={() => setHidePassword(!hidePassword)}
+                        />
+                      }
+                      field="password"
+                    />
+                    <TextInputField
+                      label="Retype Password"
+                      value={values.retypePassword}
+                      errors={errors.retypePassword}
+                      handleChange={handleChange}
+                      secureTextEntry={hideRetypePassword}
+                      right={
+                        <TextInput.Icon
+                          name={hideRetypePassword ? 'eye-off' : 'eye'}
+                          size={20}
+                          onPress={() =>
+                            setHideRetypePassword(!hideRetypePassword)
+                          }
+                        />
+                      }
+                      field="retypePassword"
+                    />
+                    <TextInputField
+                      label="Full Name"
+                      value={values.fullname}
+                      errors={errors.fullname}
+                      handleChange={handleChange}
+                      field="fullname"
+                    />
+                  </View>
                   <ActionButton text="Update" onPress={handleSubmit} />
-                </>
+                </View>
               )}
             </Formik>
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </View>
       </SafeAreaView>
     </HideKeyboard>
   );
@@ -102,10 +104,18 @@ const UpdateProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFF1CA',
+  },
+  flex: {
+    flex: 1,
   },
   contentContainer: {
-    padding: 25,
-    paddingBottom: 100,
+    padding: 15,
+    flexGrow: 1,
+  },
+  formContainer: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
   },
 });
 

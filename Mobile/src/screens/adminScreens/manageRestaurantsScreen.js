@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useCallback} from 'react';
 import {StyleSheet, FlatList} from 'react-native';
 import {FAB} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
@@ -23,19 +23,20 @@ const ManageRestaurantsScreen = ({navigation}) => {
   const [visible, setVisible] = useState(false);
 
   const onRefresh = () => {
+    setVisible(false);
     setIsFetching(true);
-    dispatch(getRestaurants(() => setIsFetching(false)));
+    dispatch(
+      getRestaurants(() => {
+        setIsFetching(false);
+        setVisible(true);
+      }),
+    );
   };
   useFocusEffect(
     useCallback(() => {
       onRefresh();
     }, []),
   );
-  useEffect(() => {
-    setTimeout(() => {
-      setVisible(true);
-    }, 500);
-  }, []);
 
   return (
     <HideKeyboard>
@@ -43,6 +44,8 @@ const ManageRestaurantsScreen = ({navigation}) => {
         <FlatList
           data={restaurants}
           keyExtractor={restaurant => restaurant}
+          contentContainerStyle={styles.container}
+          style={styles.container}
           renderItem={restaurant => (
             <AdminField
               index={restaurant.index}
@@ -79,6 +82,11 @@ const ManageRestaurantsScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexGrow: 1,
+    backgroundColor: '#FFF1CA',
+  },
   fab: {
     position: 'absolute',
     margin: 40,

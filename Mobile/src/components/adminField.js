@@ -11,7 +11,7 @@ const AdminField = ({
   title,
   description,
   icon,
-  iconColor = '#FBBC00',
+  iconColor = '#4A6572',
   index,
   row,
   prevOpenedRow,
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
   itemContainer: {
-    backgroundColor: 'white',
+    backgroundColor: '#FFF1CA',
   },
   swipeableButton: {
     justifyContent: 'center',

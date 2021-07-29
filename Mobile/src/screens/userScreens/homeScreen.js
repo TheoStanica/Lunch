@@ -34,6 +34,7 @@ const HomeScreen = ({navigation}) => {
         },
         () => {
           setIsFetching(false);
+          setFabVisible(true);
         },
       ),
     );
@@ -41,7 +42,6 @@ const HomeScreen = ({navigation}) => {
 
   useEffect(() => {
     onRefresh();
-    setFabVisible(true);
   }, []);
 
   return (

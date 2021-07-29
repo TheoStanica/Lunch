@@ -37,7 +37,10 @@ const ProfileStack = () => {
       <Stack.Screen
         name="UpdateProfileScreen"
         component={UpdateProfileScreen}
-        options={{title: 'Update Profile'}}
+        options={{
+          title: 'Update Profile',
+          headerStyle: {backgroundColor: '#FFF1CA'},
+        }}
       />
     </Stack.Navigator>
   );
@@ -64,7 +67,10 @@ const AdminStack = () => {
       <Stack.Screen
         name="ManageRestaurantsScreen"
         component={ManageRestaurantsScreen}
-        options={{title: 'Manage Restaurants'}}
+        options={{
+          title: 'Manage Restaurants',
+          headerStyle: {backgroundColor: '#FFF1CA'},
+        }}
       />
       <Stack.Screen
         name="RestaurantDetailsScreen"
