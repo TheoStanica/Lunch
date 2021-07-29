@@ -65,7 +65,7 @@ const createOrder = async (req, res, next) => {
       return next(new BadRequestError('Please provide a valid user id.'));
     }
 
-    if (await Order.findOne({ menuId: req.body.menuId })) {
+    if (await Order.findOne({ menuId: req.body.menuId, deleted: false })) {
       return next(
         new BadRequestError("Can't create two orders for the same menu.")
       );
