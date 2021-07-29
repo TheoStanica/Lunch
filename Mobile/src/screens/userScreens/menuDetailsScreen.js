@@ -1,25 +1,48 @@
-import React, {useRef} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {
   SafeAreaView,
   View,
   StyleSheet,
   ScrollView,
   Animated,
+  Text,
 } from 'react-native';
-import {Title, Headline, Paragraph} from 'react-native-paper';
+import {
+  Title,
+  Headline,
+  Paragraph,
+  ActivityIndicator,
+} from 'react-native-paper';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionButton from '../../components/actionButton';
 import AnimatedHeader from '../../components/animatedHeader';
-import {createOrder} from '../../redux/thunks/orderThunks';
+import {
+  createOrder,
+  getOrder,
+  updateOrder,
+} from '../../redux/thunks/orderThunks';
 
 const MenuDetailsScreen = ({navigation, route}) => {
   const {menuId} = route.params;
   const {menusById} = useSelector(state => state.menuReducer);
   const {id} = useSelector(state => state.userReducer);
   const offset = useRef(new Animated.Value(0)).current;
+  const [isFetchingOrder, setIsFetchingOrder] = useState(true);
+  const [order, setOrder] = useState('');
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(
+      getOrder({filter: {userId: id, menuId: menuId}}, res => {
+        if (res?.orders.length > 0) {
+          setOrder(res.orders[0]);
+        }
+        setIsFetchingOrder(false);
+      }),
+    );
+  }, []);
 
   const renderCourses = courses =>
     courses.map((course, idx) => (
@@ -57,6 +80,106 @@ const MenuDetailsScreen = ({navigation, route}) => {
       </View>
     ));
 
+  const renderActiveOrderOptions = () => {
+    return (
+      <>
+        <ActionButton
+          text="cancel order"
+          style={[styles.leftButton, {backgroundColor: 'red'}]}
+          onPress={cancelOrder}
+        />
+        {order.type === 'takeaway' ? (
+          <ActionButton
+            text="update order"
+            style={styles.rightButton}
+            onPress={() =>
+              navigation.navigate('MenuTakeawayOrderScreen', {menuId})
+            }
+          />
+        ) : null}
+      </>
+    );
+  };
+
+  const renderCancelledOrderOptions = () => {
+    return (
+      <>
+        <Text>Update</Text>
+        <ActionButton
+          text="Restaurant"
+          style={styles.leftButton}
+          onPress={submitOrder}
+        />
+        <ActionButton
+          text="Takeaway"
+          style={styles.rightButton}
+          onPress={() =>
+            navigation.navigate('MenuTakeawayOrderScreen', {menuId})
+          }
+        />
+      </>
+    );
+  };
+
+  const renderOrderOptions = () => {
+    return (
+      <View style={styles.buttons}>
+        {order.status === 'active'
+          ? renderActiveOrderOptions()
+          : renderCancelledOrderOptions()}
+      </View>
+    );
+  };
+
+  const cancelOrder = () => {
+    dispatch(
+      updateOrder({
+        orderId: order.id,
+        status: 'cancelled',
+      }),
+    );
+    setOrder({...order, status: 'cancelled'});
+  };
+
+  const submitOrder = () => {
+    if (!order) {
+      dispatch(
+        createOrder(
+          {
+            menuId: menuId,
+            userId: id,
+            type: 'restaurant',
+            menuOptions: undefined,
+          },
+          () => sendSuccessMessage(),
+        ),
+      );
+    } else {
+      dispatch(
+        updateOrder(
+          {
+            orderId: order.id,
+            status: 'active',
+            type: 'restaurant',
+          },
+          () => sendSuccessMessage(),
+        ),
+      );
+    }
+  };
+
+  const sendSuccessMessage = () => {
+    navigation.reset({
+      routes: [
+        {name: 'HomeScreen'},
+        {
+          name: 'MessageScreen',
+          params: {message: 'Order created!'},
+        },
+      ],
+    });
+  };
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
@@ -64,59 +187,48 @@ const MenuDetailsScreen = ({navigation, route}) => {
           animatedValue={offset}
           title={menusById[menuId].restaurantId.name}
         />
-        <ScrollView
-          contentContainerStyle={styles.scrollViewContainer}
-          scrollEventThrottle={16}
-          showsVerticalScrollIndicator={false}
-          onScroll={Animated.event(
-            [{nativeEvent: {contentOffset: {y: offset}}}],
-            {useNativeDriver: false},
-          )}>
-          <View style={styles.body}>
-            <View>
-              {renderCourseTypes()}
-              <View style={styles.going}>
-                <Title>Going</Title>
-                <Icon name="information" size={30} />
+        {!isFetchingOrder ? (
+          <ScrollView
+            contentContainerStyle={styles.scrollViewContainer}
+            scrollEventThrottle={16}
+            showsVerticalScrollIndicator={false}
+            onScroll={Animated.event(
+              [{nativeEvent: {contentOffset: {y: offset}}}],
+              {useNativeDriver: false},
+            )}>
+            <View style={styles.body}>
+              <View>
+                {renderCourseTypes()}
+                <View style={styles.going}>
+                  <Title>Going</Title>
+                  <Icon name="information" size={30} />
+                </View>
               </View>
+              {!order.status ? (
+                <View style={styles.buttons}>
+                  <ActionButton
+                    text="Restaurant"
+                    style={styles.leftButton}
+                    onPress={submitOrder}
+                  />
+                  <ActionButton
+                    text="Takeaway"
+                    style={styles.rightButton}
+                    onPress={() =>
+                      navigation.navigate('MenuTakeawayOrderScreen', {menuId})
+                    }
+                  />
+                </View>
+              ) : (
+                renderOrderOptions()
+              )}
             </View>
-            <View style={styles.buttons}>
-              <ActionButton
-                text="Restaurant"
-                style={styles.leftButton}
-                onPress={() => {
-                  dispatch(
-                    createOrder(
-                      {
-                        menuId: menuId,
-                        userId: id,
-                        type: 'restaurant',
-                        menuOptions: undefined,
-                      },
-                      () =>
-                        navigation.reset({
-                          routes: [
-                            {name: 'HomeScreen'},
-                            {
-                              name: 'MessageScreen',
-                              params: {message: 'Order created!'},
-                            },
-                          ],
-                        }),
-                    ),
-                  );
-                }}
-              />
-              <ActionButton
-                text="Takeaway"
-                style={styles.rightButton}
-                onPress={() =>
-                  navigation.navigate('MenuTakeawayOrderScreen', {menuId})
-                }
-              />
-            </View>
+          </ScrollView>
+        ) : (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator />
           </View>
-        </ScrollView>
+        )}
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -171,6 +283,11 @@ const styles = StyleSheet.create({
   },
   capitalizedText: {
     textTransform: 'capitalize',
+  },
+  loadingContainer: {
+    paddingTop: 220,
+    flex: 1,
+    justifyContent: 'center',
   },
 });
 
