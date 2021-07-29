@@ -61,8 +61,8 @@ const CreateMenuScreen = ({navigation}) => {
           selectedItemLabelStyle={styles.selectedItemLabel}
           dropDownContainerStyle={styles.dropdownContainer}
         />
+        {errors ? <Text style={styles.errorMessage}>{errors}</Text> : null}
       </View>
-      {errors ? <Text style={styles.errorMessage}>{errors}</Text> : null}
       <ScrollView style={styles.body} contentContainerStyle={{flexGrow: 1}}>
         <MenuCreator
           onSubmit={menu => {
