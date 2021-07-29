@@ -166,7 +166,7 @@ const TabNavigatorRoutes = () => {
           unmountOnBlur: true,
           tabBarLabel: 'Profile',
           tabBarIcon: ({color}) => (
-            <Icon name="card-account-details-outline" size={25} color={color} />
+            <Icon name="account" size={25} color={color} />
           ),
         }}
       />

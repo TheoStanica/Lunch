@@ -1,6 +1,6 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
-import {Card, Title} from 'react-native-paper';
+import {SafeAreaView, StyleSheet, View, Text} from 'react-native';
+import {Title} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import ProfileField from '../../components/profileField';
 import ActionButton from '../../components/actionButton';
@@ -15,34 +15,41 @@ const ProfileScreen = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
         <View>
-          <Title>Welcome</Title>
-          <Card style={styles.card}>
-            <ProfileField
-              title={userReducer.fullname}
-              paragraph="Full name"
-              icon="account-circle-outline"
-            />
-            <ProfileField
-              title={userReducer.email}
-              paragraph="Email"
-              icon="email"
-            />
-            <ProfileField
-              title={`Account ${userReducer.status}`}
-              paragraph="Status"
-              icon={
-                userReducer.status === 'active'
-                  ? 'chevron-down-circle-outline'
-                  : 'close-circle-outline'
-              }
-            />
-          </Card>
-          <ActionButton
-            text="Update"
-            onPress={() => navigation.navigate('UpdateProfileScreen')}
+          <Text style={styles.title}>Welcome back</Text>
+          <ProfileField
+            paragraph={userReducer.fullname}
+            title="Name"
+            icon="account-circle-outline"
+            iconColor="#4A6572"
+          />
+          <ProfileField
+            paragraph={userReducer.email}
+            title="Email"
+            icon="email"
+            iconColor="#4A6572"
+          />
+          <ProfileField
+            paragraph={`Account ${userReducer.status}`}
+            title="Status"
+            icon={
+              userReducer.status === 'active'
+                ? 'chevron-down-circle-outline'
+                : 'close-circle-outline'
+            }
+            iconColor="#4A6572"
           />
         </View>
-        <ActionButton text="Logout" onPress={() => dispatch(logoutUser())} />
+        <View>
+          <ActionButton
+            text="Update Profile"
+            onPress={() => navigation.navigate('UpdateProfileScreen')}
+          />
+          <ActionButton
+            text="Logout"
+            onPress={() => dispatch(logoutUser())}
+            style={styles.logoutButton}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -55,19 +62,17 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    padding: 25,
+    padding: 15,
+    paddingTop: 0,
     justifyContent: 'space-between',
   },
-  glassButton: {marginVertical: 8, shadowColor: 'transparent'},
-  buttonText: {
-    color: 'green',
-    fontSize: 18,
-    textTransform: 'capitalize',
-    lineHeight: 40,
+  logoutButton: {
+    backgroundColor: 'red',
+    marginTop: 15,
   },
-  card: {
-    backgroundColor: 'transparent',
-    marginBottom: 15,
+  title: {
+    fontSize: 28,
+    marginBottom: 10,
   },
 });
 

@@ -1,22 +1,19 @@
 import React from 'react';
 import {Card, Title, Paragraph, Divider} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 
 const ProfileField = ({title, paragraph, icon, iconColor = '#FBBC00'}) => {
   return (
-    <Card.Content>
-      <View style={styles.container}>
-        <View style={styles.icon}>
-          <Icon name={icon} size={40} color={iconColor} />
-        </View>
-        <View style={styles.content}>
-          <Title>{title}</Title>
-          <Paragraph style={styles.paragraph}>{paragraph}</Paragraph>
-        </View>
+    <View style={styles.container}>
+      <View style={styles.icon}>
+        <Icon name={icon} size={40} color={iconColor} />
       </View>
-      <Divider style={styles.divider} />
-    </Card.Content>
+      <View style={styles.content}>
+        <Text style={styles.title}>{title}</Text>
+        <Paragraph>{paragraph}</Paragraph>
+      </View>
+    </View>
   );
 };
 
@@ -35,8 +32,8 @@ const styles = StyleSheet.create({
   content: {
     marginLeft: 10,
   },
-  paragraph: {
-    color: 'gray',
+  title: {
+    fontSize: 20,
     textTransform: 'capitalize',
   },
 });

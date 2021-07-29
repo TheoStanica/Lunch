@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     marginHorizontal: 15,
+    marginBottom: 10,
   },
   body: {
     marginHorizontal: 15,

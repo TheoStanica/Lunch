@@ -21,7 +21,7 @@ const MenuCard = ({onPress, title}) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 5,
+    marginBottom: 10,
     borderRadius: 15,
   },
   title: {
