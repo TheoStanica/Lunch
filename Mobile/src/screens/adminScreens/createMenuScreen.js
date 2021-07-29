@@ -5,6 +5,7 @@ import {
   StatusBar,
   Text,
   ScrollView,
+  View,
 } from 'react-native';
 import {Title} from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -44,7 +45,7 @@ const CreateMenuScreen = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#FFF1CA" barStyle="dark-content" />
-      <ScrollView style={styles.body} contentContainerStyle={{flexGrow: 1}}>
+      <View style={styles.restaurantContainer}>
         <Title>Select a restaurant:</Title>
         <DropDownPicker
           open={openDropDown}
@@ -60,7 +61,9 @@ const CreateMenuScreen = ({navigation}) => {
           selectedItemLabelStyle={styles.selectedItemLabel}
           dropDownContainerStyle={styles.dropdownContainer}
         />
-        {errors ? <Text style={styles.errorMessage}>{errors}</Text> : null}
+      </View>
+      {errors ? <Text style={styles.errorMessage}>{errors}</Text> : null}
+      <ScrollView style={styles.body} contentContainerStyle={{flexGrow: 1}}>
         <MenuCreator
           onSubmit={menu => {
             if (!selectedRestaurant) {
@@ -114,6 +117,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF1CA',
     borderColor: '#0007',
     borderWidth: 0.3,
+  },
+  restaurantContainer: {
+    marginHorizontal: 15,
+    zIndex: 1000,
   },
 });
 
