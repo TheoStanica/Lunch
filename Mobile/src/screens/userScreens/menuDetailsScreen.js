@@ -44,15 +44,20 @@ const MenuDetailsScreen = ({navigation, route}) => {
     );
   }, []);
 
+  const renderOrderItemSelected = (courseCategory, idx) => {
+    return order?.status === 'active' &&
+      order?.type === 'takeaway' &&
+      order?.menuOptions[courseCategory] === idx ? (
+      <Icon size={24} name="check" color="#4A6572" />
+    ) : null;
+  };
+
   const renderCourses = ({courseCategory, courses}) =>
     courses.map((course, idx) => (
       <View
         style={styles.courseDetails}
         key={`${menuId}-${course.courseCategory}-${idx}`}>
-        {order?.type === 'takeaway' &&
-        order?.menuOptions[courseCategory] === idx ? (
-          <Icon size={24} name="check" color="#4A6572" />
-        ) : null}
+        {renderOrderItemSelected(courseCategory, idx)}
         <Paragraph style={styles.capitalizedText}>
           {course.description}
         </Paragraph>
