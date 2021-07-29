@@ -68,6 +68,12 @@ const HomeScreen = ({navigation}) => {
             );
           }}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.flatlistContainer}
+          ListEmptyComponent={() => (
+            <View style={styles.nothingContainer}>
+              <Text>Damn. There are no menus today :(</Text>
+            </View>
+          )}
         />
         {role === 'admin' ? (
           <FAB
@@ -101,6 +107,16 @@ const styles = StyleSheet.create({
     margin: 40,
     right: 0,
     bottom: 0,
+  },
+  nothingContainer: {
+    flex: 1,
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  flatlistContainer: {
+    flex: 1,
+    flexGrow: 1,
   },
 });
 
