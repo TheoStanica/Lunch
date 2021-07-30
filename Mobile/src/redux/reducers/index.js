@@ -4,6 +4,7 @@ import errorsReducer from './errorsReducer';
 import allUsersReducer from './allUsersReducer';
 import restaurantReducer from './restaurantReducer';
 import menuReducer from './menuReducer';
+import allMenusReducer from './allMenusReducer';
 
 export default combineReducers({
   userReducer,
@@ -11,4 +12,5 @@ export default combineReducers({
   errorsReducer,
   restaurantReducer,
   menuReducer,
+  allMenusReducer,
 });

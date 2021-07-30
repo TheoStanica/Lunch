@@ -14,3 +14,6 @@ export const DELETE_RESTAURANT = 'DELETE_RESTAURANT';
 
 export const SET_MENUS = 'SET_MENUS';
 export const DELETE_MENUS = 'DELETE_MENUS';
+
+export const SET_ALLMENUS = 'SET_ALLMENUS';
+export const DELETE_MENU = 'DELETE_MENU';
