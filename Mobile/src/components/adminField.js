@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
   itemContainer: {
-    backgroundColor: '#FFF1CA',
+    backgroundColor: '#fff7e0',
   },
   swipeableButton: {
     justifyContent: 'center',
