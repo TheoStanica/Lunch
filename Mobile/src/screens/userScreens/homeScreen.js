@@ -31,6 +31,7 @@ const HomeScreen = ({navigation}) => {
             createdAt: moment().startOf('day'),
             endedAt: moment().endOf('day'),
           },
+          privilege: 'user',
         },
         () => {
           setIsFetching(false);

@@ -1,15 +1,10 @@
 import React, {useState, useCallback} from 'react';
-import {StyleSheet, FlatList, Text} from 'react-native';
-import {FAB} from 'react-native-paper';
+import {StyleSheet, FlatList} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import AdminField from '../../components/adminField';
-import {
-  deleteRestaurant,
-  getRestaurants,
-} from '../../redux/thunks/restaurantThunks';
 import HideKeyboard from '../../components/hideKeyboard';
 import {useFocusEffect} from '@react-navigation/native';
-import {getMenus} from '../../redux/thunks/menuThunks';
+import {getMenus, deleteMenu} from '../../redux/thunks/menuThunks';
 
 const ManageMenusScreen = () => {
   const {menus, menusById} = useSelector(state => state.menuReducer);
@@ -21,7 +16,15 @@ const ManageMenusScreen = () => {
 
   const onRefresh = () => {
     setIsFetching(true);
-    dispatch(getMenus({}, () => setIsFetching(false)));
+    dispatch(
+      getMenus(
+        {
+          filter: {},
+          privilege: 'admin',
+        },
+        () => setIsFetching(false),
+      ),
+    );
   };
   useFocusEffect(
     useCallback(() => {
@@ -33,19 +36,19 @@ const ManageMenusScreen = () => {
     <HideKeyboard>
       <FlatList
         data={menus}
-        keyExtractor={restaurant => restaurant}
+        keyExtractor={menu => menu}
         contentContainerStyle={styles.container}
         style={styles.container}
-        renderItem={restaurant => (
+        renderItem={menu => (
           <AdminField
-            index={restaurant.index}
-            title={menusById[restaurant.item].name}
-            description={`Cost: ${menusById[restaurant.item].cost} lei`}
+            index={menu.index}
+            title={menusById[menu.item].name}
+            description={`Cost: ${menusById[menu.item].cost} lei`}
             icon="food"
-            onDelete={() => dispatch(deleteRestaurant({id: restaurant.item}))}
+            onDelete={() => dispatch(deleteMenu({_menuId: menu.item}))}
             onEdit={() =>
-              navigation.navigate('RestaurantDetailsScreen', {
-                restaurantId: restaurant.item,
+              navigation.navigate('menuDetailsScreen', {
+                menuId: menu.item,
               })
             }
             row={row}
