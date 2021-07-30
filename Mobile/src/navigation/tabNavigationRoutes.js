@@ -17,6 +17,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useSelector} from 'react-redux';
 import MenuTakeawayOrderScreen from '../screens/userScreens/menuTakeawayOrderScreen';
 import CreateMenuScreen from '../screens/adminScreens/createMenuScreen';
+import ManageMenusScreen from '../screens/adminScreens/manageMenusScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -70,6 +71,13 @@ const AdminStack = () => {
         component={UserDetailsScreen}
         options={{
           title: 'Update User',
+        }}
+      />
+      <Stack.Screen
+        name="ManageMenusScreen"
+        component={ManageMenusScreen}
+        options={{
+          title: 'Manage Menus',
         }}
       />
       <Stack.Screen

@@ -18,6 +18,11 @@ const AdminScreen = ({navigation}) => {
           text="Manage restaurants"
           onPress={() => navigation.navigate('ManageRestaurantsScreen')}
         />
+        <ActionButton
+          style={styles.button}
+          text="Manage Menus"
+          onPress={() => navigation.navigate('ManageMenusScreen')}
+        />
       </View>
     </SafeAreaView>
   );
