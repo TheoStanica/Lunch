@@ -48,7 +48,11 @@ const ProfileStack = () => {
 
 const AdminStack = () => {
   return (
-    <Stack.Navigator screenOptions={{...screenOptions}}>
+    <Stack.Navigator
+      screenOptions={{
+        ...screenOptions,
+        headerStyle: {backgroundColor: '#FFF1CA'},
+      }}>
       <Stack.Screen
         name="AdminScreen"
         component={AdminScreen}
@@ -59,7 +63,6 @@ const AdminStack = () => {
         component={ManageUsersScreen}
         options={{
           title: 'Manage Users',
-          headerStyle: {backgroundColor: '#FFF1CA'},
         }}
       />
       <Stack.Screen
@@ -67,7 +70,6 @@ const AdminStack = () => {
         component={UserDetailsScreen}
         options={{
           title: 'Update User',
-          headerStyle: {backgroundColor: '#FFF1CA'},
         }}
       />
       <Stack.Screen
@@ -75,7 +77,6 @@ const AdminStack = () => {
         component={ManageRestaurantsScreen}
         options={{
           title: 'Manage Restaurants',
-          headerStyle: {backgroundColor: '#FFF1CA'},
         }}
       />
       <Stack.Screen
@@ -83,7 +84,6 @@ const AdminStack = () => {
         component={RestaurantDetailsScreen}
         options={{
           title: 'Restaurant Details',
-          headerStyle: {backgroundColor: '#FFF1CA'},
         }}
       />
       <Stack.Screen
@@ -93,7 +93,6 @@ const AdminStack = () => {
           title: 'Create Restaurant',
           detachPreviousScreen: true,
           detachInactiveScreens: true,
-          headerStyle: {backgroundColor: '#FFF1CA'},
         }}
       />
       <Stack.Screen
