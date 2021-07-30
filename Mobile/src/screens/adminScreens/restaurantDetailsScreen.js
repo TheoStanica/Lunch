@@ -86,6 +86,7 @@ const RestaurantDetailsScreen = ({route, navigation}) => {
                   right={() => (
                     <Switch
                       value={values.status === 'active' ? true : false}
+                      color="#4A6572"
                       onValueChange={() =>
                         setFieldValue(
                           'status',
@@ -124,6 +125,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#FFF1CA',
   },
   contentContainer: {
     flex: 1,

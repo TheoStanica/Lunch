@@ -75,7 +75,10 @@ const AdminStack = () => {
       <Stack.Screen
         name="RestaurantDetailsScreen"
         component={RestaurantDetailsScreen}
-        options={{title: 'Restaurant Details'}}
+        options={{
+          title: 'Restaurant Details',
+          headerStyle: {backgroundColor: '#FFF1CA'},
+        }}
       />
       <Stack.Screen
         name="CreateRestaurantScreen"
@@ -84,6 +87,7 @@ const AdminStack = () => {
           title: 'Create Restaurant',
           detachPreviousScreen: true,
           detachInactiveScreens: true,
+          headerStyle: {backgroundColor: '#FFF1CA'},
         }}
       />
       <Stack.Screen

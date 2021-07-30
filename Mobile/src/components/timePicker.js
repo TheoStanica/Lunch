@@ -18,7 +18,7 @@ const DateTimePicker = ({title, description, onConfirm, mode, ...rest}) => {
             <Icon
               size={40}
               name={'clock'}
-              color={'#FCBB00'}
+              color={'#4A6572'}
               onPress={() => setIsPickerVisible(true)}
             />
           </View>
