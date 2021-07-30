@@ -19,30 +19,30 @@ const UserDetailsScreen = ({route, navigation}) => {
   return (
     <HideKeyboard>
       <SafeAreaView style={styles.container}>
-        <View style={styles.contentContainer}>
-          <Formik
-            validationSchema={updateValidationSchema}
-            initialValues={{
-              email: user.email,
-              fullname: user.fullname,
-              role: user.role,
-            }}
-            onSubmit={values => {
-              values.role = roleValue;
-              if (values.email === user.email) delete values.email;
+        <Formik
+          validationSchema={updateValidationSchema}
+          initialValues={{
+            email: user.email,
+            fullname: user.fullname,
+            role: user.role,
+          }}
+          onSubmit={values => {
+            values.role = roleValue;
+            if (values.email === user.email) delete values.email;
 
-              dispatch(
-                updateUser({
-                  _userId: user.id,
-                  email: values.email,
-                  fullname: values.fullname,
-                  role: values.role,
-                }),
-              );
-              navigation.goBack();
-            }}>
-            {({values, handleChange, errors, isValid, handleSubmit}) => (
-              <>
+            dispatch(
+              updateUser({
+                _userId: user.id,
+                email: values.email,
+                fullname: values.fullname,
+                role: values.role,
+              }),
+            );
+            navigation.goBack();
+          }}>
+          {({values, handleChange, errors, isValid, handleSubmit}) => (
+            <View style={styles.contentContainer}>
+              <View>
                 <TextInputField
                   label="Email"
                   value={values.email}
@@ -72,11 +72,12 @@ const UserDetailsScreen = ({route, navigation}) => {
                   handleChange={handleChange}
                   field="fullname"
                 />
-                <ActionButton text="Update" onPress={handleSubmit} />
-              </>
-            )}
-          </Formik>
-        </View>
+              </View>
+              <ActionButton text="Update" onPress={handleSubmit} />
+            </View>
+          )}
+        </Formik>
+        {/* </View> */}
       </SafeAreaView>
     </HideKeyboard>
   );
@@ -87,8 +88,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   contentContainer: {
-    padding: 25,
-    paddingBottom: 100,
+    padding: 15,
+    flex: 1,
+    backgroundColor: '#FFF1CA',
+    justifyContent: 'space-between',
   },
   roleText: openDropDown => ({
     paddingLeft: 12,

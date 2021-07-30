@@ -57,12 +57,18 @@ const AdminStack = () => {
       <Stack.Screen
         name="ManageUsersScreen"
         component={ManageUsersScreen}
-        options={{title: 'Manage Users'}}
+        options={{
+          title: 'Manage Users',
+          headerStyle: {backgroundColor: '#FFF1CA'},
+        }}
       />
       <Stack.Screen
         name="UserDetailsScreen"
         component={UserDetailsScreen}
-        options={{title: 'Update User'}}
+        options={{
+          title: 'Update User',
+          headerStyle: {backgroundColor: '#FFF1CA'},
+        }}
       />
       <Stack.Screen
         name="ManageRestaurantsScreen"

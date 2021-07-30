@@ -62,6 +62,7 @@ const ManageUsersScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFF1CA',
   },
   containerButtons: {
     flexDirection: 'row',
