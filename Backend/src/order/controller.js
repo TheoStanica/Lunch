@@ -29,15 +29,18 @@ const convertFilterToQuery = (filter) => {
     newFilter.userId = filter.userId;
   }
 
-  if (filter.createdAt && filter.endedAt) {
-    newFilter.createdAt = { $gte: filter.createdAt, $lte: filter.endedAt };
+  if (filter.createdAfter && filter.createdBefore) {
+    newFilter.createdAt = {
+      $gte: filter.createdAfter,
+      $lte: filter.createdBefore,
+    };
   } else {
-    if (filter.createdAt) {
-      newFilter.createdAt = { $gte: filter.createdAt };
+    if (filter.createdAfter) {
+      newFilter.createdAt = { $gte: filter.createdAfter };
     }
 
-    if (filter.endedAt) {
-      newFilter.createdAt = { $lte: filter.endedAt };
+    if (filter.createdBefore) {
+      newFilter.createdAt = { $lte: filter.createdBefore };
     }
   }
 
@@ -46,10 +49,9 @@ const convertFilterToQuery = (filter) => {
 
 const getOrders = async (req, res, next) => {
   try {
-    const { filter } = req.query;
     let query =
-      filter && Object.keys(JSON.parse(filter)).length > 0
-        ? convertFilterToQuery(JSON.parse(filter))
+      Object.keys(req.query).length > 0
+        ? convertFilterToQuery(req.query)
         : { deleted: false };
 
     if (

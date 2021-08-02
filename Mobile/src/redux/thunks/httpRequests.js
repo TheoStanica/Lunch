@@ -106,7 +106,7 @@ export const orderCreateRequest = async ({
 };
 
 export const orderGetRequest = async ({filter}) => {
-  return await api.get('/order', {params: {filter}});
+  return await api.get('/order', {params: filter});
 };
 
 export const orderUpdateRequest = async ({
