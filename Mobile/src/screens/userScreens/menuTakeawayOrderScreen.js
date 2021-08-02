@@ -58,15 +58,6 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
       </View>
     ));
 
-  const validateOptions = menuOptions => {
-    const courseCategories = menusById[menuId].menu.map(
-      category => category.courseCategory,
-    );
-    return courseCategories.some(
-      courseCategory => !menuOptions.hasOwnProperty(courseCategory),
-    );
-  };
-
   const submitOrder = menuOptions => {
     if (!order) {
       dispatch(
@@ -135,7 +126,6 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
                 [{nativeEvent: {contentOffset: {y: offset}}}],
                 {useNativeDriver: false},
               )}>
-              {errors ? <Text>{JSON.stringify(errors)}</Text> : null}
               <View
                 style={{
                   flexGrow: 1,
