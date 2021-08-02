@@ -4,6 +4,7 @@ import {
   orderUpdateRequest,
 } from './httpRequests';
 import {handleError} from './errorThunks';
+import {setOrdersAction} from '../actions/ordersActions';
 
 export const createOrder =
   ({menuId, userId, type, menuOptions}, callback) =>
@@ -17,11 +18,14 @@ export const createOrder =
   };
 
 export const getOrder =
-  ({filter}, callback) =>
+  ({filter, privilege}, callback) =>
   async dispatch => {
     try {
-      const res = await orderGetRequest({filter});
-      if (typeof callback == 'function') callback(res.data);
+      const response = await orderGetRequest({filter});
+
+      if (privilege === 'admin')
+        dispatch(setOrdersAction({orders: response.data.orders}));
+      if (typeof callback == 'function') callback(response.data);
     } catch (error) {
       dispatch(handleError(error));
       if (typeof callback == 'function') callback(null);
