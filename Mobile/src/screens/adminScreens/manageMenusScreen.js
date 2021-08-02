@@ -33,8 +33,6 @@ const ManageMenusScreen = ({navigation}) => {
     }, []),
   );
 
-  console.log(allMenusById);
-
   return (
     <SafeAreaView style={styles.container}>
       <HideKeyboard>
