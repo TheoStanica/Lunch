@@ -28,26 +28,32 @@ const AdminField = ({
   const renderActions = () => {
     return (
       <>
-        <RectButton
-          style={[styles.swipeableButton, styles.swipeableDelete]}
-          onPress={() =>
-            Alert.alert('Delete', `Are you sure you want to remove ${title}?`, [
-              {text: 'Yes', onPress: () => (onDelete ? onDelete() : null)},
-              {text: 'No'},
-            ])
-          }>
-          <Animated.Text
-            style={[styles.actionText, styles.swipeableDeleteText]}>
-            Delete
-          </Animated.Text>
-        </RectButton>
-        <RectButton
-          onPress={() => (onEdit ? onEdit() : null)}
-          style={[styles.swipeableButton, styles.swipeableEdit]}>
-          <Animated.Text style={[styles.actionText, styles.swipeableEditText]}>
-            Edit
-          </Animated.Text>
-        </RectButton>
+        {onDelete ? (
+          <RectButton
+            style={[styles.swipeableButton, styles.swipeableDelete]}
+            onPress={() =>
+              Alert.alert(
+                'Delete',
+                `Are you sure you want to remove ${title}?`,
+                [{text: 'Yes', onPress: () => onDelete()}, {text: 'No'}],
+              )
+            }>
+            <Animated.Text
+              style={[styles.actionText, styles.swipeableDeleteText]}>
+              Delete
+            </Animated.Text>
+          </RectButton>
+        ) : null}
+        {onEdit ? (
+          <RectButton
+            onPress={() => onEdit()}
+            style={[styles.swipeableButton, styles.swipeableEdit]}>
+            <Animated.Text
+              style={[styles.actionText, styles.swipeableEditText]}>
+              Edit
+            </Animated.Text>
+          </RectButton>
+        ) : null}
       </>
     );
   };

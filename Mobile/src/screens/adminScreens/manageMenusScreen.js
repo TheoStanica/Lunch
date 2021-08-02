@@ -46,11 +46,6 @@ const ManageMenusScreen = () => {
             description={`Cost: ${menusById[menu.item].cost} lei`}
             icon="food"
             onDelete={() => dispatch(deleteMenu({_menuId: menu.item}))}
-            onEdit={() =>
-              navigation.navigate('menuDetailsScreen', {
-                menuId: menu.item,
-              })
-            }
             row={row}
             onUpdateRow={row => setRow(row)}
             prevOpenedRow={previousOpenedRow}

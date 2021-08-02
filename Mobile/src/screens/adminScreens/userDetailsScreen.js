@@ -77,7 +77,6 @@ const UserDetailsScreen = ({route, navigation}) => {
             </View>
           )}
         </Formik>
-        {/* </View> */}
       </SafeAreaView>
     </HideKeyboard>
   );
