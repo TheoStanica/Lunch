@@ -17,6 +17,7 @@ const AdminField = ({
   prevOpenedRow,
   onUpdateRow,
   onUpdatePrevOpenedRow,
+  backgroundColor = '#fff7e0',
 }) => {
   const closeRow = index => {
     if (prevOpenedRow && prevOpenedRow !== row[index]) {
@@ -70,7 +71,7 @@ const AdminField = ({
         closeRow(index);
       }}>
       <List.Item
-        style={styles.itemContainer}
+        style={styles.itemContainer(backgroundColor)}
         title={title}
         titleStyle={styles.title}
         description={description}
@@ -92,9 +93,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textTransform: 'capitalize',
   },
-  itemContainer: {
-    backgroundColor: '#fff7e0',
-  },
+  itemContainer: backgroundColor => ({
+    backgroundColor: backgroundColor,
+  }),
   swipeableButton: {
     justifyContent: 'center',
   },

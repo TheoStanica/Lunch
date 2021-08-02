@@ -65,6 +65,11 @@ const ManageRestaurantsScreen = ({navigation}) => {
                 onUpdateRow={row => setRow(row)}
                 prevOpenedRow={previousOpenedRow}
                 onUpdatePrevOpenedRow={prevRow => setPreviousOpenedRow(prevRow)}
+                backgroundColor={
+                  restaurantsById[restaurant.item].status === 'active'
+                    ? '#fff7e0'
+                    : '#bdbdbd'
+                }
               />
             )}
             onRefresh={onRefresh}
