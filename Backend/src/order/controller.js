@@ -64,7 +64,7 @@ const getOrders = async (req, res, next) => {
       query.userId = req.user.id;
     }
 
-    orders = await Order.find(query);
+    orders = await Order.find(query).populate('menuId').populate('userId');
 
     res.send({ orders });
   } catch (error) {
