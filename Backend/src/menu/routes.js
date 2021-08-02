@@ -1,10 +1,12 @@
 const router = require('express').Router();
 const menuController = require('./controller');
-const { adminAuthValidation } = require('../middleware/authValidation');
+const {
+  adminAuthValidation,
+  userAuthValidation,
+} = require('../middleware/authValidation');
 const { validationResults } = require('../middleware/bodyValidation/index');
 const {
   createMenuValidationSchema,
-  updateMenuValidationSchema,
   menuIdValidationSchema,
 } = require('../middleware/bodyValidation/menuValidation');
 
@@ -15,7 +17,7 @@ router.post(
   validationResults,
   menuController.createMenu
 );
-router.get('/', adminAuthValidation, menuController.getMenus);
+router.get('/', userAuthValidation, menuController.getMenus);
 router.delete(
   '/:_id',
   adminAuthValidation,
