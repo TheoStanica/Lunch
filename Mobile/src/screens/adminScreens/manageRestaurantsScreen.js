@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import {StyleSheet, FlatList} from 'react-native';
+import {StyleSheet, FlatList, SafeAreaView} from 'react-native';
 import {FAB} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import AdminField from '../../components/adminField';
@@ -39,52 +39,55 @@ const ManageRestaurantsScreen = ({navigation}) => {
   );
 
   return (
-    <HideKeyboard>
-      <>
-        <FlatList
-          data={restaurants}
-          keyExtractor={restaurant => restaurant}
-          contentContainerStyle={styles.container}
-          style={styles.container}
-          renderItem={restaurant => (
-            <AdminField
-              index={restaurant.index}
-              title={restaurantsById[restaurant.item].name}
-              description={`Cost: ${restaurantsById[restaurant.item].cost} lei`}
-              icon="food"
-              onDelete={() => dispatch(deleteRestaurant({id: restaurant.item}))}
-              onEdit={() =>
-                navigation.navigate('RestaurantDetailsScreen', {
-                  restaurantId: restaurant.item,
-                })
-              }
-              row={row}
-              onUpdateRow={row => setRow(row)}
-              prevOpenedRow={previousOpenedRow}
-              onUpdatePrevOpenedRow={prevRow => setPreviousOpenedRow(prevRow)}
-            />
-          )}
-          onRefresh={onRefresh}
-          refreshing={isFetching}
-          showsVerticalScrollIndicator={false}
-        />
-        <FAB
-          style={styles.fab}
-          icon="plus"
-          color="white"
-          visible={visible}
-          animated={true}
-          onPress={() => navigation.navigate('CreateRestaurantScreen')}
-        />
-      </>
-    </HideKeyboard>
+    <SafeAreaView style={styles.container}>
+      <HideKeyboard>
+        <>
+          <FlatList
+            data={restaurants}
+            keyExtractor={restaurant => restaurant}
+            renderItem={restaurant => (
+              <AdminField
+                index={restaurant.index}
+                title={restaurantsById[restaurant.item].name}
+                description={`Cost: ${
+                  restaurantsById[restaurant.item].cost
+                } lei`}
+                icon="food"
+                onDelete={() =>
+                  dispatch(deleteRestaurant({id: restaurant.item}))
+                }
+                onEdit={() =>
+                  navigation.navigate('RestaurantDetailsScreen', {
+                    restaurantId: restaurant.item,
+                  })
+                }
+                row={row}
+                onUpdateRow={row => setRow(row)}
+                prevOpenedRow={previousOpenedRow}
+                onUpdatePrevOpenedRow={prevRow => setPreviousOpenedRow(prevRow)}
+              />
+            )}
+            onRefresh={onRefresh}
+            refreshing={isFetching}
+            showsVerticalScrollIndicator={false}
+          />
+          <FAB
+            style={styles.fab}
+            icon="plus"
+            color="white"
+            visible={visible}
+            animated={true}
+            onPress={() => navigation.navigate('CreateRestaurantScreen')}
+          />
+        </>
+      </HideKeyboard>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexGrow: 1,
     backgroundColor: '#FFF1CA',
   },
   fab: {
