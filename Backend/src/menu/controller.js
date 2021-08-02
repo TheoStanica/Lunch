@@ -59,9 +59,8 @@ const getMenus = async (req, res, next) => {
 
 const deleteMenu = async (req, res, next) => {
   try {
-    const { _id } = req.params;
-
-    const menu = await Menu.findOne({ _id });
+    const { _id } = req.params,
+      menu = await Menu.findOne({ _id });
 
     if (!menu || menu.deleted) {
       return next(new NotFoundError("Menu doesn't exist"));

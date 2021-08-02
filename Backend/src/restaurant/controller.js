@@ -74,7 +74,8 @@ const updateRestaurant = async (req, res, next) => {
 
 const deleteRestaurant = async (req, res, next) => {
   try {
-    const restaurant = await Restaurant.findOne({ _id: req.params._id });
+    const { _id } = req.params,
+      restaurant = await Restaurant.findOne({ _id });
 
     if (!restaurant || restaurant.deleted) {
       return next(new NotFoundError("Restaurant doesn't exist"));
