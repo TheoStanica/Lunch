@@ -8,6 +8,7 @@ import {RectButton} from 'react-native-gesture-handler';
 const AdminField = ({
   onEdit,
   onDelete,
+  onPress,
   title,
   description,
   icon,
@@ -76,6 +77,7 @@ const AdminField = ({
         titleStyle={styles.title}
         description={description}
         descriptionStyle={styles.description}
+        onPress={() => (onPress ? onPress() : null)}
         left={() =>
           icon ? (
             <View style={styles.icon}>

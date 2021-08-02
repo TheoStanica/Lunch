@@ -7,7 +7,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {getMenus, deleteMenu} from '../../redux/thunks/menuThunks';
 import Moment from 'moment';
 
-const ManageMenusScreen = () => {
+const ManageMenusScreen = ({navigation}) => {
   const {allMenus, allMenusById} = useSelector(state => state.allMenusReducer);
   const [isFetching, setIsFetching] = useState(true);
   const dispatch = useDispatch();
@@ -50,6 +50,7 @@ const ManageMenusScreen = () => {
               ).format('DD-MM-YYYY')}`}
               icon="food"
               onDelete={() => dispatch(deleteMenu({_menuId: menu.item}))}
+              onPress={() => navigation.navigate('MenuAdminDetailsScreen')}
               row={row}
               onUpdateRow={row => setRow(row)}
               prevOpenedRow={previousOpenedRow}

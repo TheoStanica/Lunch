@@ -11,6 +11,7 @@ import CreateRestaurantScreen from '../screens/adminScreens/createRestaurantScre
 import MenuDetailsScreen from '../screens/userScreens/menuDetailsScreen';
 import MessageScreen from '../screens/messageScreen';
 import ManageOrdersScreen from '../screens/adminScreens/manageOrdersScreen';
+import MenuAdminDetailsScreen from '../screens/adminScreens/menuAdminDetailsScreen';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {createStackNavigator} from '@react-navigation/stack';
@@ -59,6 +60,13 @@ const AdminStack = () => {
         name="AdminScreen"
         component={AdminScreen}
         options={{title: 'Admin', headerShown: false}}
+      />
+      <Stack.Screen
+        name="MenuAdminDetailsScreen"
+        component={MenuAdminDetailsScreen}
+        options={{
+          title: 'Menu Details',
+        }}
       />
       <Stack.Screen
         name="ManageUsersScreen"
