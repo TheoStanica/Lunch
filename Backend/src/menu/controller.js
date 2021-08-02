@@ -16,15 +16,18 @@ const convertFilterToQuery = (filter) => {
     newFilter.restaurantId = filter.restaurantId;
   }
 
-  if (filter.createdAt && filter.endedAt) {
-    newFilter.createdAt = { $gte: filter.createdAt, $lte: filter.endedAt };
+  if (filter.createdAfter && filter.createdBefore) {
+    newFilter.createdAt = {
+      $gte: filter.createdAfter,
+      $lte: filter.createdBefore,
+    };
   } else {
-    if (filter.createdAt) {
-      newFilter.createdAt = { $gte: filter.createdAt };
+    if (filter.createdAfter) {
+      newFilter.createdAt = { $gte: filter.createdAfter };
     }
 
-    if (filter.endedAt) {
-      newFilter.createdAt = { $lte: filter.endedAt };
+    if (filter.createdBefore) {
+      newFilter.createdAt = { $lte: filter.createdBefore };
     }
   }
   return newFilter;
