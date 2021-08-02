@@ -1,17 +1,15 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import LoginScreen from '../screens/authScreens/loginScreen';
-import RegisterScreen from '../screens/authScreens/registerScreen';
-import ForgotPasswordScreen from '../screens/authScreens/forgotPasswordScreen';
-import TabNavigatorRoutes from './tabNavigationRoutes';
-import {useSelector} from 'react-redux';
-import AuthScreen from '../screens/authScreens/authScreen';
-import MessageScreen from '../screens/messageScreen';
-import ActivationScreen from '../screens/authScreens/activationScreen';
+import LoginScreen from '../../screens/authScreens/loginScreen';
+import RegisterScreen from '../../screens/authScreens/registerScreen';
+import ForgotPasswordScreen from '../../screens/authScreens/forgotPasswordScreen';
+import AuthScreen from '../../screens/authScreens/authScreen';
+import MessageScreen from '../../screens/messageScreen';
+import ActivationScreen from '../../screens/authScreens/activationScreen';
 
 const Stack = createStackNavigator();
 
-const Auth = () => {
+const AuthStack = () => {
   const authScreensOptions = {
     headerBackTitle: '',
     headerStyle: {backgroundColor: '#FBBC00'},
@@ -56,26 +54,4 @@ const Auth = () => {
   );
 };
 
-const AppNavigatorRoutes = () => {
-  const {accessToken} = useSelector(state => state.userReducer);
-
-  return !accessToken ? (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Auth"
-        component={Auth}
-        options={{headerShown: false}}
-      />
-    </Stack.Navigator>
-  ) : (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="TabNavigatorRoutes"
-        component={TabNavigatorRoutes}
-        options={{headerShown: false}}
-      />
-    </Stack.Navigator>
-  );
-};
-
-export default AppNavigatorRoutes;
+export default AuthStack;

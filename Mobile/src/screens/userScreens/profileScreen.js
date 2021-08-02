@@ -1,6 +1,5 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet, View, Text} from 'react-native';
-import {Title} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import ProfileField from '../../components/profileField';
 import ActionButton from '../../components/actionButton';
