@@ -28,8 +28,8 @@ const HomeScreen = ({navigation}) => {
       getMenus(
         {
           filter: {
-            createdAt: moment().startOf('day'),
-            endedAt: moment().endOf('day'),
+            createdAt: new Date(moment().startOf('day')),
+            endedAt: new Date(moment().endOf('day')),
           },
           privilege: 'user',
         },

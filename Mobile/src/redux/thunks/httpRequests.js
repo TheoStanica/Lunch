@@ -85,7 +85,7 @@ export const restaurantCreateRequest = async ({
 };
 
 export const menuGetRequest = async ({filter}) => {
-  return await api.get('/menu', {params: {filter}});
+  return await api.get('/menu', {params: filter});
 };
 
 export const menuPostRequest = async ({menu, restaurantId}) => {
