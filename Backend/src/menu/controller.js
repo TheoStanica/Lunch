@@ -3,6 +3,8 @@ const NotFoundError = require('../errors/notFoundError');
 const Restaurant = require('../restaurant/model');
 const Menu = require('./model');
 
+const { restaurantStatus } = require('../utils/enums');
+
 const convertFilterToQuery = (filter) => {
   const newFilter = { deleted: false };
 
@@ -30,10 +32,15 @@ const convertFilterToQuery = (filter) => {
 
 const createMenu = async (req, res, next) => {
   try {
-    const { restaurantId } = req.body;
+    const { restaurantId } = req.body,
+      restaurant = await Restaurant.findById(restaurantId);
 
-    if (!(await Restaurant.findById(restaurantId))) {
-      return next(new BadRequestError('Please provide a valid restaurantId'));
+    if (!restaurant) {
+      return next(new BadRequestError('Please provide a valid restaurantId.'));
+    }
+
+    if (restaurant.status === restaurantStatus.inactive) {
+      return next(new BadRequestError('Please provide an active restaurant.'));
     }
 
     await Menu.create(req.body);

@@ -26,10 +26,11 @@ const CreateMenuScreen = ({navigation}) => {
   const generateRestaurantItems = () => {
     const items = [];
     restaurants.forEach(restaurantId => {
-      items.push({
-        label: restaurantsById[restaurantId].name,
-        value: restaurantsById[restaurantId].id,
-      });
+      if (restaurantsById[restaurantId].status === 'active')
+        items.push({
+          label: restaurantsById[restaurantId].name,
+          value: restaurantsById[restaurantId].id,
+        });
     });
     return items;
   };
