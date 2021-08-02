@@ -1,5 +1,32 @@
-const { check, param } = require('express-validator');
+const { check, param, query } = require('express-validator');
 const { courseRequiredType, courseTypes } = require('../../utils/enums');
+
+const filterMenuValidationSchema = [
+  query('_id')
+    .notEmpty()
+    .withMessage('Menu ID is required')
+    .matches(/^[0-9a-fA-F]{24}$/)
+    .withMessage('Please provide a valid menu ID')
+    .optional(),
+  query('restaurantId')
+    .notEmpty()
+    .withMessage('RestaurantId is required')
+    .matches(/^[0-9a-fA-F]{24}$/)
+    .withMessage('Please provide a valid restaurantId')
+    .optional(),
+  query('createdAfter')
+    .notEmpty()
+    .withMessage('CreatedAfter is required')
+    .isISO8601()
+    .withMessage('CreatedAftert must be a valid date.')
+    .optional(),
+  query('createdBefore')
+    .notEmpty()
+    .withMessage('Created Before is required')
+    .isISO8601()
+    .withMessage('Created Before must be a valid date.')
+    .optional(),
+];
 
 const createMenuValidationSchema = [
   check('restaurantId')
@@ -52,4 +79,5 @@ module.exports = {
   createMenuValidationSchema,
   menuIdValidationSchema,
   getMenuValidationSchema,
+  filterMenuValidationSchema,
 };

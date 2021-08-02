@@ -5,6 +5,7 @@ const {
   createValidationSchema,
   updateValidationSchema,
   orderIdValidationSchema,
+  filterValidationSchema,
 } = require('../middleware/bodyValidation/orderValidation');
 
 const {
@@ -14,7 +15,13 @@ const {
 
 const orderController = require('./controller');
 
-router.get('/', userAuthValidation, orderController.getOrders);
+router.get(
+  '/',
+  userAuthValidation,
+  filterValidationSchema,
+  validationResults,
+  orderController.getOrders
+);
 
 router.post(
   '/',

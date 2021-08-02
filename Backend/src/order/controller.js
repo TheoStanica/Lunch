@@ -18,7 +18,7 @@ const convertFilterToQuery = (filter) => {
   }
 
   if (filter.status) {
-    newFilter.states = filter.status;
+    newFilter.status = filter.status;
   }
 
   if (filter.menuId) {

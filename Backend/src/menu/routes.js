@@ -8,6 +8,7 @@ const { validationResults } = require('../middleware/bodyValidation/index');
 const {
   createMenuValidationSchema,
   menuIdValidationSchema,
+  filterMenuValidationSchema,
 } = require('../middleware/bodyValidation/menuValidation');
 
 router.post(
@@ -17,7 +18,15 @@ router.post(
   validationResults,
   menuController.createMenu
 );
-router.get('/', userAuthValidation, menuController.getMenus);
+
+router.get(
+  '/',
+  userAuthValidation,
+  filterMenuValidationSchema,
+  validationResults,
+  menuController.getMenus
+);
+
 router.delete(
   '/:_id',
   adminAuthValidation,
