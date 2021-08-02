@@ -7,7 +7,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {getMenus, deleteMenu} from '../../redux/thunks/menuThunks';
 
 const ManageMenusScreen = () => {
-  const {menus, menusById} = useSelector(state => state.menuReducer);
+  const {allMenus, allMenusById} = useSelector(state => state.allMenusReducer);
   const [isFetching, setIsFetching] = useState(true);
   const dispatch = useDispatch();
 
@@ -32,18 +32,22 @@ const ManageMenusScreen = () => {
     }, []),
   );
 
+  console.log(allMenusById);
+
   return (
     <HideKeyboard>
       <FlatList
-        data={menus}
+        data={allMenus}
         keyExtractor={menu => menu}
         contentContainerStyle={styles.container}
         style={styles.container}
         renderItem={menu => (
           <AdminField
             index={menu.index}
-            title={menusById[menu.item].name}
-            description={`Cost: ${menusById[menu.item].cost} lei`}
+            title={allMenusById[menu.item].restaurantId.name}
+            description={`Cost: ${
+              allMenusById[menu.item].restaurantId.cost
+            } lei`}
             icon="food"
             onDelete={() => dispatch(deleteMenu({_menuId: menu.item}))}
             row={row}
