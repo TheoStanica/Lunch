@@ -1,4 +1,11 @@
+import {createOrderValidationSchema} from '../../assets/bodyValidation/orderValidation';
+import {createOrder, updateOrder} from '../../redux/thunks/orderThunks';
+import AnimatedHeader from '../../components/animatedHeader';
+import ActionButton from '../../components/actionButton';
+import {Headline, RadioButton} from 'react-native-paper';
+import {useDispatch, useSelector} from 'react-redux';
 import React, {useRef, useState} from 'react';
+import {Formik} from 'formik';
 import {
   Text,
   View,
@@ -7,19 +14,13 @@ import {
   SafeAreaView,
   ScrollView,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import AnimatedHeader from '../../components/animatedHeader';
-import {Formik} from 'formik';
-import {Headline, RadioButton} from 'react-native-paper';
-import ActionButton from '../../components/actionButton';
-import {createOrder, updateOrder} from '../../redux/thunks/orderThunks';
 
 const MenuTakeawayOrderScreen = ({route, navigation}) => {
   const {menuId, order} = route.params;
   const {menusById} = useSelector(state => state.menuReducer);
   const {id} = useSelector(state => state.userReducer);
+  const [isCheckingValidation, setCheckingValidation] = useState(false);
   const offset = useRef(new Animated.Value(0)).current;
-  const [errors, setErrors] = useState('');
   const dispatch = useDispatch();
 
   const renderCourses = courses =>
@@ -113,20 +114,18 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
         title={menusById[menuId].restaurantId.name}
       />
       <Formik
+        validationSchema={createOrderValidationSchema(
+          menusById[menuId].menu.map(c => c.courseCategory),
+        )}
         initialValues={{
           selectedMenu: order?.status === 'active' ? order.menuOptions : {},
         }}
+        validateOnBlur={isCheckingValidation}
+        validateOnChange={isCheckingValidation}
         onSubmit={values => {
-          if (validateOptions(values.selectedMenu)) {
-            setErrors(
-              'Please select one dish from each course to submit your order',
-            );
-          } else {
-            setErrors('');
-            submitOrder(values.selectedMenu);
-          }
+          submitOrder(values.selectedMenu);
         }}>
-        {({values, handleSubmit, setFieldValue}) => (
+        {({values, handleSubmit, errors, setFieldValue}) => (
           <>
             <ScrollView
               contentContainerStyle={styles.scrollViewContainer}
@@ -136,16 +135,25 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
                 [{nativeEvent: {contentOffset: {y: offset}}}],
                 {useNativeDriver: false},
               )}>
+              {errors ? <Text>{JSON.stringify(errors)}</Text> : null}
               <View
                 style={{
                   flexGrow: 1,
                 }}>
                 <View>{renderCourseTypes(values, setFieldValue)}</View>
               </View>
-              {errors ? (
-                <Text style={styles.errorMessage}>{errors}</Text>
+              {Object.keys(errors).length > 0 ? (
+                <Text style={styles.errorMessage}>
+                  Please select one dish from each course
+                </Text>
               ) : null}
-              <ActionButton text="Submit Order" onPress={handleSubmit} />
+              <ActionButton
+                text="Submit Order"
+                onPress={() => {
+                  handleSubmit();
+                  setCheckingValidation(true);
+                }}
+              />
             </ScrollView>
           </>
         )}
