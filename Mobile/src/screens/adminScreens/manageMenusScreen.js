@@ -33,8 +33,6 @@ const ManageMenusScreen = ({navigation}) => {
     }, []),
   );
 
-  console.log(allMenusById);
-
   return (
     <SafeAreaView style={styles.container}>
       <HideKeyboard>
@@ -50,7 +48,11 @@ const ManageMenusScreen = ({navigation}) => {
               ).format('DD-MM-YYYY')}`}
               icon="food"
               onDelete={() => dispatch(deleteMenu({_menuId: menu.item}))}
-              onPress={() => navigation.navigate('MenuAdminDetailsScreen')}
+              onPress={() =>
+                navigation.navigate('MenuAdminDetailsScreen', {
+                  menu: allMenusById[menu.item],
+                })
+              }
               row={row}
               onUpdateRow={row => setRow(row)}
               prevOpenedRow={previousOpenedRow}
