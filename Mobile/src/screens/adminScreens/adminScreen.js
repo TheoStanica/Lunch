@@ -23,6 +23,11 @@ const AdminScreen = ({navigation}) => {
           text="Manage Menus"
           onPress={() => navigation.navigate('ManageMenusScreen')}
         />
+        <ActionButton
+          style={styles.button}
+          text="Manage Orders"
+          onPress={() => navigation.navigate('ManageOrdersScreen')}
+        />
       </View>
     </SafeAreaView>
   );
