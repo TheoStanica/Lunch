@@ -5,6 +5,7 @@ import AdminField from '../../components/adminField';
 import HideKeyboard from '../../components/hideKeyboard';
 import {useFocusEffect} from '@react-navigation/native';
 import {getMenus, deleteMenu} from '../../redux/thunks/menuThunks';
+import Moment from 'moment';
 
 const ManageMenusScreen = () => {
   const {allMenus, allMenusById} = useSelector(state => state.allMenusReducer);
@@ -44,9 +45,9 @@ const ManageMenusScreen = () => {
             <AdminField
               index={menu.index}
               title={allMenusById[menu.item].restaurantId.name}
-              description={`Cost: ${
-                allMenusById[menu.item].restaurantId.cost
-              } lei`}
+              description={`Created: ${Moment(
+                allMenusById[menu.item].createdAt,
+              ).format('DD-MM-YYYY')}`}
               icon="food"
               onDelete={() => dispatch(deleteMenu({_menuId: menu.item}))}
               row={row}
