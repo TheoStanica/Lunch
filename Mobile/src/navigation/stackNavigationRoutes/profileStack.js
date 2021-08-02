@@ -6,6 +6,11 @@ import UpdateProfileScreen from '../../screens/userScreens/updateProfileScreen';
 const Stack = createStackNavigator();
 
 const ProfileStack = () => {
+  const screenOptions = {
+    headerBackTitle: '',
+    headerTintColor: 'black',
+  };
+
   return (
     <Stack.Navigator screenOptions={{...screenOptions}}>
       <Stack.Screen

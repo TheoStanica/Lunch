@@ -13,12 +13,12 @@ import ManageMenusScreen from '../../screens/adminScreens/manageMenusScreen';
 
 const Stack = createStackNavigator();
 
-const screenOptions = {
-  headerBackTitle: '',
-  headerTintColor: 'black',
-};
-
 const AdminStack = () => {
+  const screenOptions = {
+    headerBackTitle: '',
+    headerTintColor: 'black',
+  };
+
   return (
     <Stack.Navigator
       screenOptions={{

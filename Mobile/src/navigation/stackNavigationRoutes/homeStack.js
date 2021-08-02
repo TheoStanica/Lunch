@@ -8,12 +8,12 @@ import CreateMenuScreen from '../../screens/adminScreens/createMenuScreen';
 
 const Stack = createStackNavigator();
 
-const screenOptions = {
-  headerBackTitle: '',
-  headerTintColor: 'black',
-};
-
 const HomeStack = () => {
+  const screenOptions = {
+    headerBackTitle: '',
+    headerTintColor: 'black',
+  };
+
   return (
     <Stack.Navigator screenOptions={{...screenOptions}}>
       <Stack.Screen
