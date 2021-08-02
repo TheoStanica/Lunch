@@ -9,11 +9,23 @@ import {useSelector, useDispatch} from 'react-redux';
 import {updateUser} from '../../redux/thunks/userThunks';
 import ActionButton from '../../components/actionButton';
 
-const UpdateProfileScreen = () => {
+const UpdateProfileScreen = ({navigation}) => {
   const userReducer = useSelector(state => state.userReducer);
   const [hidePassword, setHidePassword] = useState(true);
   const [hideRetypePassword, setHideRetypePassword] = useState(true);
   const dispatch = useDispatch();
+
+  const sendSuccessMessage = () => {
+    navigation.reset({
+      routes: [
+        {name: 'ProfileScreen'},
+        {
+          name: 'MessageScreen',
+          params: {message: 'Account updated!'},
+        },
+      ],
+    });
+  };
 
   return (
     <HideKeyboard>
@@ -32,11 +44,14 @@ const UpdateProfileScreen = () => {
                 if (values.email === userReducer.email)
                   values.email = undefined;
                 dispatch(
-                  updateUser({
-                    email: values.email,
-                    password: values.password,
-                    fullname: values.fullname,
-                  }),
+                  updateUser(
+                    {
+                      email: values.email,
+                      password: values.password,
+                      fullname: values.fullname,
+                    },
+                    sendSuccessMessage,
+                  ),
                 );
               }}
               style={{backgroundColor: 'red'}}>

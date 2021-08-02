@@ -84,7 +84,7 @@ export const getUser = () => async dispatch => {
 };
 
 export const updateUser =
-  ({_userId, email, password, fullname, role}) =>
+  ({_userId, email, password, fullname, role}, callback) =>
   async dispatch => {
     try {
       const response = await userPutRequest({
@@ -100,6 +100,7 @@ export const updateUser =
       } else {
         dispatch(updateUserAction(response.data.user));
       }
+      if (typeof callback == 'function') callback();
     } catch (error) {
       dispatch(handleError(error));
     }
