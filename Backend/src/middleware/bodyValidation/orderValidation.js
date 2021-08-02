@@ -1,5 +1,50 @@
-const { check, param } = require('express-validator');
+const { check, param, query } = require('express-validator');
 const { courseRequiredType, orderStatus } = require('../../utils/enums');
+
+const filterValidationSchema = [
+  query('_id')
+    .notEmpty()
+    .withMessage('Order ID is required')
+    .matches(/^[0-9a-fA-F]{24}$/)
+    .withMessage('Please provide a valid order ID')
+    .optional(),
+  query('type')
+    .notEmpty()
+    .withMessage('Type is required.')
+    .isIn([courseRequiredType.restaurant, courseRequiredType.takeaway])
+    .withMessage('Type should be restaurant or takeaway')
+    .optional(),
+  query('status')
+    .notEmpty()
+    .withMessage('Status is required.')
+    .isIn([orderStatus.active, orderStatus.cancelled])
+    .withMessage('Status should be active or cancelled')
+    .optional(),
+  query('menuId')
+    .notEmpty()
+    .withMessage('MenuId is required')
+    .matches(/^[0-9a-fA-F]{24}$/)
+    .withMessage('Please provide a valid menuId')
+    .optional(),
+  query('userId')
+    .notEmpty()
+    .withMessage('UserID is required')
+    .matches(/^[0-9a-fA-F]{24}$/)
+    .withMessage('Please provide a valid userId')
+    .optional(),
+  query('createdAfter')
+    .notEmpty()
+    .withMessage('CreatedAfter is required')
+    .isISO8601()
+    .withMessage('CreatedAftert must be a valid date.')
+    .optional(),
+  query('createdBefore')
+    .notEmpty()
+    .withMessage('Created Before is required')
+    .isISO8601()
+    .withMessage('Created Before must be a valid date.')
+    .optional(),
+];
 
 const createValidationSchema = [
   check('menuId')
@@ -76,4 +121,5 @@ module.exports = {
   createValidationSchema,
   updateValidationSchema,
   orderIdValidationSchema,
+  filterValidationSchema,
 };
