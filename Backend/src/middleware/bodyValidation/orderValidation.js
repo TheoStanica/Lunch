@@ -11,7 +11,8 @@ const createValidationSchema = [
     .notEmpty()
     .withMessage('User ID is required')
     .matches(/^[0-9a-fA-F]{24}$/)
-    .withMessage('Please provide a valid user ID'),
+    .withMessage('Please provide a valid user ID')
+    .optional(),
   check('type')
     .notEmpty()
     .withMessage('Type is required.')

@@ -3,6 +3,8 @@ const BadRequestError = require('../errors/badRequestError');
 const Order = require('./model');
 const Menu = require('../menu/model');
 const User = require('../user/model');
+const { accountRole } = require('../utils/enums');
+const ForbiddenError = require('../errors/forbiddenError');
 
 const convertFilterToQuery = (filter) => {
   const newFilter = { deleted: false };
@@ -44,10 +46,25 @@ const convertFilterToQuery = (filter) => {
 
 const getOrders = async (req, res, next) => {
   try {
-    const query = req.query.filter
-        ? convertFilterToQuery(JSON.parse(req.query.filter))
-        : { deleted: false },
-      orders = await Order.find(query).populate('menuId').populate('userId');
+    const { filter } = req.query;
+    let query =
+      filter && Object.keys(JSON.parse(filter)).length > 0
+        ? convertFilterToQuery(JSON.parse(filter))
+        : { deleted: false };
+
+    if (
+      query.userId &&
+      query.userId !== req.user.id &&
+      req.user.role === accountRole.user
+    ) {
+      return next(new ForbiddenError());
+    }
+
+    if (req.user.role === accountRole.user) {
+      query.userId = req.user.id;
+    }
+
+    orders = await Order.find(query);
 
     res.send({ orders });
   } catch (error) {
@@ -61,17 +78,36 @@ const createOrder = async (req, res, next) => {
       return next(new BadRequestError('Please provide a valid menu id.'));
     }
 
-    if (!(await User.findOne({ _id: req.body.userId }))) {
+    if (
+      req.body.userId &&
+      req.body.userId !== req.user.id &&
+      req.user.role === accountRole.user
+    ) {
+      return next(new ForbiddenError());
+    }
+
+    const userId = req.body.userId ? req.body.userId : req.user.id;
+
+    if (req.body.userId && !(await User.findOne({ _id: userId }))) {
       return next(new BadRequestError('Please provide a valid user id.'));
     }
 
-    if (await Order.findOne({ menuId: req.body.menuId, deleted: false })) {
+    if (
+      await Order.findOne({
+        userId,
+        menuId: req.body.menuId,
+        deleted: false,
+      })
+    ) {
       return next(
         new BadRequestError("Can't create two orders for the same menu.")
       );
     }
 
-    let order = new Order(req.body);
+    let order = new Order({
+      ...req.body,
+      userId,
+    });
     order = await order.save();
 
     res.sendStatus(201);

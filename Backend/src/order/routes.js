@@ -7,7 +7,10 @@ const {
   orderIdValidationSchema,
 } = require('../middleware/bodyValidation/orderValidation');
 
-const { userAuthValidation } = require('../middleware/authValidation');
+const {
+  userAuthValidation,
+  adminAuthValidation,
+} = require('../middleware/authValidation');
 
 const orderController = require('./controller');
 
@@ -32,7 +35,7 @@ router.put(
 
 router.delete(
   '/:_orderId',
-  userAuthValidation,
+  adminAuthValidation,
   orderIdValidationSchema,
   validationResults,
   orderController.deleteOrder
