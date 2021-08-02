@@ -69,7 +69,6 @@ const HomeScreen = ({navigation}) => {
             );
           }}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.flatlistContainer}
           ListEmptyComponent={() => (
             <View style={styles.nothingContainer}>
               <Text>Damn. There are no menus today :(</Text>
@@ -115,10 +114,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  flatlistContainer: {
-    flex: 1,
-    flexGrow: 1,
   },
 });
 
