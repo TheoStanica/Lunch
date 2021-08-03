@@ -14,6 +14,7 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {RectButton} from 'react-native-gesture-handler';
 import {Formik} from 'formik';
 import ActionButton from './actionButton';
+import {menuValidationSchema} from '../assets/bodyValidation/menuValidation';
 
 const EMPTY_COURSE = {courseCategory: '', courses: []};
 const EMPTY_DISH = {description: ''};
@@ -53,6 +54,7 @@ const MenuCreator = ({onSubmit}) => {
     courseIdx,
     handleChange,
     setFieldValue,
+    errors,
   }) => {
     return course.courses.map((dish, idx) => {
       return (
@@ -64,6 +66,9 @@ const MenuCreator = ({onSubmit}) => {
                 label="Dish Name"
                 handleChange={handleChange}
                 value={values.createdMenu[courseIdx].courses[idx].description}
+                errors={
+                  errors?.createdMenu?.[courseIdx]?.courses?.[idx]?.description
+                }
                 field={`createdMenu[${courseIdx}].courses[${idx}].description`}
                 theme={{colors: {primary: '#4A6572'}}}
                 underlineColor="#0002"
@@ -132,6 +137,7 @@ const MenuCreator = ({onSubmit}) => {
 
   return (
     <Formik
+      validationSchema={menuValidationSchema}
       initialValues={{
         createdMenu: [],
       }}
@@ -173,6 +179,7 @@ const MenuCreator = ({onSubmit}) => {
                           label="Course Title"
                           value={values.createdMenu[idx].courseCategory}
                           handleChange={handleChange}
+                          errors={errors?.createdMenu?.[idx]?.courseCategory}
                           field={`createdMenu[${idx}].courseCategory`}
                         />
                         <View style={styles.dishesContainer}>
@@ -196,6 +203,7 @@ const MenuCreator = ({onSubmit}) => {
                           course: item,
                           courseIdx: idx,
                           values,
+                          errors,
                           handleChange,
                           setFieldValue,
                         })}
