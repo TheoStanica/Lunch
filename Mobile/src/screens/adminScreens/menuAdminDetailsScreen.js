@@ -90,6 +90,7 @@ const MenuAdminDetailsScreen = ({route, navigation}) => {
                   </SafeAreaView>
                 )}
               />
+              <Divider style={styles.orderDivider} />
             </SafeAreaView>
           )}
           showsVerticalScrollIndicator={false}
@@ -164,6 +165,12 @@ const styles = StyleSheet.create({
   divider: {
     marginVertical: 5,
     borderWidth: 0.5,
+  },
+  orderDivider: {
+    marginVertical: 5,
+    borderWidth: 0.5,
+    borderColor: '#4A6572',
+    marginHorizontal: 10,
   },
   summary: {
     fontSize: 15,
