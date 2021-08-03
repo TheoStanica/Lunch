@@ -20,7 +20,7 @@ const ProfileField = ({title, paragraph, icon, iconColor = '#FBBC00'}) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginVertical: 10,
+    marginVertical: 5,
   },
   icon: {
     justifyContent: 'center',

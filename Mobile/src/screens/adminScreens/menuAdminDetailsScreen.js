@@ -3,6 +3,9 @@ import {useSelector, useDispatch} from 'react-redux';
 import {StyleSheet, SafeAreaView, FlatList, View, Text} from 'react-native';
 import {getOrder} from '../../redux/thunks/orderThunks';
 import {useFocusEffect} from '@react-navigation/native';
+import {Paragraph, Divider} from 'react-native-paper';
+import ProfileField from '../../components/profileField';
+import Moment from 'moment';
 
 const MenuAdminDetailsScreen = ({route, navigation}) => {
   const {orders, ordersById} = useSelector(state => state.ordersReducer);
@@ -42,40 +45,62 @@ const MenuAdminDetailsScreen = ({route, navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>
-        {menu.restaurantId.name} {menu.restaurantId.cost} {menu.createdAt}
-      </Text>
-      <Text>Manage Orders Sceen</Text>
-      <FlatList
-        data={orders.filter(order => ordersById[order].type === 'takeaway')}
-        keyExtractor={order => order}
-        renderItem={order => (
-          <View>
-            <Text>
-              {ordersById[order.item].userId.fullname} (
-              {ordersById[order.item].userId.email})
-            </Text>
-            <FlatList
-              data={menu.menu}
-              keyExtractor={option => option.index}
-              renderItem={option => (
-                <Text>
-                  {
-                    option.item.courses[
-                      ordersById[order.item].menuOptions[
-                        option.item.courseCategory
-                      ]
-                    ].description
-                  }
-                </Text>
-              )}
-            />
-          </View>
-        )}
-        showsVerticalScrollIndicator={false}
-      />
-      <Text>Manage Orders Sceen</Text>
-      <Text>Summary</Text>
+      <SafeAreaView style={styles.header}>
+        <ProfileField
+          paragraph={menu.restaurantId.name}
+          title="Restaurant"
+          icon="account-circle-outline"
+          iconColor="#4A6572"
+        />
+        <ProfileField
+          paragraph={Moment(menu.restaurantId.createdAt).format('DD-MM-YYYY')}
+          title="Created"
+          icon="account-circle-outline"
+          iconColor="#4A6572"
+        />
+      </SafeAreaView>
+      <Divider style={styles.divider} />
+      <SafeAreaView style={styles.body}>
+        <FlatList
+          data={orders.filter(order => ordersById[order].type === 'takeaway')}
+          keyExtractor={order => order}
+          renderItem={order => (
+            <SafeAreaView>
+              <Text style={styles.fullname}>
+                {ordersById[order.item].userId.fullname} (
+                {ordersById[order.item].userId.email})
+              </Text>
+              <FlatList
+                data={menu.menu}
+                keyExtractor={option => option.courseCategory}
+                renderItem={option => (
+                  <SafeAreaView style={styles.course}>
+                    <Paragraph style={styles.courseCategory}>
+                      {option.item.courseCategory} -{' '}
+                    </Paragraph>
+                    <Paragraph style={styles.capitalizedText}>
+                      {
+                        option.item.courses[
+                          ordersById[order.item].menuOptions[
+                            option.item.courseCategory
+                          ]
+                        ].description
+                      }
+                    </Paragraph>
+                    <Divider style={styles.divider} />
+                  </SafeAreaView>
+                )}
+              />
+            </SafeAreaView>
+          )}
+          showsVerticalScrollIndicator={false}
+        />
+      </SafeAreaView>
+      <Divider style={styles.divider} />
+      <SafeAreaView style={styles.container}>
+        <Text>Manage Orders Sceen</Text>
+        <Text>Summary</Text>
+      </SafeAreaView>
     </SafeAreaView>
   );
 };
@@ -84,6 +109,33 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF1CA',
+  },
+  header: {
+    marginLeft: 10,
+  },
+  body: {
+    flex: 3.5,
+  },
+  course: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginHorizontal: 20,
+  },
+  courseCategory: {
+    fontSize: 16,
+    textTransform: 'capitalize',
+  },
+  capitalizedText: {
+    textTransform: 'capitalize',
+  },
+  fullname: {
+    fontSize: 20,
+    marginLeft: 10,
+  },
+  divider: {
+    marginVertical: 5,
+    borderWidth: 0.5,
   },
 });
 
