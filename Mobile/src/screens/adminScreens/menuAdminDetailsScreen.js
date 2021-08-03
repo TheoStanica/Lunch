@@ -5,6 +5,7 @@ import {getOrder} from '../../redux/thunks/orderThunks';
 import {useFocusEffect} from '@react-navigation/native';
 import {Paragraph, Divider} from 'react-native-paper';
 import ProfileField from '../../components/profileField';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Moment from 'moment';
 
 const MenuAdminDetailsScreen = ({route, navigation}) => {
@@ -46,7 +47,7 @@ const MenuAdminDetailsScreen = ({route, navigation}) => {
         <ProfileField
           paragraph={menu.restaurantId.name}
           title="Restaurant"
-          icon="food-fork-drink"
+          icon="food"
           iconColor="#4A6572"
         />
         <ProfileField
@@ -97,17 +98,32 @@ const MenuAdminDetailsScreen = ({route, navigation}) => {
       <Divider style={styles.divider} />
       <SafeAreaView style={styles.header}>
         <Text style={styles.titleSummary}>Summary</Text>
-        <Text style={styles.summary}>Total orders: {summary.totalOrders}</Text>
         <Text style={styles.summary}>
-          Total restaurant orders: {summary.totalRestaurantOrders}
+          {'       '}Total orders: {summary.totalOrders}
         </Text>
-        <Text style={styles.summary}>
-          Total takeaway orders: {summary.totalTakeawayOrders}
-        </Text>
-        <Text style={styles.summary}>
-          Total takeaway cost:{' '}
-          {menu.restaurantId.cost * summary.totalTakeawayOrders}
-        </Text>
+        <View style={styles.flexDirectionRow}>
+          <Icon size={20} name={'food-fork-drink'} color="#4A6572" />
+          <Text style={styles.summary}>
+            {'  '}
+            Total restaurant orders: {summary.totalRestaurantOrders}
+          </Text>
+        </View>
+        <View style={styles.flexDirectionRow}>
+          <Icon size={20} name={'package-variant'} color="#4A6572" />
+          <Text style={styles.summary}>
+            {'  '}
+            Total takeaway orders: {summary.totalTakeawayOrders}
+          </Text>
+        </View>
+        <View style={styles.flexDirectionRow}>
+          <Icon size={20} name={'currency-usd'} color="#4A6572" />
+          <Text style={styles.summary}>
+            {'  '}
+            Total takeaway cost:{' '}
+            {menu.restaurantId.cost * summary.totalTakeawayOrders} (
+            {menu.restaurantId.cost} each)
+          </Text>
+        </View>
       </SafeAreaView>
     </SafeAreaView>
   );
@@ -117,6 +133,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF1CA',
+  },
+  flexDirectionRow: {
+    flexDirection: 'row',
   },
   header: {
     flex: 1,
