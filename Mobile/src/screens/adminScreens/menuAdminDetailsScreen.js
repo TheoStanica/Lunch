@@ -76,13 +76,15 @@ const MenuAdminDetailsScreen = ({route, navigation}) => {
                       {option.item.courseCategory} -{' '}
                     </Paragraph>
                     <Paragraph style={styles.capitalizedText}>
-                      {
-                        option.item.courses[
-                          ordersById[order.item].menuOptions[
-                            option.item.courseCategory
-                          ]
-                        ].description
-                      }
+                      {ordersById[order.item].menuOptions[
+                        option.item.courseCategory
+                      ] !== undefined
+                        ? option.item.courses[
+                            ordersById[order.item].menuOptions[
+                              option.item.courseCategory
+                            ]
+                          ].description
+                        : ''}
                     </Paragraph>
                   </SafeAreaView>
                 )}
