@@ -12,10 +12,6 @@ const MenuAdminDetailsScreen = ({route, navigation}) => {
   const {menu} = route.params;
   const dispatch = useDispatch();
 
-  //console.log(menu);
-  //console.log(ordersById);
-  //console.log(menu.menu.filter(item => item.courseCategory === 'Cirova'));
-
   const generateSummary = () => {
     const summary = {};
 
@@ -25,10 +21,11 @@ const MenuAdminDetailsScreen = ({route, navigation}) => {
     ).length;
     summary.totalTakeawayOrders =
       summary.totalOrders - summary.totalRestaurantOrders;
-    //console.log(summary);
+
+    return summary;
   };
 
-  generateSummary();
+  const summary = generateSummary();
   const onRefresh = () => {
     dispatch(
       getOrder({
@@ -49,13 +46,13 @@ const MenuAdminDetailsScreen = ({route, navigation}) => {
         <ProfileField
           paragraph={menu.restaurantId.name}
           title="Restaurant"
-          icon="account-circle-outline"
+          icon="food-fork-drink"
           iconColor="#4A6572"
         />
         <ProfileField
           paragraph={Moment(menu.restaurantId.createdAt).format('DD-MM-YYYY')}
           title="Created"
-          icon="account-circle-outline"
+          icon="information-variant"
           iconColor="#4A6572"
         />
       </SafeAreaView>
@@ -87,7 +84,6 @@ const MenuAdminDetailsScreen = ({route, navigation}) => {
                         ].description
                       }
                     </Paragraph>
-                    <Divider style={styles.divider} />
                   </SafeAreaView>
                 )}
               />
@@ -97,9 +93,19 @@ const MenuAdminDetailsScreen = ({route, navigation}) => {
         />
       </SafeAreaView>
       <Divider style={styles.divider} />
-      <SafeAreaView style={styles.container}>
-        <Text>Manage Orders Sceen</Text>
-        <Text>Summary</Text>
+      <SafeAreaView style={styles.header}>
+        <Text style={styles.titleSummary}>Summary</Text>
+        <Text style={styles.summary}>Total orders: {summary.totalOrders}</Text>
+        <Text style={styles.summary}>
+          Total restaurant orders: {summary.totalRestaurantOrders}
+        </Text>
+        <Text style={styles.summary}>
+          Total takeaway orders: {summary.totalTakeawayOrders}
+        </Text>
+        <Text style={styles.summary}>
+          Total takeaway cost:{' '}
+          {menu.restaurantId.cost * summary.totalTakeawayOrders}
+        </Text>
       </SafeAreaView>
     </SafeAreaView>
   );
@@ -111,6 +117,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF1CA',
   },
   header: {
+    flex: 1,
     marginLeft: 10,
   },
   body: {
@@ -136,6 +143,14 @@ const styles = StyleSheet.create({
   divider: {
     marginVertical: 5,
     borderWidth: 0.5,
+  },
+  summary: {
+    fontSize: 15,
+    marginVertical: 2.5,
+  },
+  titleSummary: {
+    alignSelf: 'center',
+    fontSize: 18,
   },
 });
 
