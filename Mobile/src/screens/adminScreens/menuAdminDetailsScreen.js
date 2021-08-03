@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {StyleSheet, SafeAreaView, FlatList, Text} from 'react-native';
+import {StyleSheet, SafeAreaView, FlatList, View, Text} from 'react-native';
 import {getOrder} from '../../redux/thunks/orderThunks';
 import {useFocusEffect} from '@react-navigation/native';
 
@@ -11,6 +11,7 @@ const MenuAdminDetailsScreen = ({route, navigation}) => {
 
   //console.log(menu);
   //console.log(ordersById);
+  //console.log(menu.menu.filter(item => item.courseCategory === 'Cirova'));
 
   const generateSummary = () => {
     const summary = {};
@@ -21,7 +22,7 @@ const MenuAdminDetailsScreen = ({route, navigation}) => {
     ).length;
     summary.totalTakeawayOrders =
       summary.totalOrders - summary.totalRestaurantOrders;
-    console.log(summary);
+    //console.log(summary);
   };
 
   generateSummary();
@@ -49,11 +50,27 @@ const MenuAdminDetailsScreen = ({route, navigation}) => {
         data={orders.filter(order => ordersById[order].type === 'takeaway')}
         keyExtractor={order => order}
         renderItem={order => (
-          <FlatList
-            data={ordersById[order.item].menuOptions}
-            keyExtractor={option => option}
-            renderItem={option => console.log(option)}
-          />
+          <View>
+            <Text>
+              {ordersById[order.item].userId.fullname} (
+              {ordersById[order.item].userId.email})
+            </Text>
+            <FlatList
+              data={menu.menu}
+              keyExtractor={option => option.index}
+              renderItem={option => (
+                <Text>
+                  {
+                    option.item.courses[
+                      ordersById[order.item].menuOptions[
+                        option.item.courseCategory
+                      ]
+                    ].description
+                  }
+                </Text>
+              )}
+            />
+          </View>
         )}
         showsVerticalScrollIndicator={false}
       />
