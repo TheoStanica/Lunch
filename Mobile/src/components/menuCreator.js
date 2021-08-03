@@ -52,6 +52,8 @@ const MenuCreator = ({onSubmit}) => {
     values,
     course,
     courseIdx,
+    touched,
+    handleBlur,
     handleChange,
     setFieldValue,
     errors,
@@ -65,6 +67,8 @@ const MenuCreator = ({onSubmit}) => {
               <TextInputField
                 label="Dish Name"
                 handleChange={handleChange}
+                handleBlur={handleBlur}
+                touched={touched}
                 value={values.createdMenu[courseIdx].courses[idx].description}
                 errors={
                   errors?.createdMenu?.[courseIdx]?.courses?.[idx]?.description
@@ -142,7 +146,15 @@ const MenuCreator = ({onSubmit}) => {
         createdMenu: [],
       }}
       onSubmit={values => onSubmit(values.createdMenu)}>
-      {({values, handleChange, errors, handleSubmit, setFieldValue}) => (
+      {({
+        values,
+        handleChange,
+        errors,
+        touched,
+        handleBlur,
+        handleSubmit,
+        setFieldValue,
+      }) => (
         <View style={styles.spaceBetweenContainer}>
           <View>
             <View style={styles.coursesHeaderContainer}>
@@ -179,6 +191,8 @@ const MenuCreator = ({onSubmit}) => {
                           label="Course Title"
                           value={values.createdMenu[idx].courseCategory}
                           handleChange={handleChange}
+                          handleBlur={handleBlur}
+                          touched={touched}
                           errors={errors?.createdMenu?.[idx]?.courseCategory}
                           field={`createdMenu[${idx}].courseCategory`}
                         />
@@ -204,6 +218,8 @@ const MenuCreator = ({onSubmit}) => {
                           courseIdx: idx,
                           values,
                           errors,
+                          touched,
+                          handleBlur,
                           handleChange,
                           setFieldValue,
                         })}

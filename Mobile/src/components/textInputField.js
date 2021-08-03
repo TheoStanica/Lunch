@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {TextInput, HelperText} from 'react-native-paper';
 
 const TextInputField = ({
@@ -7,8 +7,11 @@ const TextInputField = ({
   errors,
   handleChange,
   field,
+  handleBlur,
+  touched,
   ...rest
 }) => {
+  const [isFocused, setIsFocused] = useState(false);
   return (
     <>
       <TextInput
@@ -19,9 +22,13 @@ const TextInputField = ({
         style={{backgroundColor: 'transparent'}}
         underlineColor="#0008"
         theme={{colors: {primary: 'black'}}}
+        onBlur={handleBlur ? handleBlur(field) : null}
+        onFocus={() => setIsFocused(true)}
         {...rest}
       />
-      <HelperText type="error" visible={errors ? true : false}>
+      <HelperText
+        type="error"
+        visible={errors && (isFocused || touched?.[field]) ? true : false}>
         {errors}
       </HelperText>
     </>

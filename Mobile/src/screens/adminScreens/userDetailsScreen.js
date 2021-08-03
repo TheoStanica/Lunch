@@ -40,7 +40,14 @@ const UserDetailsScreen = ({route, navigation}) => {
             );
             navigation.goBack();
           }}>
-          {({values, handleChange, errors, isValid, handleSubmit}) => (
+          {({
+            values,
+            handleChange,
+            errors,
+            touched,
+            handleBlur,
+            handleSubmit,
+          }) => (
             <View style={styles.contentContainer}>
               <View>
                 <TextInputField
@@ -48,6 +55,8 @@ const UserDetailsScreen = ({route, navigation}) => {
                   value={values.email}
                   errors={errors.email}
                   handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  touched={touched}
                   field="email"
                 />
 
@@ -70,6 +79,8 @@ const UserDetailsScreen = ({route, navigation}) => {
                   value={values.fullname}
                   errors={errors.fullname}
                   handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  touched={touched}
                   field="fullname"
                 />
               </View>

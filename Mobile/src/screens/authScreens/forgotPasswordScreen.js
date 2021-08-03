@@ -53,13 +53,23 @@ const ForgotPasswordScreen = ({theme, route, navigation}) => {
                 }),
               );
             }}>
-            {({values, handleChange, errors, isValid, handleSubmit}) => (
+            {({
+              values,
+              handleChange,
+              errors,
+              isValid,
+              touched,
+              handleBlur,
+              handleSubmit,
+            }) => (
               <>
                 <TextInputField
                   label="Email"
                   value={values.email}
                   errors={errors.email}
                   handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  touched={touched}
                   field="email"
                 />
                 <Button

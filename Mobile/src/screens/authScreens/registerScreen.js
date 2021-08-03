@@ -68,13 +68,23 @@ const RegisterScreen = ({navigation, theme}) => {
                     }),
                   );
                 }}>
-                {({values, handleChange, errors, isValid, handleSubmit}) => (
+                {({
+                  values,
+                  handleChange,
+                  isValid,
+                  errors,
+                  touched,
+                  handleBlur,
+                  handleSubmit,
+                }) => (
                   <>
                     <TextInputField
                       label="Email"
                       value={values.email}
                       errors={errors.email}
                       handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      touched={touched}
                       field="email"
                     />
                     <TextInputField
@@ -82,6 +92,8 @@ const RegisterScreen = ({navigation, theme}) => {
                       value={values.password}
                       errors={errors.password}
                       handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      touched={touched}
                       secureTextEntry={hidePassword}
                       right={
                         <TextInput.Icon
@@ -97,6 +109,8 @@ const RegisterScreen = ({navigation, theme}) => {
                       value={values.retypePassword}
                       errors={errors.retypePassword}
                       handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      touched={touched}
                       secureTextEntry={hideRetypePassword}
                       right={
                         <TextInput.Icon
@@ -114,6 +128,8 @@ const RegisterScreen = ({navigation, theme}) => {
                       value={values.fullname}
                       errors={errors.fullname}
                       handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      touched={touched}
                       field="fullname"
                     />
                     <Button

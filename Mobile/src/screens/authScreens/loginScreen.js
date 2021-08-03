@@ -39,13 +39,23 @@ const LoginScreen = ({navigation, theme}) => {
                     loginUser({email: values.email, password: values.password}),
                   )
                 }>
-                {({values, handleChange, errors, isValid, handleSubmit}) => (
+                {({
+                  handleBlur,
+                  values,
+                  handleChange,
+                  errors,
+                  isValid,
+                  touched,
+                  handleSubmit,
+                }) => (
                   <>
                     <TextInputField
                       label="Email"
                       value={values.email}
                       errors={errors.email}
                       handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      touched={touched}
                       field="email"
                     />
                     <TextInputField
@@ -53,6 +63,8 @@ const LoginScreen = ({navigation, theme}) => {
                       value={values.password}
                       errors={errors.password}
                       handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      touched={touched}
                       secureTextEntry={hidePassword}
                       right={
                         <TextInput.Icon

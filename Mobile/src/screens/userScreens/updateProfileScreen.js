@@ -55,7 +55,14 @@ const UpdateProfileScreen = ({navigation}) => {
                 );
               }}
               style={{backgroundColor: 'red'}}>
-              {({values, handleChange, errors, handleSubmit}) => (
+              {({
+                values,
+                handleChange,
+                errors,
+                touched,
+                handleBlur,
+                handleSubmit,
+              }) => (
                 <View style={styles.formContainer}>
                   <View>
                     <TextInputField
@@ -63,6 +70,8 @@ const UpdateProfileScreen = ({navigation}) => {
                       value={values.email}
                       errors={errors.email}
                       handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      touched={touched}
                       field="email"
                     />
                     <TextInputField
@@ -70,6 +79,8 @@ const UpdateProfileScreen = ({navigation}) => {
                       value={values.password}
                       errors={errors.password}
                       handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      touched={touched}
                       secureTextEntry={hidePassword}
                       right={
                         <TextInput.Icon
@@ -85,6 +96,8 @@ const UpdateProfileScreen = ({navigation}) => {
                       value={values.retypePassword}
                       errors={errors.retypePassword}
                       handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      touched={touched}
                       secureTextEntry={hideRetypePassword}
                       right={
                         <TextInput.Icon
@@ -102,6 +115,8 @@ const UpdateProfileScreen = ({navigation}) => {
                       value={values.fullname}
                       errors={errors.fullname}
                       handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      touched={touched}
                       field="fullname"
                     />
                   </View>

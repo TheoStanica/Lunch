@@ -63,7 +63,15 @@ const RestaurantDetailsScreen = ({route, navigation}) => {
               ),
             );
           }}>
-          {({values, handleChange, errors, handleSubmit, setFieldValue}) => (
+          {({
+            values,
+            handleChange,
+            errors,
+            touched,
+            handleBlur,
+            handleSubmit,
+            setFieldValue,
+          }) => (
             <View style={styles.contentContainer}>
               <View>
                 <TextInputField
@@ -71,6 +79,8 @@ const RestaurantDetailsScreen = ({route, navigation}) => {
                   value={values.name}
                   errors={errors.name}
                   handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  touched={touched}
                   field="name"
                 />
                 <TextInputField
@@ -78,6 +88,8 @@ const RestaurantDetailsScreen = ({route, navigation}) => {
                   value={values.cost}
                   errors={errors.cost}
                   handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  touched={touched}
                   field="cost"
                   keyboardType="numeric"
                 />
