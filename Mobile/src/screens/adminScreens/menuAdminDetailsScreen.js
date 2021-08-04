@@ -1,12 +1,11 @@
 import React, {useCallback, useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {StyleSheet, SafeAreaView, FlatList, View, Text} from 'react-native';
+import {StyleSheet, SafeAreaView, FlatList, Text} from 'react-native';
 import {getOrder} from '../../redux/thunks/orderThunks';
 import {useFocusEffect} from '@react-navigation/native';
 import {Paragraph, Divider} from 'react-native-paper';
 import ProfileField from '../../components/profileField';
 import SummaryField from '../../components/summaryField';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Moment from 'moment';
 
 const MenuAdminDetailsScreen = ({route}) => {
@@ -16,7 +15,9 @@ const MenuAdminDetailsScreen = ({route}) => {
   const dispatch = useDispatch();
 
   const generateSummary = () => {
-    const summary = {};
+    const summary = {},
+      totalMenuOptions = [];
+    let courses = [];
 
     summary.totalOrders = orders.length;
     summary.totalRestaurantOrders = orders.filter(
@@ -25,6 +26,23 @@ const MenuAdminDetailsScreen = ({route}) => {
     summary.totalTakeawayOrders =
       summary.totalOrders - summary.totalRestaurantOrders;
 
+    menu.menu.forEach(menu => {
+      menu.courses.forEach((course, index) => {
+        courses.push({
+          description: course.description,
+          count: Object.values(ordersById).filter(order => {
+            if (order.type === 'restaurant') return false;
+            return order.menuOptions[menu.courseCategory] === index;
+          }).length,
+        });
+      });
+
+      totalMenuOptions.push(courses);
+      courses = [];
+    });
+    summary.totalMenuOptions = totalMenuOptions;
+
+    console.log(summary);
     return summary;
   };
 
