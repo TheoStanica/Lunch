@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {StyleSheet, SafeAreaView, FlatList, View, Text} from 'react-native';
 import {getOrder} from '../../redux/thunks/orderThunks';
@@ -8,8 +8,9 @@ import ProfileField from '../../components/profileField';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Moment from 'moment';
 
-const MenuAdminDetailsScreen = ({route, navigation}) => {
+const MenuAdminDetailsScreen = ({route}) => {
   const {orders, ordersById} = useSelector(state => state.ordersReducer);
+  const [summary, setSummary] = useState({});
   const {menu} = route.params;
   const dispatch = useDispatch();
 
@@ -26,7 +27,6 @@ const MenuAdminDetailsScreen = ({route, navigation}) => {
     return summary;
   };
 
-  const summary = generateSummary();
   const onRefresh = () => {
     dispatch(
       getOrder({
@@ -35,6 +35,11 @@ const MenuAdminDetailsScreen = ({route, navigation}) => {
       }),
     );
   };
+
+  useEffect(() => {
+    setSummary(generateSummary());
+  }, [orders]);
+
   useFocusEffect(
     useCallback(() => {
       onRefresh();
