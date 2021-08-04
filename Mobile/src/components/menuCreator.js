@@ -146,9 +146,10 @@ const MenuCreator = ({onSubmit}) => {
   };
 
   const checkForErrors = errors => {
-    if (menuError && Object.keys(errors).length > 0) {
-      setMenuError('Please fill in the menu correctly');
-    } else setMenuError('');
+    if (menuError)
+      if (Object.keys(errors).length > 0) {
+        setMenuError('Please fill in the menu correctly');
+      } else setMenuError('');
   };
 
   return (
