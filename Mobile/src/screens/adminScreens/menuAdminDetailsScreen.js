@@ -133,9 +133,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF1CA',
   },
-  flexDirectionRow: {
-    flexDirection: 'row',
-  },
   header: {
     flex: 1,
     marginLeft: 10,
@@ -169,10 +166,6 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: '#4A6572',
     marginHorizontal: 10,
-  },
-  summary: {
-    fontSize: 15,
-    marginVertical: 2.5,
   },
   titleSummary: {
     alignSelf: 'center',
