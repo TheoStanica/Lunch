@@ -10,6 +10,7 @@ import MessageScreen from '../../screens/messageScreen';
 import ManageOrdersScreen from '../../screens/adminScreens/manageOrdersScreen';
 import MenuAdminDetailsScreen from '../../screens/adminScreens/menuAdminDetailsScreen';
 import ManageMenusScreen from '../../screens/adminScreens/manageMenusScreen';
+import MenuDetailsTab from '../tabNavigationRoutes/menuDetailsTab';
 
 const Stack = createStackNavigator();
 
@@ -31,8 +32,8 @@ const AdminStack = () => {
         options={{title: 'Admin', headerShown: false}}
       />
       <Stack.Screen
-        name="MenuAdminDetailsScreen"
-        component={MenuAdminDetailsScreen}
+        name="MenuDetailsTab"
+        component={MenuDetailsTab}
         options={{
           title: 'Menu Details',
         }}

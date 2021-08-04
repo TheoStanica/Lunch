@@ -49,7 +49,7 @@ const ManageMenusScreen = ({navigation}) => {
               icon="food"
               onDelete={() => dispatch(deleteMenu({_menuId: menu.item}))}
               onPress={() =>
-                navigation.navigate('MenuAdminDetailsScreen', {
+                navigation.navigate('MenuDetailsTab', {
                   menu: allMenusById[menu.item],
                 })
               }
