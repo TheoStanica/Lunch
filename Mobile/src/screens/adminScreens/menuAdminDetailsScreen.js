@@ -1,11 +1,12 @@
 import React, {useCallback, useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {StyleSheet, SafeAreaView, FlatList, Text} from 'react-native';
+import {StyleSheet, SafeAreaView, Text} from 'react-native';
 import {getOrder} from '../../redux/thunks/orderThunks';
 import {useFocusEffect} from '@react-navigation/native';
-import {Paragraph, Divider} from 'react-native-paper';
+import {Divider} from 'react-native-paper';
 import ProfileField from '../../components/profileField';
 import SummaryField from '../../components/summaryField';
+import MenuOptions from '../../components/menuOptions';
 import Moment from 'moment';
 
 const MenuAdminDetailsScreen = ({route}) => {
@@ -36,13 +37,14 @@ const MenuAdminDetailsScreen = ({route}) => {
           }).length,
         });
       });
-
-      totalMenuOptions.push(courses);
+      totalMenuOptions.push({
+        courseCategory: menu.courseCategory,
+        courses: courses,
+      });
       courses = [];
     });
     summary.totalMenuOptions = totalMenuOptions;
 
-    console.log(summary);
     return summary;
   };
 
@@ -67,81 +69,40 @@ const MenuAdminDetailsScreen = ({route}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <SafeAreaView style={styles.header}>
-        <ProfileField
-          paragraph={menu.restaurantId.name}
-          title="Restaurant"
-          icon="food"
-          iconColor="#4A6572"
-        />
-        <ProfileField
-          paragraph={Moment(menu.restaurantId.createdAt).format('DD-MM-YYYY')}
-          title="Created"
-          icon="information-variant"
-          iconColor="#4A6572"
-        />
-      </SafeAreaView>
+      <ProfileField
+        paragraph={menu.restaurantId.name}
+        title="Restaurant"
+        icon="food"
+        iconColor="#4A6572"
+      />
+      <ProfileField
+        paragraph={Moment(menu.restaurantId.createdAt).format('DD-MM-YYYY')}
+        title="Created"
+        icon="information-variant"
+        iconColor="#4A6572"
+      />
       <Divider style={styles.divider} />
-      <SafeAreaView style={styles.body}>
-        <FlatList
-          data={orders.filter(order => ordersById[order].type === 'takeaway')}
-          keyExtractor={order => order}
-          renderItem={order => (
-            <SafeAreaView>
-              <Text style={styles.fullname}>
-                {ordersById[order.item].userId.fullname} (
-                {ordersById[order.item].userId.email})
-              </Text>
-              <FlatList
-                data={menu.menu}
-                keyExtractor={option => option.courseCategory}
-                renderItem={option => (
-                  <SafeAreaView style={styles.course}>
-                    <Paragraph style={styles.courseCategory}>
-                      {option.item.courseCategory} -{' '}
-                    </Paragraph>
-                    <Paragraph style={styles.capitalizedText}>
-                      {ordersById[order.item].menuOptions[
-                        option.item.courseCategory
-                      ] !== undefined
-                        ? option.item.courses[
-                            ordersById[order.item].menuOptions[
-                              option.item.courseCategory
-                            ]
-                          ].description
-                        : ''}
-                    </Paragraph>
-                  </SafeAreaView>
-                )}
-              />
-              <Divider style={styles.orderDivider} />
-            </SafeAreaView>
-          )}
-          showsVerticalScrollIndicator={false}
-        />
-      </SafeAreaView>
+      <Text style={styles.titleSummary}>Summary</Text>
+      <SummaryField
+        text={`Total orders: ${summary.totalOrders}`}
+        icon="dropbox"
+      />
+      <SummaryField
+        text={`Total restaurant orders: ${summary.totalRestaurantOrders}`}
+        icon="food-fork-drink"
+      />
+      <SummaryField
+        text={`Total takeaway orders: ${summary.totalTakeawayOrders}`}
+        icon="package-variant"
+      />
+      <SummaryField
+        text={`Total takeaway cost: ${
+          menu.restaurantId.cost * summary.totalTakeawayOrders
+        } (${menu.restaurantId.cost} each)`}
+        icon="currency-usd"
+      />
       <Divider style={styles.divider} />
-      <SafeAreaView style={styles.header}>
-        <Text style={styles.titleSummary}>Summary</Text>
-        <SummaryField
-          text={`Total orders: ${summary.totalOrders}`}
-          icon="dropbox"
-        />
-        <SummaryField
-          text={`Total restaurant orders: ${summary.totalRestaurantOrders}`}
-          icon="food-fork-drink"
-        />
-        <SummaryField
-          text={`Total takeaway orders: ${summary.totalTakeawayOrders}`}
-          icon="package-variant"
-        />
-        <SummaryField
-          text={`Total takeaway cost: ${
-            menu.restaurantId.cost * summary.totalTakeawayOrders
-          } (${menu.restaurantId.cost} each)`}
-          icon="currency-usd"
-        />
-      </SafeAreaView>
+      <MenuOptions menuOptions={summary.totalMenuOptions} />
     </SafeAreaView>
   );
 };
@@ -150,30 +111,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF1CA',
-  },
-  header: {
-    flex: 1,
-    marginLeft: 10,
-  },
-  body: {
-    flex: 3.5,
-  },
-  course: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginHorizontal: 20,
-  },
-  courseCategory: {
-    fontSize: 16,
-    textTransform: 'capitalize',
-  },
-  capitalizedText: {
-    textTransform: 'capitalize',
-  },
-  fullname: {
-    fontSize: 20,
-    marginLeft: 10,
   },
   divider: {
     marginVertical: 5,
