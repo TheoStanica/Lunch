@@ -74,6 +74,7 @@ const HomeScreen = ({navigation}) => {
               <Text>Damn. There are no menus today :(</Text>
             </View>
           )}
+          contentContainerStyle={styles.growContainer}
         />
         {role === 'admin' ? (
           <FAB
@@ -114,6 +115,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  growContainer: {
+    flexGrow: 1,
   },
 });
 
