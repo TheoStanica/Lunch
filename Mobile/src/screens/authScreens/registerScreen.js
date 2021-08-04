@@ -84,7 +84,7 @@ const RegisterScreen = ({navigation, theme}) => {
                       errors={errors.email}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
-                      touched={touched}
+                      touched={touched.email}
                       field="email"
                     />
                     <TextInputField
@@ -93,7 +93,7 @@ const RegisterScreen = ({navigation, theme}) => {
                       errors={errors.password}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
-                      touched={touched}
+                      touched={touched.password}
                       secureTextEntry={hidePassword}
                       right={
                         <TextInput.Icon
@@ -110,7 +110,7 @@ const RegisterScreen = ({navigation, theme}) => {
                       errors={errors.retypePassword}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
-                      touched={touched}
+                      touched={touched.retypePassword}
                       secureTextEntry={hideRetypePassword}
                       right={
                         <TextInput.Icon
@@ -129,7 +129,7 @@ const RegisterScreen = ({navigation, theme}) => {
                       errors={errors.fullname}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
-                      touched={touched}
+                      touched={touched.fullname}
                       field="fullname"
                     />
                     <Button

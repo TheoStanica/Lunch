@@ -80,7 +80,7 @@ const RestaurantDetailsScreen = ({route, navigation}) => {
                   errors={errors.name}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
-                  touched={touched}
+                  touched={touched.name}
                   field="name"
                 />
                 <TextInputField
@@ -89,7 +89,7 @@ const RestaurantDetailsScreen = ({route, navigation}) => {
                   errors={errors.cost}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
-                  touched={touched}
+                  touched={touched.cost}
                   field="cost"
                   keyboardType="numeric"
                 />

@@ -56,7 +56,7 @@ const UserDetailsScreen = ({route, navigation}) => {
                   errors={errors.email}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
-                  touched={touched}
+                  touched={touched.email}
                   field="email"
                 />
 
@@ -80,7 +80,7 @@ const UserDetailsScreen = ({route, navigation}) => {
                   errors={errors.fullname}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
-                  touched={touched}
+                  touched={touched.fullname}
                   field="fullname"
                 />
               </View>

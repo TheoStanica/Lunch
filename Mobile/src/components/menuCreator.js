@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View, Animated, Alert} from 'react-native';
 import {
   List,
@@ -20,6 +20,8 @@ const EMPTY_COURSE = {courseCategory: '', courses: []};
 const EMPTY_DISH = {description: ''};
 
 const MenuCreator = ({onSubmit}) => {
+  const [menuError, setMenuError] = useState('');
+
   const renderActions = (idx, setFieldValue, values) => {
     return (
       <RectButton
@@ -68,8 +70,12 @@ const MenuCreator = ({onSubmit}) => {
                 label="Dish Name"
                 handleChange={handleChange}
                 handleBlur={handleBlur}
-                touched={touched}
-                value={values.createdMenu[courseIdx].courses[idx].description}
+                touched={
+                  touched?.createdMenu?.[courseIdx]?.courses?.[idx]?.description
+                }
+                value={
+                  values.createdMenu?.[courseIdx]?.courses?.[idx]?.description
+                }
                 errors={
                   errors?.createdMenu?.[courseIdx]?.courses?.[idx]?.description
                 }
@@ -139,6 +145,12 @@ const MenuCreator = ({onSubmit}) => {
     });
   };
 
+  const checkForErrors = errors => {
+    if (menuError && Object.keys(errors).length > 0) {
+      setMenuError('Please fill in the menu correctly');
+    } else setMenuError('');
+  };
+
   return (
     <Formik
       validationSchema={menuValidationSchema}
@@ -169,6 +181,12 @@ const MenuCreator = ({onSubmit}) => {
                 }
               />
             </View>
+            {checkForErrors(errors)}
+            {typeof errors.createdMenu === 'string' || menuError ? (
+              <Text style={styles.errorMessage}>
+                {menuError ? menuError : errors.createdMenu}
+              </Text>
+            ) : null}
             <View style={styles.contentContainer}>
               {values.createdMenu.length > 0 ? (
                 values.createdMenu.map((item, idx) => (
@@ -192,10 +210,13 @@ const MenuCreator = ({onSubmit}) => {
                           value={values.createdMenu[idx].courseCategory}
                           handleChange={handleChange}
                           handleBlur={handleBlur}
-                          touched={touched}
+                          touched={touched?.createdMenu?.[idx]?.courseCategory}
                           errors={errors?.createdMenu?.[idx]?.courseCategory}
                           field={`createdMenu[${idx}].courseCategory`}
+                          style={styles.dishInputField}
+                          underlineColor="transparent"
                         />
+
                         <View style={styles.dishesContainer}>
                           <Subheading>Dishes </Subheading>
                           <IconButton
@@ -213,6 +234,13 @@ const MenuCreator = ({onSubmit}) => {
                             }}
                           />
                         </View>
+                        {menuError &&
+                        typeof errors?.createdMenu?.[idx]?.courses ===
+                          'string' ? (
+                          <Text style={[styles.errorMessage, {marginLeft: 12}]}>
+                            {errors.createdMenu[idx].courses}
+                          </Text>
+                        ) : null}
                         {renderDish({
                           course: item,
                           courseIdx: idx,
@@ -234,12 +262,19 @@ const MenuCreator = ({onSubmit}) => {
               )}
             </View>
           </View>
-          <ActionButton
-            style={styles.button}
-            text="create menu"
-            onPress={handleSubmit}>
-            Submit
-          </ActionButton>
+          <View>
+            <ActionButton
+              style={styles.button}
+              text="create menu"
+              onPress={() => {
+                if (Object.keys(errors).length > 0) {
+                  setMenuError('Please fill in the menu correctly');
+                } else setMenuError('');
+                handleSubmit();
+              }}>
+              Submit
+            </ActionButton>
+          </View>
         </View>
       )}
     </Formik>
@@ -291,7 +326,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginLeft: 10,
+    marginLeft: 12,
   },
   flexGrowContainer: {
     flexGrow: 1,
@@ -323,16 +358,26 @@ const styles = StyleSheet.create({
   },
   radioGroupContainer: {
     flexDirection: 'row',
-    marginLeft: 15,
+    marginLeft: 12,
   },
   radioText: {
-    marginLeft: 15,
+    marginLeft: 12,
   },
   dishInputField: {
     backgroundColor: 'transparent',
     borderWidth: 0.3,
     borderColor: '#0007',
-    marginLeft: 15,
+    fontSize: 12,
+  },
+  inputField: {
+    backgroundColor: 'transparent',
+    fontSize: 12,
+    height: 45,
+  },
+  errorMessage: {
+    fontSize: 12,
+    color: '#A52630',
+    marginBottom: 10,
   },
 });
 

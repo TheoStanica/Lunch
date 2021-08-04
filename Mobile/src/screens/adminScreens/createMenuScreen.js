@@ -105,8 +105,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   errorMessage: {
-    fontSize: 16,
-    color: 'red',
+    fontSize: 12,
+    color: '#A52630',
     marginVertical: 10,
   },
   dropdownStyle: {

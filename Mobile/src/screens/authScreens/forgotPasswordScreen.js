@@ -69,7 +69,7 @@ const ForgotPasswordScreen = ({theme, route, navigation}) => {
                   errors={errors.email}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
-                  touched={touched}
+                  touched={touched.email}
                   field="email"
                 />
                 <Button

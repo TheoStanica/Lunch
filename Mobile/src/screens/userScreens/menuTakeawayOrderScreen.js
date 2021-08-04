@@ -167,8 +167,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   errorMessage: {
-    fontSize: 16,
-    color: 'red',
+    fontSize: 12,
+    color: '#A52630',
     marginVertical: 10,
   },
   capitalizedText: {

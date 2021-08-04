@@ -71,7 +71,7 @@ const UpdateProfileScreen = ({navigation}) => {
                       errors={errors.email}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
-                      touched={touched}
+                      touched={touched.email}
                       field="email"
                     />
                     <TextInputField
@@ -80,7 +80,7 @@ const UpdateProfileScreen = ({navigation}) => {
                       errors={errors.password}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
-                      touched={touched}
+                      touched={touched.password}
                       secureTextEntry={hidePassword}
                       right={
                         <TextInput.Icon
@@ -97,7 +97,7 @@ const UpdateProfileScreen = ({navigation}) => {
                       errors={errors.retypePassword}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
-                      touched={touched}
+                      touched={touched.retypePassword}
                       secureTextEntry={hideRetypePassword}
                       right={
                         <TextInput.Icon
@@ -116,7 +116,7 @@ const UpdateProfileScreen = ({navigation}) => {
                       errors={errors.fullname}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
-                      touched={touched}
+                      touched={touched.fullname}
                       field="fullname"
                     />
                   </View>

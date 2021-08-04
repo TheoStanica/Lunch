@@ -55,7 +55,7 @@ const LoginScreen = ({navigation, theme}) => {
                       errors={errors.email}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
-                      touched={touched}
+                      touched={touched.email}
                       field="email"
                     />
                     <TextInputField
@@ -64,7 +64,7 @@ const LoginScreen = ({navigation, theme}) => {
                       errors={errors.password}
                       handleChange={handleChange}
                       handleBlur={handleBlur}
-                      touched={touched}
+                      touched={touched.passwird}
                       secureTextEntry={hidePassword}
                       right={
                         <TextInput.Icon

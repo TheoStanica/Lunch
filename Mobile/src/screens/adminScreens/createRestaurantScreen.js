@@ -53,7 +53,7 @@ const CreateRestaurantScreen = ({navigation}) => {
                   errors={errors.name}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
-                  touched={touched}
+                  touched={touched.name}
                   field="name"
                 />
                 <TextInputField
@@ -62,7 +62,7 @@ const CreateRestaurantScreen = ({navigation}) => {
                   errors={errors.cost}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
-                  touched={touched}
+                  touched={touched.cost}
                   field="cost"
                   keyboardType="numeric"
                 />

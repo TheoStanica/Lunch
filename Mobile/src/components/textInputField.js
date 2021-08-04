@@ -22,13 +22,13 @@ const TextInputField = ({
         style={{backgroundColor: 'transparent'}}
         underlineColor="#0008"
         theme={{colors: {primary: 'black'}}}
-        onBlur={handleBlur ? handleBlur(field) : null}
+        onBlur={handleBlur(field)}
         onFocus={() => setIsFocused(true)}
         {...rest}
       />
       <HelperText
         type="error"
-        visible={errors && (isFocused || touched?.[field]) ? true : false}>
+        visible={errors && (isFocused || touched) ? true : false}>
         {errors}
       </HelperText>
     </>
