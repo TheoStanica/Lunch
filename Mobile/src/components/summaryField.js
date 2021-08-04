@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const SummaryField = ({text, icon, iconColor = '#4A6572'}) => {
   return (
     <View style={styles.flexDirectionRow}>
-      <Icon size={20} name={icon} color={iconColor} />
+      <Icon size={25} name={icon} color={iconColor} />
       <Text style={styles.summary}>
         {'  '}
         {text}
@@ -16,8 +16,8 @@ const SummaryField = ({text, icon, iconColor = '#4A6572'}) => {
 
 const styles = StyleSheet.create({
   summary: {
-    fontSize: 15,
-    marginVertical: 2.5,
+    fontSize: 16,
+    marginVertical: 5,
   },
   flexDirectionRow: {
     flexDirection: 'row',

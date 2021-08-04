@@ -69,39 +69,44 @@ const MenuAdminDetailsScreen = ({route}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ProfileField
-        paragraph={menu.restaurantId.name}
-        title="Restaurant"
-        icon="food"
-        iconColor="#4A6572"
-      />
-      <ProfileField
-        paragraph={Moment(menu.restaurantId.createdAt).format('DD-MM-YYYY')}
-        title="Created"
-        icon="information-variant"
-        iconColor="#4A6572"
-      />
+      <SafeAreaView style={styles.body}>
+        <ProfileField
+          paragraph={menu.restaurantId.name}
+          title="Restaurant"
+          icon="food"
+          iconColor="#4A6572"
+        />
+        <ProfileField
+          paragraph={Moment(menu.restaurantId.createdAt).format('DD-MM-YYYY')}
+          title="Created"
+          icon="information-variant"
+          iconColor="#4A6572"
+        />
+      </SafeAreaView>
       <Divider style={styles.divider} />
       <Text style={styles.titleSummary}>Summary</Text>
-      <SummaryField
-        text={`Total orders: ${summary.totalOrders}`}
-        icon="dropbox"
-      />
-      <SummaryField
-        text={`Total restaurant orders: ${summary.totalRestaurantOrders}`}
-        icon="food-fork-drink"
-      />
-      <SummaryField
-        text={`Total takeaway orders: ${summary.totalTakeawayOrders}`}
-        icon="package-variant"
-      />
-      <SummaryField
-        text={`Total takeaway cost: ${
-          menu.restaurantId.cost * summary.totalTakeawayOrders
-        } (${menu.restaurantId.cost} each)`}
-        icon="currency-usd"
-      />
+      <SafeAreaView style={styles.body}>
+        <SummaryField
+          text={`Total orders: ${summary.totalOrders}`}
+          icon="dropbox"
+        />
+        <SummaryField
+          text={`Total restaurant orders: ${summary.totalRestaurantOrders}`}
+          icon="food-fork-drink"
+        />
+        <SummaryField
+          text={`Total takeaway orders: ${summary.totalTakeawayOrders}`}
+          icon="package-variant"
+        />
+        <SummaryField
+          text={`Total takeaway cost: ${
+            menu.restaurantId.cost * summary.totalTakeawayOrders
+          } (${menu.restaurantId.cost} each)`}
+          icon="currency-usd"
+        />
+      </SafeAreaView>
       <Divider style={styles.divider} />
+      <Text style={styles.titleSummary}>Menu Options</Text>
       <MenuOptions menuOptions={summary.totalMenuOptions} />
     </SafeAreaView>
   );
@@ -111,6 +116,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF1CA',
+  },
+  body: {
+    marginLeft: 10,
   },
   divider: {
     marginVertical: 5,
@@ -124,7 +132,8 @@ const styles = StyleSheet.create({
   },
   titleSummary: {
     alignSelf: 'center',
-    fontSize: 18,
+    fontWeight: 'bold',
+    fontSize: 20,
   },
 });
 
