@@ -3,7 +3,6 @@ import {View, StyleSheet} from 'react-native';
 import {List} from 'react-native-paper';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import moment from 'moment';
 
 const DateTimePicker = ({title, description, onConfirm, mode, ...rest}) => {
   const [isPickerVisible, setIsPickerVisible] = useState(false);
