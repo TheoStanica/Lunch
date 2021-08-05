@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginHorizontal: 20,
+    marginLeft: 20,
   },
   courseCategory: {
     fontSize: 16,
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   flexDirectionRow: {
-    alignSelf: 'center',
+    marginLeft: 20,
     flexDirection: 'row',
     marginVertical: 10,
   },
