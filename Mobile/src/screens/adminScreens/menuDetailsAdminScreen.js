@@ -9,7 +9,7 @@ import SummaryField from '../../components/summaryField';
 import MenuOptions from '../../components/menuOptions';
 import Moment from 'moment';
 
-const MenuAdminDetailsScreen = ({route}) => {
+const MenuDetailsAdminScreen = ({route}) => {
   const {orders, ordersById} = useSelector(state => state.ordersReducer);
   const [summary, setSummary] = useState({});
   const {menu} = route.params;
@@ -137,4 +137,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MenuAdminDetailsScreen;
+export default MenuDetailsAdminScreen;

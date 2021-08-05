@@ -4,7 +4,7 @@ import {SafeAreaView, FlatList, StyleSheet, Text} from 'react-native';
 import {Paragraph, Divider} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const MenuOrders = ({route}) => {
+const MenuOrdersAdminScreen = ({route}) => {
   const {orders, ordersById} = useSelector(state => state.ordersReducer);
   const {menu} = route.params;
 
@@ -88,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MenuOrders;
+export default MenuOrdersAdminScreen;

@@ -8,7 +8,6 @@ import RestaurantDetailsScreen from '../../screens/adminScreens/restaurantDetail
 import CreateRestaurantScreen from '../../screens/adminScreens/createRestaurantScreen';
 import MessageScreen from '../../screens/messageScreen';
 import ManageOrdersScreen from '../../screens/adminScreens/manageOrdersScreen';
-import MenuAdminDetailsScreen from '../../screens/adminScreens/menuAdminDetailsScreen';
 import ManageMenusScreen from '../../screens/adminScreens/manageMenusScreen';
 import MenuDetailsTab from '../tabNavigationRoutes/menuDetailsTab';
 

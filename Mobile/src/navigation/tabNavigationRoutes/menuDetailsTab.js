@@ -1,7 +1,7 @@
 import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import MenuAdminDetailsScreen from '../../screens/adminScreens/menuAdminDetailsScreen';
-import MenuOrders from '../../screens/adminScreens/menuOrders';
+import MenuDetailsAdminScreen from '../../screens/adminScreens/menuDetailsAdminScreen';
+import MenuOrdersAdminScreen from '../../screens/adminScreens/menuOrdersAdminScreen';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -15,10 +15,10 @@ const MenuDetailsTab = ({route}) => {
         activeTintColor: '#FBBC00',
       }}
       screenOptions={{unmountOnBlur: true}}
-      initialRouteName="MenuAdminDetailsScreen">
+      initialRouteName="MenuDetailsAdminScreen">
       <Tab.Screen
-        name="MenuAdminDetailsScreen"
-        component={MenuAdminDetailsScreen}
+        name="MenuDetailsAdminScreen"
+        component={MenuDetailsAdminScreen}
         initialParams={{menu: route.params.menu}}
         options={{
           unmountOnBlur: true,
@@ -26,8 +26,8 @@ const MenuDetailsTab = ({route}) => {
         }}
       />
       <Tab.Screen
-        name="MenuOrders"
-        component={MenuOrders}
+        name="MenuOrdersAdminScreen"
+        component={MenuOrdersAdminScreen}
         initialParams={{menu: route.params.menu}}
         options={{
           unmountOnBlur: true,
