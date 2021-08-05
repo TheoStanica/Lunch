@@ -41,6 +41,10 @@ const menuSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    usersGoing: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: 'User',
+    },
   },
   {
     timestamps: {
