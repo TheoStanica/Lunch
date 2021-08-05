@@ -3,8 +3,15 @@ const BadRequestError = require('../errors/badRequestError');
 const Order = require('./model');
 const Menu = require('../menu/model');
 const User = require('../user/model');
-const { accountRole } = require('../utils/enums');
+const {
+  accountRole,
+  courseRequiredType,
+  orderStatus,
+} = require('../utils/enums');
 const ForbiddenError = require('../errors/forbiddenError');
+const mongoose = require('mongoose');
+const InternalServerError = require('../errors/internalServerError');
+const moment = require('moment');
 
 const convertFilterToQuery = (filter) => {
   const newFilter = { deleted: false };
@@ -53,7 +60,6 @@ const getOrders = async (req, res, next) => {
       Object.keys(req.query).length > 0
         ? convertFilterToQuery(req.query)
         : { deleted: false };
-
     if (
       query.userId &&
       query.userId !== req.user.id &&
@@ -74,45 +80,92 @@ const getOrders = async (req, res, next) => {
   }
 };
 
+const checkIfUserCanSetUserId = ({ userId, id, role }) =>
+  userId && userId !== id && role === accountRole.user;
+
+const checkIfOrderIsCancelled = (cancelAt) =>
+  moment().isAfter(moment(cancelAt, ['h:mm A']).format());
+
+const shouldNotifyAdmin = (notifyAfter) =>
+  moment().isAfter(moment(notifyAfter, ['h:mm A']).format());
+
+const handleOrderCreation = async ({
+  data,
+  orderType,
+  session,
+  menuId,
+  userId,
+}) => {
+  await Order.create([data], { session: session });
+
+  if (orderType === courseRequiredType.restaurant) {
+    await Menu.findByIdAndUpdate(
+      menuId,
+      {
+        $push: { usersGoing: userId },
+      },
+      { session: session }
+    );
+  }
+};
+
 const createOrder = async (req, res, next) => {
   try {
-    if (!(await Menu.findOne({ _id: req.body.menuId }))) {
+    let { userId, menuId, type } = req.body;
+    const { id, role } = req.user;
+
+    const menu = await Menu.findOne({ _id: menuId }).populate('restaurantId');
+    if (!menu) {
       return next(new BadRequestError('Please provide a valid menu id.'));
     }
 
-    if (
-      req.body.userId &&
-      req.body.userId !== req.user.id &&
-      req.user.role === accountRole.user
-    ) {
+    const { notifyAfter, cancelAt } = menu.restaurantId;
+
+    if (checkIfUserCanSetUserId({ userId, id, role })) {
       return next(new ForbiddenError());
     }
 
-    const userId = req.body.userId ? req.body.userId : req.user.id;
+    userId = userId ? userId : id;
 
-    if (req.body.userId && !(await User.findOne({ _id: userId }))) {
+    if (!(await User.findOne({ _id: userId }))) {
       return next(new BadRequestError('Please provide a valid user id.'));
     }
 
-    if (
-      await Order.findOne({
-        userId,
-        menuId: req.body.menuId,
-        deleted: false,
-      })
-    ) {
+    if (checkIfOrderIsCancelled(cancelAt)) {
+      return next(
+        new BadRequestError('You can no longer make orders for this menu')
+      );
+    }
+
+    if (await Order.findOne({ userId, menuId, deleted: false })) {
       return next(
         new BadRequestError("Can't create two orders for the same menu.")
       );
     }
 
-    let order = new Order({
-      ...req.body,
-      userId,
-    });
-    order = await order.save();
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      await handleOrderCreation({
+        data: { ...req.body, userId },
+        orderType: type,
+        menuId,
+        userId,
+        session: session,
+      });
+      await session.commitTransaction();
+      session.endSession();
 
-    res.sendStatus(201);
+      if (shouldNotifyAdmin(notifyAfter)) {
+        // send push notification to admins
+      }
+
+      res.sendStatus(201);
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+      return next(new InternalServerError());
+    }
   } catch (error) {
     return next(error);
   }
@@ -120,10 +173,41 @@ const createOrder = async (req, res, next) => {
 
 const updateOrder = async (req, res, next) => {
   try {
-    let order = await Order.findOne({ _id: req.params._orderId });
+    let order = await Order.findOne({ _id: req.params._orderId }).populate({
+      path: 'menuId',
+      populate: {
+        path: 'restaurantId',
+      },
+    });
 
     if (!order || order.deleted) {
       return next(new NotFoundError('Order not found'));
+    }
+
+    if (
+      (req.body.userId &&
+        req.body.userId !== req.user.id &&
+        req.user.role === accountRole.user) ||
+      (req.user.role === accountRole.user &&
+        order.userId &&
+        order.userId != req.user.id)
+    ) {
+      return next(new ForbiddenError());
+    }
+
+    const userId = req.body.userId ? req.body.userId : req.user.id;
+
+    const { notifyAfter, cancelAt } = order.menuId.restaurantId;
+    let sendNotification = false;
+
+    if (moment().isAfter(moment(cancelAt, ['h:mm A']).format())) {
+      return next(
+        new BadRequestError('You can no longer make orders for this menu')
+      );
+    }
+
+    if (moment().isAfter(moment(notifyAfter, ['h:mm A']).format())) {
+      sendNotification = true;
     }
 
     if (req.body.menuId && !(await Menu.findOne({ _id: req.body.menuId }))) {
@@ -136,13 +220,61 @@ const updateOrder = async (req, res, next) => {
 
     order.type = req.body.type || order.type;
     order.status = req.body.status || order.status;
-    order.userId = req.body.userId || order.userId;
+    order.userId = userId || order.userId;
     order.menuId = req.body.menuId || order.menuId;
     order.menuOptions = req.body.menuOptions || order.menuOptions;
 
-    order = await order.save();
+    // if body.status === cancelled && old type === restaurant =>> remove from usersGoing
+    // body status === active && body.type === restaurant => add to usersGoing
 
-    res.send({ order });
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      if (
+        req.body.status === orderStatus.cancelled &&
+        order.type === courseRequiredType.restaurant
+      ) {
+        console.log('removing user');
+        await Menu.findByIdAndUpdate(
+          order.menuId.id,
+          {
+            $pull: { usersGoing: userId },
+          },
+          { session: session }
+        );
+      }
+
+      if (
+        req.body.status === orderStatus.active &&
+        (req.body.type === courseRequiredType.restaurant ||
+          order.type === courseRequiredType.restaurant)
+      ) {
+        console.log('adding user');
+        await Menu.findByIdAndUpdate(
+          order.menuId.id,
+          {
+            $push: { usersGoing: userId },
+          },
+          { session: session }
+        );
+      }
+
+      order = await order.save({ session });
+
+      await session.commitTransaction();
+      session.endSession();
+      console.log('finished transaction successfully');
+
+      if (sendNotification) {
+        // send push notification to admins
+      }
+
+      res.send({ order });
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+      return next(new InternalServerError());
+    }
   } catch (error) {
     return next(error);
   }
