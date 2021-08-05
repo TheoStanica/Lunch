@@ -15,6 +15,7 @@ const MenuDetailsTab = ({route}) => {
         activeTintColor: '#FBBC00',
       }}
       screenOptions={{unmountOnBlur: true}}
+      sceneContainerStyle={{backgroundColor: '#FFF1CA'}}
       initialRouteName="MenuDetailsAdminScreen">
       <Tab.Screen
         name="MenuDetailsAdminScreen"
