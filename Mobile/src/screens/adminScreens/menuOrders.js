@@ -1,13 +1,91 @@
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {useSelector} from 'react-redux';
+import {SafeAreaView, FlatList, StyleSheet, Text} from 'react-native';
+import {Paragraph, Divider} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const MenuOrders = () => {
+const MenuOrders = ({route}) => {
+  const {orders, ordersById} = useSelector(state => state.ordersReducer);
+  const {menu} = route.params;
+
   return (
-    <View>
-      <Text>Menu Orders</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={orders.filter(order => ordersById[order].type === 'takeaway')}
+        keyExtractor={order => order}
+        renderItem={order => (
+          <SafeAreaView>
+            <SafeAreaView style={styles.flexDirectionRow}>
+              <Icon name="account" size={25} color="black" />
+              <Text style={styles.fullname}>
+                {' '}
+                {ordersById[order.item].userId.fullname} (
+                {ordersById[order.item].userId.email})
+              </Text>
+            </SafeAreaView>
+            <FlatList
+              data={menu.menu}
+              keyExtractor={option => option.courseCategory}
+              renderItem={option => (
+                <SafeAreaView style={styles.course}>
+                  <Paragraph style={styles.courseCategory}>
+                    {option.item.courseCategory} -{' '}
+                  </Paragraph>
+                  <Paragraph style={styles.capitalizedText}>
+                    {ordersById[order.item].menuOptions[
+                      option.item.courseCategory
+                    ] !== undefined
+                      ? option.item.courses[
+                          ordersById[order.item].menuOptions[
+                            option.item.courseCategory
+                          ]
+                        ].description
+                      : ''}
+                  </Paragraph>
+                </SafeAreaView>
+              )}
+            />
+            <Divider style={styles.orderDivider} />
+          </SafeAreaView>
+        )}
+        showsVerticalScrollIndicator={false}
+      />
+    </SafeAreaView>
   );
 };
-const styles = StyleSheet.create({});
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF1CA',
+  },
+  course: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginHorizontal: 20,
+  },
+  courseCategory: {
+    fontSize: 16,
+    textTransform: 'capitalize',
+  },
+  capitalizedText: {
+    textTransform: 'capitalize',
+  },
+  fullname: {
+    fontSize: 20,
+  },
+  flexDirectionRow: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    marginVertical: 10,
+  },
+  orderDivider: {
+    marginTop: 10,
+    borderWidth: 0.5,
+    borderColor: '#4A6572',
+    marginHorizontal: 10,
+  },
+});
 
 export default MenuOrders;

@@ -14,19 +14,23 @@ const MenuDetailsTab = ({route}) => {
         inactiveTintColor: 'white',
         activeTintColor: '#FBBC00',
       }}
+      screenOptions={{unmountOnBlur: true}}
       initialRouteName="MenuAdminDetailsScreen">
       <Tab.Screen
         name="MenuAdminDetailsScreen"
         component={MenuAdminDetailsScreen}
         initialParams={{menu: route.params.menu}}
         options={{
+          unmountOnBlur: true,
           tabBarLabel: 'Menu Summary',
         }}
       />
       <Tab.Screen
         name="MenuOrders"
         component={MenuOrders}
+        initialParams={{menu: route.params.menu}}
         options={{
+          unmountOnBlur: true,
           tabBarLabel: 'User Orders',
         }}
       />
