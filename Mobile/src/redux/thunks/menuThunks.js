@@ -14,7 +14,14 @@ export const getMenus =
       const response = await menuGetRequest({filter});
 
       if (privilege === 'admin') {
-        dispatch(setAllMenusAction({allMenus: response.data.menus}));
+        dispatch(
+          setAllMenusAction({
+            allMenus: response.data.menus.sort((a, b) => {
+              if (a.createdAt < b.createdAt) return 1;
+              else return -1;
+            }),
+          }),
+        );
       } else {
         dispatch(setMenusAction({menus: response.data.menus}));
       }
