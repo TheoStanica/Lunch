@@ -144,12 +144,14 @@ const MenuDetailsScreen = ({navigation, route}) => {
 
   const cancelOrder = () => {
     dispatch(
-      updateOrder({
-        orderId: order.id,
-        status: 'cancelled',
-      }),
+      updateOrder(
+        {
+          orderId: order.id,
+          status: 'cancelled',
+        },
+        () => setOrder({...order, status: 'cancelled'}),
+      ),
     );
-    setOrder({...order, status: 'cancelled'});
   };
 
   const submitOrder = () => {
