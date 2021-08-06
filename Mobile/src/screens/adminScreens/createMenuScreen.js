@@ -8,11 +8,11 @@ import {
   View,
 } from 'react-native';
 import {Title} from 'react-native-paper';
-import DropDownPicker from 'react-native-dropdown-picker';
 import {useDispatch, useSelector} from 'react-redux';
 import {getRestaurants} from '../../redux/thunks/restaurantThunks';
-import MenuCreator from '../../components/menuCreator';
 import {createMenu} from '../../redux/thunks/menuThunks';
+import DropDownPicker from 'react-native-dropdown-picker';
+import MenuCreator from '../../components/menuCreator';
 
 const CreateMenuScreen = ({navigation}) => {
   const [openDropDown, setOpenDropDown] = useState(false);

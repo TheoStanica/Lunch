@@ -7,8 +7,8 @@ import {
   deleteRestaurant,
   getRestaurants,
 } from '../../redux/thunks/restaurantThunks';
-import HideKeyboard from '../../components/hideKeyboard';
 import {useFocusEffect} from '@react-navigation/native';
+import HideKeyboard from '../../components/hideKeyboard';
 
 const ManageRestaurantsScreen = ({navigation}) => {
   const {restaurants, restaurantsById} = useSelector(

@@ -4,7 +4,6 @@ import {updateUser} from '../../redux/thunks/userThunks';
 import {Formik} from 'formik';
 import {updateValidationSchema} from '../../assets/bodyValidation/userValidation';
 import {useDispatch} from 'react-redux';
-
 import DropDownPicker from 'react-native-dropdown-picker';
 import TextInputField from '../../components/textInputField';
 import ActionButton from '../../components/actionButton';
