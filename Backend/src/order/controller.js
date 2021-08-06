@@ -83,11 +83,13 @@ const getOrders = async (req, res, next) => {
 const checkIfUserCanSetUserId = ({ userId, id, role }) =>
   userId && userId !== id && role === accountRole.user;
 
-const checkIfOrderIsCancelled = (cancelAt) =>
-  moment().isAfter(moment(cancelAt, ['h:mm A']).format());
-
-const shouldNotifyAdmin = (notifyAfter) =>
-  moment().isAfter(moment(notifyAfter, ['h:mm A']).format());
+const checkIfExpired = ({ date, time }) => {
+  const day = moment(date).format('L');
+  const _time = moment(time, 'h:mm a').format('LT');
+  return moment().isAfter(
+    moment(day + ' ' + _time, 'MM/DD/YYYY h:mm a').format()
+  );
+};
 
 const handleOrderCreation = async ({
   data,
@@ -131,7 +133,7 @@ const createOrder = async (req, res, next) => {
       return next(new BadRequestError('Please provide a valid user id.'));
     }
 
-    if (checkIfOrderIsCancelled(cancelAt)) {
+    if (checkIfExpired({ date: menu.createdAt, time: cancelAt })) {
       return next(
         new BadRequestError('You can no longer make orders for this menu')
       );
@@ -156,7 +158,8 @@ const createOrder = async (req, res, next) => {
       await session.commitTransaction();
       session.endSession();
 
-      if (shouldNotifyAdmin(notifyAfter)) {
+      if (checkIfExpired({ date: menu.createdAt, time: notifyAfter })) {
+        console.log('send push notification to admin');
         // send push notification to admins
       }
 
