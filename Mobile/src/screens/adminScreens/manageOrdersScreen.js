@@ -1,10 +1,18 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {StyleSheet, SafeAreaView, Text} from 'react-native';
+import {StyleSheet, SafeAreaView} from 'react-native';
 import {getOrder} from '../../redux/thunks/orderThunks';
 import DateTimePicker from '../../components/timePicker';
 import {Title, Divider} from 'react-native-paper';
 import moment from 'moment';
+
+const EMPTY_RESTAURANT = {
+  totalOrders: 0,
+  totalTakeawayOrders: 0,
+  totalRestaurantOrders: 0,
+  totalTakeawayCost: 0,
+  totalCost: 0,
+};
 
 const ManageOrdersScreen = () => {
   const {orders, ordersById} = useSelector(state => state.ordersReducer);
@@ -18,24 +26,26 @@ const ManageOrdersScreen = () => {
   const dispatch = useDispatch();
 
   const generateStatistics = () => {
-    const restaurantObject = {
-      totalOrders: 0,
-      totalTakeawayOrders: 0,
-      totalRestaurantOrders: 0,
-      totalTakeawayCost: 0,
-      totalCost: 0,
-    };
     let restaurants = [],
-      statistics = {};
+      statistics = restaurantObject;
 
     Object.values(ordersById).forEach(order => {
       const restaurant = order.menuId.restaurantId;
 
-      if (!restaurants[restaurant.name])
-        restaurants[restaurant.name] = restaurantObject;
+      console.log(restaurants);
+      if (!restaurants[restaurant.name]) {
+        console.log(restaurantObject);
+        restaurants[restaurant.name] = {
+          totalOrders: 0,
+          totalTakeawayOrders: 0,
+          totalRestaurantOrders: 0,
+          totalTakeawayCost: 0,
+          totalCost: 0,
+        };
+      }
+      console.log(restaurants);
 
       if (order.status === 'active') {
-        console.log(order);
         restaurants[restaurant.name].totalOrders++;
         restaurants[restaurant.name].totalCost += restaurant.cost;
         if (order.type === 'takeaway') {
@@ -43,38 +53,43 @@ const ManageOrdersScreen = () => {
           restaurants[restaurant.name].totalTakeawayCost += restaurant.cost;
         }
       }
-      console.log(restaurants);
     });
 
     restaurants.forEach(el => {
       el.totalRestaurantOrders = el.totalOrders - el.totalTakeawayOrders;
+      statistics.totalOrders += el.totalOrders;
+      statistics.totalCost += el.totalCost;
+      statistics.totalTakeawayOrders += el.totalRestaurantOrders;
+      statistics.totalRestaurantOrders += el.totalRestaurantOrders;
+      statistics.totalTakeawayCost += el.totalTakeawayCost;
     });
 
-    console.log(restaurants);
+    //console.log(restaurants);
+    statistics.restaurants = restaurants;
+    //console.log(statistics);
+
+    return statistics;
   };
 
   useEffect(() => {
     dispatch(
-      getOrder(
-        {
-          filter: {
-            createdAfter: new Date(
-              moment(orderStart, 'DD-MM-YYYY').startOf('day').format(),
-            ),
-            createdBefore: new Date(
-              moment(orderEnd, 'DD-MM-YYYY').endOf('day').format(),
-            ),
-          },
-          privilege: 'admin',
+      getOrder({
+        filter: {
+          createdAfter: new Date(
+            moment(orderStart, 'DD-MM-YYYY').startOf('day').format(),
+          ),
+          createdBefore: new Date(
+            moment(orderEnd, 'DD-MM-YYYY').endOf('day').format(),
+          ),
         },
-        response => {
-          if (response) {
-            setStatistics(generateStatistics());
-          }
-        },
-      ),
+        privilege: 'admin',
+      }),
     );
   }, [orderStart, orderEnd]);
+
+  useEffect(() => {
+    setStatistics(generateStatistics());
+  }, [orders]);
 
   return (
     <SafeAreaView style={styles.container}>
