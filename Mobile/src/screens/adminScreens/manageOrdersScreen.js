@@ -14,25 +14,67 @@ const ManageOrdersScreen = () => {
   const [orderEnd, setOrderEnd] = useState(
     moment(Date.now()).format('DD-MM-YYYY'),
   );
+  const [statistics, setStatistics] = useState({});
   const dispatch = useDispatch();
+
+  const generateStatistics = () => {
+    const restaurantObject = {
+      totalOrders: 0,
+      totalTakeawayOrders: 0,
+      totalRestaurantOrders: 0,
+      totalTakeawayCost: 0,
+      totalCost: 0,
+    };
+    let restaurants = [],
+      statistics = {};
+
+    Object.values(ordersById).forEach(order => {
+      const restaurant = order.menuId.restaurantId;
+
+      if (!restaurants[restaurant.name])
+        restaurants[restaurant.name] = restaurantObject;
+
+      if (order.status === 'active') {
+        console.log(order);
+        restaurants[restaurant.name].totalOrders++;
+        restaurants[restaurant.name].totalCost += restaurant.cost;
+        if (order.type === 'takeaway') {
+          restaurants[restaurant.name].totalTakeawayOrders++;
+          restaurants[restaurant.name].totalTakeawayCost += restaurant.cost;
+        }
+      }
+      console.log(restaurants);
+    });
+
+    restaurants.forEach(el => {
+      el.totalRestaurantOrders = el.totalOrders - el.totalTakeawayOrders;
+    });
+
+    console.log(restaurants);
+  };
 
   useEffect(() => {
     dispatch(
-      getOrder({
-        filter: {
-          createdAfter: new Date(
-            moment(orderStart, 'DD-MM-YYYY').startOf('day').format(),
-          ),
-          createdBefore: new Date(
-            moment(orderEnd, 'DD-MM-YYYY').endOf('day').format(),
-          ),
+      getOrder(
+        {
+          filter: {
+            createdAfter: new Date(
+              moment(orderStart, 'DD-MM-YYYY').startOf('day').format(),
+            ),
+            createdBefore: new Date(
+              moment(orderEnd, 'DD-MM-YYYY').endOf('day').format(),
+            ),
+          },
+          privilege: 'admin',
         },
-        privilege: 'admin',
-      }),
+        response => {
+          if (response) {
+            setStatistics(generateStatistics());
+          }
+        },
+      ),
     );
   }, [orderStart, orderEnd]);
-
-  console.log(ordersById);
 
   return (
     <SafeAreaView style={styles.container}>
