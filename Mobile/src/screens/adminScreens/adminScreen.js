@@ -26,7 +26,7 @@ const AdminScreen = ({navigation}) => {
         <ActionButton
           style={styles.button}
           text="Manage Orders"
-          onPress={() => navigation.navigate('ManageOrdersScreen')}
+          onPress={() => navigation.navigate('OrderDetailsTab')}
         />
       </View>
     </SafeAreaView>

@@ -7,9 +7,9 @@ import UserDetailsScreen from '../../screens/adminScreens/userDetailsScreen';
 import RestaurantDetailsScreen from '../../screens/adminScreens/restaurantDetailsScreen';
 import CreateRestaurantScreen from '../../screens/adminScreens/createRestaurantScreen';
 import MessageScreen from '../../screens/messageScreen';
-import ManageOrdersScreen from '../../screens/adminScreens/manageOrdersScreen';
 import ManageMenusScreen from '../../screens/adminScreens/manageMenusScreen';
 import MenuDetailsTab from '../tabNavigationRoutes/menuDetailsTab';
+import OrderDetailsTab from '../tabNavigationRoutes/orderDetailsTab';
 
 const Stack = createStackNavigator();
 
@@ -59,8 +59,8 @@ const AdminStack = () => {
         }}
       />
       <Stack.Screen
-        name="ManageOrdersScreen"
-        component={ManageOrdersScreen}
+        name="OrderDetailsTab"
+        component={OrderDetailsTab}
         options={{
           title: 'Manage Orders',
         }}

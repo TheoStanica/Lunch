@@ -127,8 +127,6 @@ const ManageOrdersScreen = () => {
           icon="currency-usd"
         />
       </SafeAreaView>
-      <Divider style={styles.divider} />
-      <Title style={styles.title}>Restaurants</Title>
     </SafeAreaView>
   );
 };
