@@ -4,6 +4,7 @@ import {StyleSheet, SafeAreaView} from 'react-native';
 import {getOrder} from '../../redux/thunks/orderThunks';
 import DateTimePicker from '../../components/timePicker';
 import {Title, Divider} from 'react-native-paper';
+import SummaryField from '../../components/summaryField';
 import moment from 'moment';
 
 const ManageOrdersScreen = () => {
@@ -104,6 +105,30 @@ const ManageOrdersScreen = () => {
       />
       <Divider style={styles.divider} />
       <Title style={styles.title}>Statistics</Title>
+      <SafeAreaView style={styles.statistics}>
+        <SummaryField
+          text={`Total orders: ${statistics.totalOrders}`}
+          icon="dropbox"
+        />
+        <SummaryField
+          text={`Total restaurant orders: ${statistics.totalRestaurantOrders}`}
+          icon="food-fork-drink"
+        />
+        <SummaryField
+          text={`Total takeaway orders: ${statistics.totalTakeawayOrders}`}
+          icon="package-variant"
+        />
+        <SummaryField
+          text={`Total takeaway cost: ${statistics.totalTakeawayCost}`}
+          icon="currency-usd"
+        />
+        <SummaryField
+          text={`Total cost: ${statistics.totalCost}`}
+          icon="currency-usd"
+        />
+      </SafeAreaView>
+      <Divider style={styles.divider} />
+      <Title style={styles.title}>Restaurants</Title>
     </SafeAreaView>
   );
 };
@@ -119,6 +144,9 @@ const styles = StyleSheet.create({
   },
   title: {
     alignSelf: 'center',
+  },
+  statistics: {
+    marginLeft: 10,
   },
 });
 
