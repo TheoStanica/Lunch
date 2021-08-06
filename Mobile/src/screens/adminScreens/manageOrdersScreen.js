@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {StyleSheet, SafeAreaView} from 'react-native';
 import {getOrder} from '../../redux/thunks/orderThunks';
-import {useNavigationState} from '@react-navigation/native';
 import {Title, Divider} from 'react-native-paper';
 import Statistics from '../../components/statistics';
 import DateTimePicker from '../../components/timePicker';
@@ -18,7 +17,6 @@ const ManageOrdersScreen = ({navigation}) => {
   );
   const [statistics, setStatistics] = useState({});
   const dispatch = useDispatch();
-  const navigator = useNavigationState(state => state.routes);
 
   const generateStatistics = () => {
     let restaurants = {},

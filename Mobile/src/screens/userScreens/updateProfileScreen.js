@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import {SafeAreaView, View, ScrollView, StyleSheet} from 'react-native';
 import {TextInput} from 'react-native-paper';
-import TextInputField from '../../components/textInputField';
-import HideKeyboard from '../../components/hideKeyboard';
 import {Formik} from 'formik';
 import {updateValidationSchema} from '../../assets/bodyValidation/userValidation';
 import {useSelector, useDispatch} from 'react-redux';
 import {updateUser} from '../../redux/thunks/userThunks';
 import ActionButton from '../../components/actionButton';
+import TextInputField from '../../components/textInputField';
+import HideKeyboard from '../../components/hideKeyboard';
 
 const UpdateProfileScreen = ({navigation}) => {
   const userReducer = useSelector(state => state.userReducer);

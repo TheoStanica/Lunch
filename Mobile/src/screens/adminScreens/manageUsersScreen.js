@@ -3,7 +3,6 @@ import {SafeAreaView, StyleSheet, FlatList} from 'react-native';
 import {getAllUsers, deleteUser} from '../../redux/thunks/userThunks';
 import {useDispatch, useSelector} from 'react-redux';
 import {useFocusEffect} from '@react-navigation/native';
-
 import AdminField from '../../components/adminField';
 
 const ManageUsersScreen = ({navigation}) => {

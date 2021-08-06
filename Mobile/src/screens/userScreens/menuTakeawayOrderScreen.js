@@ -1,10 +1,8 @@
+import React, {useRef, useState} from 'react';
 import {createOrderValidationSchema} from '../../assets/bodyValidation/orderValidation';
 import {createOrder, updateOrder} from '../../redux/thunks/orderThunks';
-import AnimatedHeader from '../../components/animatedHeader';
-import ActionButton from '../../components/actionButton';
 import {Headline, RadioButton} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
-import React, {useRef, useState} from 'react';
 import {Formik} from 'formik';
 import {
   Text,
@@ -14,6 +12,8 @@ import {
   SafeAreaView,
   ScrollView,
 } from 'react-native';
+import AnimatedHeader from '../../components/animatedHeader';
+import ActionButton from '../../components/actionButton';
 
 const MenuTakeawayOrderScreen = ({route, navigation}) => {
   const {menuId, order} = route.params;

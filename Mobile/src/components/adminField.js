@@ -1,9 +1,9 @@
-import {List} from 'react-native-paper';
 import React from 'react';
+import {List} from 'react-native-paper';
 import {StyleSheet, View, Animated, Alert} from 'react-native';
+import {RectButton} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import {RectButton} from 'react-native-gesture-handler';
 
 const AdminField = ({
   onEdit,

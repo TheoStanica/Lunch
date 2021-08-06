@@ -1,19 +1,18 @@
 import React, {useState, useCallback} from 'react';
 import {StyleSheet, FlatList, SafeAreaView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import AdminField from '../../components/adminField';
-import HideKeyboard from '../../components/hideKeyboard';
 import {useFocusEffect} from '@react-navigation/native';
 import {getMenus, deleteMenu} from '../../redux/thunks/menuThunks';
+import AdminField from '../../components/adminField';
+import HideKeyboard from '../../components/hideKeyboard';
 import Moment from 'moment';
 
 const ManageMenusScreen = ({navigation}) => {
   const {allMenus, allMenusById} = useSelector(state => state.allMenusReducer);
   const [isFetching, setIsFetching] = useState(true);
-  const dispatch = useDispatch();
-
   const [row, setRow] = useState([]);
   const [previousOpenedRow, setPreviousOpenedRow] = useState(null);
+  const dispatch = useDispatch();
 
   const onRefresh = () => {
     setIsFetching(true);

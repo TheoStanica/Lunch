@@ -3,11 +3,11 @@ import {View, StyleSheet} from 'react-native';
 import {Formik} from 'formik';
 import {Switch, List} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
+import {updateRestaurant} from '../../redux/thunks/restaurantThunks';
+import {restaurantValidationSchema} from '../../assets/bodyValidation/restaurantValidation';
 import TextInputField from '../../components/textInputField';
 import ActionButton from '../../components/actionButton';
-import {restaurantValidationSchema} from '../../assets/bodyValidation/restaurantValidation';
 import HideKeyboard from '../../components/hideKeyboard';
-import {updateRestaurant} from '../../redux/thunks/restaurantThunks';
 import DateTimePicker from '../../components/timePicker';
 import moment from 'moment';
 
