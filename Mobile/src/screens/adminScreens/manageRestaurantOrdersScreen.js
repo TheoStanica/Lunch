@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {StyleSheet, SafeAreaView, FlatList} from 'react-native';
 import {useNavigationState} from '@react-navigation/native';
 import {Title} from 'react-native-paper';
-import SummaryField from '../../components/summaryField';
+import Statistics from '../../components/statistics';
 
 const ManageRestaurantOrdersScreen = () => {
   const navigator = useNavigationState(state => state.routes);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <FlatList
         data={Object.entries(
           navigator.filter(nav => nav.name === 'ManageOrdersScreen')[0].params
@@ -17,26 +17,13 @@ const ManageRestaurantOrdersScreen = () => {
         keyExtractor={item => item}
         renderItem={restaurant => (
           <SafeAreaView>
-            <Title>{restaurant.item[0]}</Title>
-            <SummaryField
-              text={`Total orders: ${restaurant.item[1].totalOrders}`}
-              icon="dropbox"
-            />
-            <SummaryField
-              text={`Total restaurant orders: ${restaurant.item[1].totalRestaurantOrders}`}
-              icon="food-fork-drink"
-            />
-            <SummaryField
-              text={`Total takeaway orders: ${restaurant.item[1].totalTakeawayOrders}`}
-              icon="package-variant"
-            />
-            <SummaryField
-              text={`Total takeaway cost: ${restaurant.item[1].totalTakeawayCost}`}
-              icon="currency-usd"
-            />
-            <SummaryField
-              text={`Total cost: ${restaurant.item[1].totalCost}`}
-              icon="currency-usd"
+            <Title style={styles.title}>{restaurant.item[0]}</Title>
+            <Statistics
+              totalOrders={restaurant.item[1].totalOrders}
+              totalRestaurantOrders={restaurant.item[1].totalRestaurantOrders}
+              totalTakeawayOrders={restaurant.item[1].totalTakeawayOrders}
+              totalTakeawayCost={restaurant.item[1].totalTakeawayCost}
+              totalCost={restaurant.item[1].totalCost}
             />
           </SafeAreaView>
         )}
@@ -45,6 +32,14 @@ const ManageRestaurantOrdersScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF1CA',
+  },
+  title: {
+    alignSelf: 'center',
+  },
+});
 
 export default ManageRestaurantOrdersScreen;

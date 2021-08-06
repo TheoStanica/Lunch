@@ -4,11 +4,11 @@ import {StyleSheet, SafeAreaView} from 'react-native';
 import {getOrder} from '../../redux/thunks/orderThunks';
 import {useNavigationState} from '@react-navigation/native';
 import {Title, Divider} from 'react-native-paper';
-import SummaryField from '../../components/summaryField';
+import Statistics from '../../components/statistics';
 import DateTimePicker from '../../components/timePicker';
 import moment from 'moment';
 
-const ManageOrdersScreen = ({navigation, route}) => {
+const ManageOrdersScreen = ({navigation}) => {
   const {orders, ordersById} = useSelector(state => state.ordersReducer);
   const [orderStart, setOrderStart] = useState(
     moment(Date.now()).format('DD-MM-YYYY'),
@@ -110,28 +110,13 @@ const ManageOrdersScreen = ({navigation, route}) => {
       />
       <Divider style={styles.divider} />
       <Title style={styles.title}>Statistics</Title>
-      <SafeAreaView style={styles.statistics}>
-        <SummaryField
-          text={`Total orders: ${statistics.totalOrders}`}
-          icon="dropbox"
-        />
-        <SummaryField
-          text={`Total restaurant orders: ${statistics.totalRestaurantOrders}`}
-          icon="food-fork-drink"
-        />
-        <SummaryField
-          text={`Total takeaway orders: ${statistics.totalTakeawayOrders}`}
-          icon="package-variant"
-        />
-        <SummaryField
-          text={`Total takeaway cost: ${statistics.totalTakeawayCost}`}
-          icon="currency-usd"
-        />
-        <SummaryField
-          text={`Total cost: ${statistics.totalCost}`}
-          icon="currency-usd"
-        />
-      </SafeAreaView>
+      <Statistics
+        totalOrders={statistics.totalOrders}
+        totalRestaurantOrders={statistics.totalRestaurantOrders}
+        totalTakeawayOrders={statistics.totalTakeawayOrders}
+        totalTakeawayCost={statistics.totalTakeawayCost}
+        totalCost={statistics.totalCost}
+      />
     </SafeAreaView>
   );
 };
@@ -147,9 +132,6 @@ const styles = StyleSheet.create({
   },
   title: {
     alignSelf: 'center',
-  },
-  statistics: {
-    marginLeft: 10,
   },
 });
 

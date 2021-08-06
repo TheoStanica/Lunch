@@ -5,7 +5,7 @@ import {getOrder} from '../../redux/thunks/orderThunks';
 import {useFocusEffect} from '@react-navigation/native';
 import {Divider} from 'react-native-paper';
 import ProfileField from '../../components/profileField';
-import SummaryField from '../../components/summaryField';
+import Statistics from '../../components/statistics';
 import MenuOptions from '../../components/menuOptions';
 import Moment from 'moment';
 
@@ -43,7 +43,11 @@ const MenuDetailsAdminScreen = ({route}) => {
       });
       courses = [];
     });
+
     summary.totalMenuOptions = totalMenuOptions;
+    summary.totalTakeawayCost =
+      menu.restaurantId.cost * summary.totalTakeawayOrders;
+    summary.totalCost = menu.restaurantId.cost * summary.totalOrders;
 
     return summary;
   };
@@ -85,26 +89,13 @@ const MenuDetailsAdminScreen = ({route}) => {
       </SafeAreaView>
       <Divider style={styles.divider} />
       <Text style={styles.titleSummary}>Summary</Text>
-      <SafeAreaView style={styles.body}>
-        <SummaryField
-          text={`Total orders: ${summary.totalOrders}`}
-          icon="dropbox"
-        />
-        <SummaryField
-          text={`Total restaurant orders: ${summary.totalRestaurantOrders}`}
-          icon="food-fork-drink"
-        />
-        <SummaryField
-          text={`Total takeaway orders: ${summary.totalTakeawayOrders}`}
-          icon="package-variant"
-        />
-        <SummaryField
-          text={`Total takeaway cost: ${
-            menu.restaurantId.cost * summary.totalTakeawayOrders
-          } (${menu.restaurantId.cost} each)`}
-          icon="currency-usd"
-        />
-      </SafeAreaView>
+      <Statistics
+        totalOrders={summary.totalOrders}
+        totalRestaurantOrders={summary.totalRestaurantOrders}
+        totalTakeawayOrders={summary.totalTakeawayOrders}
+        totalTakeawayCost={summary.totalTakeawayCost}
+        totalCost={summary.totalCost}
+      />
       <Divider style={styles.divider} />
       <Text style={styles.titleSummary}>Menu Options</Text>
       <MenuOptions menuOptions={summary.totalMenuOptions} />
