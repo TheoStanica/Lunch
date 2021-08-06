@@ -29,7 +29,7 @@ const ManageOrdersScreen = () => {
 
     Object.values(ordersById).forEach(order => {
       const restaurant = order.menuId.restaurantId;
-      console.log(order);
+
       if (!restaurants[restaurant.name]) {
         restaurants[restaurant.name] = {
           totalOrders: 0,
@@ -50,8 +50,18 @@ const ManageOrdersScreen = () => {
       }
     });
 
-    console.log(restaurants);
+    Object.values(restaurants).forEach(restaurant => {
+      restaurant.totalRestaurantOrders =
+        restaurant.totalOrders - restaurant.totalTakeawayOrders;
+      statistics.totalOrders += restaurant.totalOrders;
+      statistics.totalCost += restaurant.totalCost;
+      statistics.totalTakeawayOrders += restaurant.totalTakeawayOrders;
+      statistics.totalRestaurantOrders += restaurant.totalRestaurantOrders;
+      statistics.totalTakeawayCost += restaurant.totalTakeawayCost;
+    });
+
     statistics.restaurants = restaurants;
+
     return statistics;
   };
 
