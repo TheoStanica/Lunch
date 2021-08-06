@@ -6,8 +6,9 @@ import DateTimePicker from '../../components/timePicker';
 import {Title, Divider} from 'react-native-paper';
 import SummaryField from '../../components/summaryField';
 import moment from 'moment';
+import {useNavigationState} from '@react-navigation/native';
 
-const ManageOrdersScreen = () => {
+const ManageOrdersScreen = ({navigation, route}) => {
   const {orders, ordersById} = useSelector(state => state.ordersReducer);
   const [orderStart, setOrderStart] = useState(
     moment(Date.now()).format('DD-MM-YYYY'),
@@ -17,6 +18,7 @@ const ManageOrdersScreen = () => {
   );
   const [statistics, setStatistics] = useState({});
   const dispatch = useDispatch();
+  const navigator = useNavigationState(state => state.routes);
 
   const generateStatistics = () => {
     let restaurants = {},
@@ -83,7 +85,11 @@ const ManageOrdersScreen = () => {
   }, [orderStart, orderEnd]);
 
   useEffect(() => {
-    setStatistics(generateStatistics());
+    const statistics = generateStatistics();
+    setStatistics(statistics);
+    navigation.setParams({statistics});
+    console.log(navigation, route);
+    console.log(navigator);
   }, [orders]);
 
   return (
