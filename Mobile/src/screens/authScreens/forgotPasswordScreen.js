@@ -7,9 +7,8 @@ import {
   passwordValidationSchema,
 } from '../../assets/bodyValidation/userValidation';
 import {useDispatch} from 'react-redux';
-
-import TextInputField from '../../components/textInputField';
 import {forgotPasswordUser} from '../../redux/thunks/userThunks';
+import TextInputField from '../../components/textInputField';
 
 const ForgotPasswordScreen = ({theme, route, navigation}) => {
   const [message, setMessage] = useState('');

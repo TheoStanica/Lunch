@@ -13,7 +13,6 @@ import {Button, TextInput, withTheme} from 'react-native-paper';
 import {registerUser} from '../../redux/thunks/userThunks';
 import {Formik} from 'formik';
 import {registerValidationSchema} from '../../assets/bodyValidation/userValidation';
-
 import TextInputField from '../../components/textInputField';
 import HideKeyboard from '../../components/hideKeyboard';
 

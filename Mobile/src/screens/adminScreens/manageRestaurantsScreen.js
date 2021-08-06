@@ -2,13 +2,13 @@ import React, {useState, useCallback} from 'react';
 import {StyleSheet, FlatList, SafeAreaView} from 'react-native';
 import {FAB} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
-import AdminField from '../../components/adminField';
 import {
   deleteRestaurant,
   getRestaurants,
 } from '../../redux/thunks/restaurantThunks';
 import {useFocusEffect} from '@react-navigation/native';
 import HideKeyboard from '../../components/hideKeyboard';
+import AdminField from '../../components/adminField';
 
 const ManageRestaurantsScreen = ({navigation}) => {
   const {restaurants, restaurantsById} = useSelector(

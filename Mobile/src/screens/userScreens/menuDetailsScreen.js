@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   Animated,
-  Text,
 } from 'react-native';
 import {
   Title,
@@ -15,14 +14,14 @@ import {
 } from 'react-native-paper';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import ActionButton from '../../components/actionButton';
-import AnimatedHeader from '../../components/animatedHeader';
 import {
   createOrder,
   getOrder,
   updateOrder,
 } from '../../redux/thunks/orderThunks';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import ActionButton from '../../components/actionButton';
+import AnimatedHeader from '../../components/animatedHeader';
 
 const MenuDetailsScreen = ({navigation, route}) => {
   const {menuId} = route.params;
