@@ -2,11 +2,11 @@ import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {StyleSheet, SafeAreaView} from 'react-native';
 import {getOrder} from '../../redux/thunks/orderThunks';
-import DateTimePicker from '../../components/timePicker';
+import {useNavigationState} from '@react-navigation/native';
 import {Title, Divider} from 'react-native-paper';
 import SummaryField from '../../components/summaryField';
+import DateTimePicker from '../../components/timePicker';
 import moment from 'moment';
-import {useNavigationState} from '@react-navigation/native';
 
 const ManageOrdersScreen = ({navigation, route}) => {
   const {orders, ordersById} = useSelector(state => state.ordersReducer);
@@ -86,10 +86,9 @@ const ManageOrdersScreen = ({navigation, route}) => {
 
   useEffect(() => {
     const statistics = generateStatistics();
+
     setStatistics(statistics);
     navigation.setParams({statistics});
-    console.log(navigation, route);
-    console.log(navigator);
   }, [orders]);
 
   return (
