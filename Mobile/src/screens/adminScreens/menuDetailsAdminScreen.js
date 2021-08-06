@@ -77,7 +77,7 @@ const MenuDetailsAdminScreen = ({route}) => {
           iconColor="#4A6572"
         />
         <ProfileField
-          paragraph={Moment(menu.restaurantId.createdAt).format('DD-MM-YYYY')}
+          paragraph={Moment(menu.createdAt).format('DD-MM-YYYY')}
           title="Created"
           icon="information-variant"
           iconColor="#4A6572"
