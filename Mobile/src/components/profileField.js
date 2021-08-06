@@ -1,7 +1,7 @@
 import React from 'react';
-import {Card, Title, Paragraph, Divider} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Paragraph} from 'react-native-paper';
 import {View, StyleSheet, Text} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ProfileField = ({title, paragraph, icon, iconColor = '#FBBC00'}) => {
   return (
