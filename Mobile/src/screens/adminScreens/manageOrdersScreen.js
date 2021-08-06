@@ -6,14 +6,6 @@ import DateTimePicker from '../../components/timePicker';
 import {Title, Divider} from 'react-native-paper';
 import moment from 'moment';
 
-const EMPTY_RESTAURANT = {
-  totalOrders: 0,
-  totalTakeawayOrders: 0,
-  totalRestaurantOrders: 0,
-  totalTakeawayCost: 0,
-  totalCost: 0,
-};
-
 const ManageOrdersScreen = () => {
   const {orders, ordersById} = useSelector(state => state.ordersReducer);
   const [orderStart, setOrderStart] = useState(
@@ -26,15 +18,19 @@ const ManageOrdersScreen = () => {
   const dispatch = useDispatch();
 
   const generateStatistics = () => {
-    let restaurants = [],
-      statistics = restaurantObject;
+    let restaurants = {},
+      statistics = {
+        totalOrders: 0,
+        totalTakeawayOrders: 0,
+        totalRestaurantOrders: 0,
+        totalTakeawayCost: 0,
+        totalCost: 0,
+      };
 
     Object.values(ordersById).forEach(order => {
       const restaurant = order.menuId.restaurantId;
-
-      console.log(restaurants);
+      console.log(order);
       if (!restaurants[restaurant.name]) {
-        console.log(restaurantObject);
         restaurants[restaurant.name] = {
           totalOrders: 0,
           totalTakeawayOrders: 0,
@@ -43,7 +39,6 @@ const ManageOrdersScreen = () => {
           totalCost: 0,
         };
       }
-      console.log(restaurants);
 
       if (order.status === 'active') {
         restaurants[restaurant.name].totalOrders++;
@@ -55,19 +50,8 @@ const ManageOrdersScreen = () => {
       }
     });
 
-    restaurants.forEach(el => {
-      el.totalRestaurantOrders = el.totalOrders - el.totalTakeawayOrders;
-      statistics.totalOrders += el.totalOrders;
-      statistics.totalCost += el.totalCost;
-      statistics.totalTakeawayOrders += el.totalRestaurantOrders;
-      statistics.totalRestaurantOrders += el.totalRestaurantOrders;
-      statistics.totalTakeawayCost += el.totalTakeawayCost;
-    });
-
-    //console.log(restaurants);
+    console.log(restaurants);
     statistics.restaurants = restaurants;
-    //console.log(statistics);
-
     return statistics;
   };
 
