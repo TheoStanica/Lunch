@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   Text,
   StyleSheet,
@@ -9,29 +9,10 @@ import {
 } from 'react-native';
 import {Button, withTheme} from 'react-native-paper';
 import LunchLogo from '../../assets/images/Lunch';
+import useAuthScreenAnimation from '../../hooks/useAuthScreenAnimation';
 
 const AuthScreen = ({navigation, theme}) => {
-  const fadeIn = new Animated.Value(0);
-  const translateY = new Animated.Value(150);
-  const translateLogo = new Animated.Value(0);
-
-  const animate = () => {
-    Animated.timing(translateLogo, {
-      toValue: -100,
-      duration: 700,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(fadeIn, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(translateY, {
-      toValue: 0,
-      duration: 900,
-      useNativeDriver: true,
-    }).start();
-  };
+  const {animate, fadeIn, translateY, translateLogo} = useAuthScreenAnimation();
 
   useEffect(() => {
     setTimeout(() => {
