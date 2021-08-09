@@ -54,7 +54,7 @@ const convertFilterToQuery = (filter) => {
   return newFilter;
 };
 
-const checkIfUserCanSetUserId = ({ userId, id, role }) =>
+const checkIfUserCanProcessUserId = ({ userId, id, role }) =>
   userId && userId !== id && role === accountRole.user;
 
 const checkMenuTimeState = ({ date, time }) => {
@@ -161,15 +161,13 @@ const checkIfAdminCanUpdateUser = async ({ role, userId, menuId, order }) => {
 
 const getOrders = async (req, res, next) => {
   try {
+    const { id, role } = req.user;
     let query =
       Object.keys(req.query).length > 0
         ? convertFilterToQuery(req.query)
         : { deleted: false };
-    if (
-      query.userId &&
-      query.userId !== req.user.id &&
-      req.user.role === accountRole.user
-    ) {
+
+    if (checkIfUserCanProcessUserId({ userId: query.userId, id, role })) {
       return next(new ForbiddenError());
     }
 
@@ -177,7 +175,7 @@ const getOrders = async (req, res, next) => {
       query.userId = req.user.id;
     }
 
-    orders = await Order.find(query)
+    const orders = await Order.find(query)
       .populate('userId')
       .populate({
         path: 'menuId',
@@ -202,20 +200,20 @@ const createOrder = async (req, res, next) => {
       return next(new BadRequestError('Please provide a valid menu id.'));
     }
 
-    if (checkIfUserCanSetUserId({ userId, id, role })) {
+    if (checkIfUserCanProcessUserId({ userId, id, role })) {
       return next(new ForbiddenError());
     }
     const { notifyAfter, cancelAt } = menu.restaurantId;
     userId = userId ? userId : id;
 
-    if (!(await User.findOne({ _id: userId }))) {
-      return next(new BadRequestError('Please provide a valid user id.'));
-    }
-
     if (checkMenuTimeState({ date: menu.createdAt, time: cancelAt })) {
       return next(
         new BadRequestError('You can no longer make orders for this menu')
       );
+    }
+
+    if (!(await User.findOne({ _id: userId }))) {
+      return next(new BadRequestError('Please provide a valid user id.'));
     }
 
     if (await Order.findOne({ userId, menuId, deleted: false })) {
@@ -237,7 +235,10 @@ const createOrder = async (req, res, next) => {
       await session.commitTransaction();
       session.endSession();
 
-      if (checkMenuTimeState({ date: menu.createdAt, time: notifyAfter })) {
+      if (
+        role !== accountRole.admin &&
+        checkMenuTimeState({ date: menu.createdAt, time: notifyAfter })
+      ) {
         // send push notification to admins
       }
 
@@ -272,8 +273,8 @@ const updateOrder = async (req, res, next) => {
     }
 
     if (
-      checkIfUserCanSetUserId({ userId, id, role }) ||
-      checkIfUserCanSetUserId({ userId: order.userId.id, id, role })
+      checkIfUserCanProcessUserId({ userId, id, role }) ||
+      checkIfUserCanProcessUserId({ userId: order.userId.id, id, role })
     ) {
       return next(new ForbiddenError());
     }
@@ -312,6 +313,7 @@ const updateOrder = async (req, res, next) => {
       session.endSession();
 
       if (
+        role !== accountRole.admin &&
         checkMenuTimeState({ date: order.menuId.createdAt, time: notifyAfter })
       ) {
         // send push notification to admins

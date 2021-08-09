@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {createOrderValidationSchema} from '../../assets/bodyValidation/orderValidation';
 import {createOrder, updateOrder} from '../../redux/thunks/orderThunks';
 import {Headline, RadioButton} from 'react-native-paper';
@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import AnimatedHeader from '../../components/animatedHeader';
 import ActionButton from '../../components/actionButton';
+import useMenuExpired from '../../hooks/useMenuExpired';
 
 const MenuTakeawayOrderScreen = ({route, navigation}) => {
   const {menuId, order} = route.params;
@@ -21,7 +22,25 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
   const {id} = useSelector(state => state.userReducer);
   const [isCheckingValidation, setCheckingValidation] = useState(false);
   const offset = useRef(new Animated.Value(0)).current;
+  const menuExpired = useMenuExpired({menuId});
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (menuExpired) {
+      navigation.reset({
+        routes: [
+          {name: 'HomeScreen'},
+          {
+            name: 'MessageScreen',
+            params: {
+              message: 'Damn.. This order expired :(',
+              image: 'clock-alert-outline',
+            },
+          },
+        ],
+      });
+    }
+  }, [menuExpired]);
 
   const renderCourses = courses =>
     courses.map((course, idx) => {
@@ -102,6 +121,12 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
     <SafeAreaView style={styles.container}>
       <AnimatedHeader
         animatedValue={offset}
+        textContainerColor={menuExpired ? '#A52630' : undefined}
+        description={
+          menuExpired
+            ? 'Expired'
+            : `Expires at ${menusById[menuId].restaurantId.cancelAt}`
+        }
         title={menusById[menuId].restaurantId.name}
       />
       <Formik
@@ -139,6 +164,7 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
               ) : null}
               <ActionButton
                 text="Submit Order"
+                disabled={menuExpired}
                 onPress={() => {
                   handleSubmit();
                   setCheckingValidation(true);

@@ -2,12 +2,20 @@ import React from 'react';
 import {Button} from 'react-native-paper';
 import {StyleSheet, Text} from 'react-native';
 
-const ActionButton = ({text, onPress, style = {}, textStyle = {}, ...rest}) => {
+const ActionButton = ({
+  text,
+  onPress,
+  style = {},
+  disabled,
+  textStyle = {},
+  ...rest
+}) => {
   return (
     <Button
       mode="contained"
       onPress={onPress}
-      style={[styles.button, style]}
+      style={[styles.button(disabled), style]}
+      disabled={disabled}
       {...rest}>
       <Text style={[styles.buttonText, textStyle]}>{text ? text : ''}</Text>
     </Button>
@@ -15,9 +23,9 @@ const ActionButton = ({text, onPress, style = {}, textStyle = {}, ...rest}) => {
 };
 
 const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#4A6572',
-  },
+  button: disabled => ({
+    backgroundColor: disabled ? '#4A657255' : '#4A6572',
+  }),
   buttonText: {
     fontSize: 18,
     textTransform: 'capitalize',
