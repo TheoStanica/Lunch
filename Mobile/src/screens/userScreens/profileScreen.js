@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   logoutButton: {
-    backgroundColor: 'red',
+    backgroundColor: '#A52630',
     marginTop: 15,
   },
   title: {
