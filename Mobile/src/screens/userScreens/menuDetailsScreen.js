@@ -105,16 +105,13 @@ const MenuDetailsScreen = ({navigation, route}) => {
               <MenuDetailsButtons
                 menuId={menuId}
                 foundOrder={order}
-                onCancelRestaurant={() => {
-                  console.log('removing from restaurant');
-                  removeUserFromGoingList(id);
-                }}
-                onCancelTakeaway={() => {
+                onCancelRestaurant={() => removeUserFromGoingList(id)}
+                onCancelTakeaway={() =>
                   setOrder({
                     ...order,
                     status: 'cancelled',
-                  });
-                }}
+                  })
+                }
               />
             </View>
           </ScrollView>
