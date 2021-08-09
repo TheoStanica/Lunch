@@ -38,7 +38,7 @@ const createMenu = async (req, res, next) => {
     const { restaurantId } = req.body,
       restaurant = await Restaurant.findById(restaurantId);
 
-    if (!restaurant) {
+    if (!restaurant || restaurant.deleted) {
       return next(new BadRequestError('Please provide a valid restaurantId.'));
     }
 
@@ -60,7 +60,9 @@ const getMenus = async (req, res, next) => {
         Object.keys(req.query).length > 0
           ? convertFilterToQuery(req.query)
           : { deleted: false },
-      menus = await Menu.find(query).populate('restaurantId');
+      menus = await Menu.find(query)
+        .populate('restaurantId')
+        .populate({ path: 'usersGoing', select: '-role -status' });
 
     res.send({ menus });
   } catch (error) {
