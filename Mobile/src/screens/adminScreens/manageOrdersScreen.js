@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {StyleSheet, SafeAreaView, View, Text} from 'react-native';
+import {StyleSheet, SafeAreaView, FlatList, Text} from 'react-native';
 import {getOrder} from '../../redux/thunks/orderThunks';
 import {Title, Divider} from 'react-native-paper';
 import {getRestaurants} from '../../redux/thunks/restaurantThunks';
@@ -61,9 +61,11 @@ const ManageOrdersScreen = ({navigation}) => {
 
       if (selectedUser === '' || selectedUser === user.id) {
         if (selectedRestaurant === '' || selectedRestaurant === restaurant.id) {
-          if (!users[user.email] || !users[user.email][restaurant.name])
-            users[user.email] = {
-              ...users[user.email],
+          const key = user.fullname + ' (' + user.email + ')';
+
+          if (!users[key] || !users[key][restaurant.name])
+            users[key] = {
+              ...users[key],
               [restaurant.name]: {
                 totalOrders: 0,
                 totalTakeawayOrders: 0,
@@ -74,19 +76,19 @@ const ManageOrdersScreen = ({navigation}) => {
             };
 
           if (order.status === 'active') {
-            users[user.email][restaurant.name].totalOrders++;
-            users[user.email][restaurant.name].totalCost += restaurant.cost;
+            users[key][restaurant.name].totalOrders++;
+            users[key][restaurant.name].totalCost += restaurant.cost;
             if (order.type === 'takeaway') {
-              users[user.email][restaurant.name].totalTakeawayOrders++;
-              users[user.email][restaurant.name].totalTakeawayCost +=
-                restaurant.cost;
+              users[key][restaurant.name].totalTakeawayOrders++;
+              users[key][restaurant.name].totalTakeawayCost += restaurant.cost;
             }
           }
 
           Object.values(users).forEach(user => {
             Object.values(user).forEach(restaurant => {
-              restaurant.totalRestaurantOrders =
-                restaurant.totalOrders - restaurant.totalTakeawayOrders;
+              if (restaurant)
+                restaurant.totalRestaurantOrders =
+                  restaurant.totalOrders - restaurant.totalTakeawayOrders;
             });
           });
         }
@@ -209,6 +211,11 @@ const ManageOrdersScreen = ({navigation}) => {
       </SafeAreaView>
       <Divider style={styles.divider} />
       <Title style={styles.title}>Statistics</Title>
+      <FlatList
+        data={Object.entries(statistics.users ? statistics.users : {})}
+        keyExtractor={item => item}
+        renderItem={user => <Text>{user.item[0]}</Text>}
+      />
     </SafeAreaView>
   );
 };
