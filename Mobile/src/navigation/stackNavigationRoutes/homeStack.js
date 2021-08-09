@@ -5,6 +5,7 @@ import MenuDetailsScreen from '../../screens/userScreens/menuDetailsScreen';
 import MessageScreen from '../../screens/messageScreen';
 import MenuTakeawayOrderScreen from '../../screens/userScreens/menuTakeawayOrderScreen';
 import CreateMenuScreen from '../../screens/adminScreens/createMenuScreen';
+import UsersGoingScreen from '../../screens/userScreens/usersGoingScreen';
 
 const Stack = createStackNavigator();
 
@@ -41,6 +42,14 @@ const HomeStack = () => {
         component={CreateMenuScreen}
         options={{
           title: 'Create Menu',
+          headerStyle: {backgroundColor: '#FFF1CA'},
+        }}
+      />
+      <Stack.Screen
+        name="UsersGoingScreen"
+        component={UsersGoingScreen}
+        options={{
+          title: 'Users Going',
           headerStyle: {backgroundColor: '#FFF1CA'},
         }}
       />
