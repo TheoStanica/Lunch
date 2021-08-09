@@ -2,14 +2,14 @@ import React from 'react';
 import {Button} from 'react-native-paper';
 import {StyleSheet, Text} from 'react-native';
 
-const ActionButton = ({text, onPress, style = {}, ...rest}) => {
+const ActionButton = ({text, onPress, style = {}, textStyle = {}, ...rest}) => {
   return (
     <Button
       mode="contained"
       onPress={onPress}
       style={[styles.button, style]}
       {...rest}>
-      <Text style={styles.buttonText}>{text ? text : ''}</Text>
+      <Text style={[styles.buttonText, textStyle]}>{text ? text : ''}</Text>
     </Button>
   );
 };
