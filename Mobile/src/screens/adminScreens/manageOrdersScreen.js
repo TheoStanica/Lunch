@@ -170,8 +170,11 @@ const ManageOrdersScreen = ({navigation}) => {
           onDismiss={() => setVisible(false)}
           contentContainerStyle={styles.containerStyle}>
           <SafeAreaView>
+            <Title style={styles.fullnameTitle}>
+              {user.item ? user.item[0] : {}}
+            </Title>
             <FlatList
-              data={Object.entries(user)}
+              data={Object.entries(user.item ? user.item[1] : {})}
               keyExtractor={item => item}
               renderItem={restaurant => (
                 <SafeAreaView>
@@ -187,6 +190,7 @@ const ManageOrdersScreen = ({navigation}) => {
                   />
                 </SafeAreaView>
               )}
+              showsVerticalScrollIndicator={false}
             />
           </SafeAreaView>
         </Modal>
@@ -252,7 +256,7 @@ const ManageOrdersScreen = ({navigation}) => {
             titleStyle={styles.listTitle}
             onPress={() => {
               setVisible(true);
-              setUser(user.item[1]);
+              setUser(user);
             }}
             left={() => (
               <View style={styles.icon}>
@@ -261,6 +265,7 @@ const ManageOrdersScreen = ({navigation}) => {
             )}
           />
         )}
+        showsVerticalScrollIndicator={false}
       />
     </SafeAreaView>
   );
@@ -277,6 +282,10 @@ const styles = StyleSheet.create({
   },
   title: {
     alignSelf: 'center',
+  },
+  fullnameTitle: {
+    alignSelf: 'center',
+    padding: 10,
   },
   dropdownStyle: {
     backgroundColor: 'transparent',
