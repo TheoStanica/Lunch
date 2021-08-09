@@ -6,13 +6,7 @@ import {
   ScrollView,
   Animated,
 } from 'react-native';
-import {
-  List,
-  Text,
-  Headline,
-  Paragraph,
-  ActivityIndicator,
-} from 'react-native-paper';
+import {ActivityIndicator, Appbar, Menu} from 'react-native-paper';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -20,16 +14,15 @@ import {
   getOrder,
   updateOrder,
 } from '../../redux/thunks/orderThunks';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionButton from '../../components/actionButton';
 import AnimatedHeader from '../../components/animatedHeader';
-import ProfileField from '../../components/profileField';
 import {updateMenuAction} from '../../redux/actions/menuActions';
 import useMenuExpired from '../../hooks/useMenuExpired';
+import DisplayMenu from '../../components/displayMenu';
 
 const MenuDetailsScreen = ({navigation, route}) => {
   const {menuId} = route.params;
-  const {menusById, id, email} = useSelector(state => ({
+  const {menusById, id} = useSelector(state => ({
     ...state.menuReducer,
     ...state.userReducer,
   }));
@@ -37,6 +30,7 @@ const MenuDetailsScreen = ({navigation, route}) => {
   const [isFetchingOrder, setIsFetchingOrder] = useState(true);
   const [order, setOrder] = useState('');
   const menuExpired = useMenuExpired({menuId});
+  const [isMenuHeaderVisible, setIsMenuHeaderVisible] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -50,51 +44,29 @@ const MenuDetailsScreen = ({navigation, route}) => {
     );
   }, []);
 
-  const renderOrderItemSelected = (courseCategory, idx) => {
-    return order?.status === 'active' &&
-      order?.type === 'takeaway' &&
-      order?.menuOptions[courseCategory] === idx ? (
-      <Icon size={24} name="check" color="#4A6572" />
-    ) : null;
-  };
-
-  const renderCourses = ({courseCategory, courses}) =>
-    courses.map((course, idx) => (
-      <View
-        style={styles.courseDetails}
-        key={`${menuId}-${course.courseCategory}-${idx}`}>
-        {renderOrderItemSelected(courseCategory, idx)}
-        <Paragraph style={styles.capitalizedText}>
-          {course.description}
-        </Paragraph>
-        {course.requiredType === 'takeaway' ||
-        course.requiredType === 'restaurant' ? (
-          <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <Icon
-              style={styles.icon}
-              size={24}
-              name={
-                course.requiredType === 'takeaway' ? 'package-variant' : 'run'
-              }
-              color="#4A6572"
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Menu
+          visible={isMenuHeaderVisible}
+          anchor={
+            <Appbar.Action
+              icon="dots-vertical"
+              onPress={() => setIsMenuHeaderVisible(true)}
             />
-          </View>
-        ) : null}
-      </View>
-    ));
-
-  const renderCourseTypes = () =>
-    menusById[menuId].menu.map((menuCourse, idx) => (
-      <View style={styles.courseTypeContainer} key={`${menuId}-${idx}`}>
-        <Headline style={styles.capitalizedText}>
-          {menuCourse.courseCategory}
-        </Headline>
-        {renderCourses({
-          courses: menuCourse.courses,
-          courseCategory: menuCourse.courseCategory,
-        })}
-      </View>
-    ));
+          }
+          onDismiss={() => setIsMenuHeaderVisible(false)}>
+          <Menu.Item
+            title="Going (Restaurant)"
+            onPress={() => {
+              setIsMenuHeaderVisible(false);
+              navigation.navigate('UsersGoingScreen', {menuId});
+            }}
+          />
+        </Menu>
+      ),
+    });
+  }, [isMenuHeaderVisible]);
 
   const removeUserFromGoingList = id => {
     dispatch(
@@ -164,25 +136,6 @@ const MenuDetailsScreen = ({navigation, route}) => {
           ? renderActiveOrderOptions()
           : renderOrderButtons(order.id)}
       </View>
-    );
-  };
-
-  const renderGoingList = () => {
-    return (
-      <List.Accordion
-        title="Going (Restaurant)"
-        style={styles.accordion}
-        theme={{colors: {primary: 'white', text: 'white'}}}>
-        {menusById[menuId].usersGoing.map(user => (
-          <ProfileField
-            key={user.email}
-            title={email === user.email ? 'You' : user.fullname}
-            paragraph={user.email}
-            iconColor="#4A6572"
-            icon="account-circle-outline"
-          />
-        ))}
-      </List.Accordion>
     );
   };
 
@@ -265,10 +218,7 @@ const MenuDetailsScreen = ({navigation, route}) => {
               {useNativeDriver: false},
             )}>
             <View style={styles.body}>
-              <View style={{marginBottom: 15}}>
-                {renderCourseTypes()}
-                {renderGoingList()}
-              </View>
+              <DisplayMenu menuId={menuId} order={order} />
               {!order.status ? (
                 <View style={styles.buttons}>{renderOrderButtons()}</View>
               ) : (
@@ -309,43 +259,14 @@ const styles = StyleSheet.create({
     margin: 15,
     justifyContent: 'space-between',
   },
-  going: {
-    flexDirection: 'row',
-  },
-  courseCategory: {
-    marginLeft: 15,
-    marginBottom: 10,
-    marginTop: 10,
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  courseTypeContainer: {
-    marginBottom: 20,
-  },
-  courseDetails: {
-    flexDirection: 'row',
-    marginLeft: 15,
-  },
   scrollViewContainer: {
     paddingTop: 220,
     flexGrow: 1,
-  },
-  icon: {
-    marginLeft: 10,
-  },
-  capitalizedText: {
-    textTransform: 'capitalize',
   },
   loadingContainer: {
     paddingTop: 220,
     flex: 1,
     justifyContent: 'center',
-  },
-  accordion: {
-    backgroundColor: '#4A6572',
-  },
-  accordionTitle: {
-    color: 'white',
   },
   cancelButton: menuExpired => ({
     backgroundColor: menuExpired ? '#A5263055' : '#A52630',
