@@ -58,7 +58,6 @@ const UserDetailsScreen = ({route, navigation}) => {
                   touched={touched.email}
                   field="email"
                 />
-
                 <Text style={styles.roleText(openDropDown)}>Role</Text>
                 <DropDownPicker
                   open={openDropDown}
@@ -71,8 +70,8 @@ const UserDetailsScreen = ({route, navigation}) => {
                   ]}
                   style={styles.dropDownPicker}
                   dropDownContainerStyle={styles.dropDownContainerStyle}
+                  selectedItemContainerStyle={{backgroundColor: '#4A6572'}}
                 />
-
                 <TextInputField
                   label="Full Name"
                   value={values.fullname}
@@ -114,7 +113,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   dropDownContainerStyle: {
-    backgroundColor: '#f2f2f2',
+    backgroundColor: '#FFF1CA',
+    borderColor: '#0007',
+    borderWidth: 0.3,
   },
 });
 

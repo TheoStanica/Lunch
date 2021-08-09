@@ -6,9 +6,9 @@ import {Title, Divider, List, Modal, Portal} from 'react-native-paper';
 import {getRestaurants} from '../../redux/thunks/restaurantThunks';
 import {getAllUsers} from '../../redux/thunks/userThunks';
 import DateTimePicker from '../../components/timePicker';
-import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Statistics from '../../components/statistics';
+import CustomDropDownPicker from '../../components/customDropDownPicker';
 import moment from 'moment';
 
 const ManageOrdersScreen = ({navigation}) => {
@@ -210,40 +210,25 @@ const ManageOrdersScreen = ({navigation}) => {
         onConfirm={date => setOrderEnd(moment(date).format('DD-MM-YYYY'))}
         mode="date"
       />
-      <SafeAreaView style={styles.restaurantContainer(2000)}>
-        <Text>Restaurant </Text>
-        <DropDownPicker
-          open={openDropDown}
-          value={selectedRestaurant}
-          setValue={setSelectedRestaurant}
-          setOpen={setOpenDropDown}
-          items={generateRestaurantItems()}
-          style={styles.dropDownPicker}
-          dropDownContainerStyle={styles.dropDownContainerStyle}
-          placeholder="All restaurants"
-          style={styles.dropdownStyle}
-          selectedItemContainerStyle={{backgroundColor: '#4A6572'}}
-          selectedItemLabelStyle={styles.selectedItemLabel}
-          dropDownContainerStyle={styles.dropdownContainer}
-        />
-      </SafeAreaView>
-      <SafeAreaView style={styles.restaurantContainer(1000)}>
-        <Text>User </Text>
-        <DropDownPicker
-          open={openSecondDropDown}
-          value={selectedUser}
-          setValue={setSelectedUser}
-          setOpen={setOpenSecondDropDown}
-          items={generateUsersItems()}
-          style={styles.dropDownPicker}
-          dropDownContainerStyle={styles.dropDownContainerStyle}
-          placeholder="All users"
-          style={styles.dropdownStyle}
-          selectedItemContainerStyle={{backgroundColor: '#4A6572'}}
-          selectedItemLabelStyle={styles.selectedItemLabel}
-          dropDownContainerStyle={styles.dropdownContainer}
-        />
-      </SafeAreaView>
+      <CustomDropDownPicker
+        text="Restaurant"
+        openDropDown={openDropDown}
+        selectedItem={selectedRestaurant}
+        setSelectedItem={setSelectedRestaurant}
+        setOpenDropDown={setOpenDropDown}
+        items={generateRestaurantItems()}
+        placeholder="All restaurants"
+        zIndex={2000}
+      />
+      <CustomDropDownPicker
+        text="User"
+        openDropDown={openSecondDropDown}
+        selectedItem={selectedUser}
+        setSelectedItem={setSelectedUser}
+        setOpenDropDown={setOpenSecondDropDown}
+        items={generateUsersItems()}
+        placeholder="All users"
+      />
       <Divider style={styles.divider} />
       <Title style={styles.title}>Statistics</Title>
       <FlatList
@@ -287,27 +272,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     padding: 10,
   },
-  dropdownStyle: {
-    backgroundColor: 'transparent',
-    borderColor: '#0007',
-    borderWidth: 0.3,
-  },
-  selectedItemLabel: {
-    color: 'white',
-  },
-  dropdownContainer: {
-    backgroundColor: '#FFF1CA',
-    borderColor: '#0007',
-    borderWidth: 0.3,
-  },
-  restaurantContainer: zIndex => ({
-    marginHorizontal: 15,
-    marginVertical: 5,
-    zIndex: zIndex,
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-  }),
   listTitle: {
     fontSize: 18,
     textTransform: 'capitalize',

@@ -5,14 +5,12 @@ import {
   StatusBar,
   Text,
   ScrollView,
-  View,
 } from 'react-native';
-import {Title} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {getRestaurants} from '../../redux/thunks/restaurantThunks';
 import {createMenu} from '../../redux/thunks/menuThunks';
-import DropDownPicker from 'react-native-dropdown-picker';
 import MenuCreator from '../../components/menuCreator';
+import CustomDropDownPicker from '../../components/customDropDownPicker';
 
 const CreateMenuScreen = ({navigation}) => {
   const [openDropDown, setOpenDropDown] = useState(false);
@@ -46,24 +44,17 @@ const CreateMenuScreen = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#FFF1CA" barStyle="dark-content" />
-      <View style={styles.restaurantContainer}>
-        <Title>Select a restaurant:</Title>
-        <DropDownPicker
-          open={openDropDown}
-          value={selectedRestaurant}
-          setValue={setSelectedRestaurant}
-          setOpen={setOpenDropDown}
-          items={generateRestaurantItems()}
-          style={styles.dropDownPicker}
-          dropDownContainerStyle={styles.dropDownContainerStyle}
-          placeholder="Select a restaurant"
-          style={styles.dropdownStyle}
-          selectedItemContainerStyle={{backgroundColor: '#4A6572'}}
-          selectedItemLabelStyle={styles.selectedItemLabel}
-          dropDownContainerStyle={styles.dropdownContainer}
-        />
-        {errors ? <Text style={styles.errorMessage}>{errors}</Text> : null}
-      </View>
+      <CustomDropDownPicker
+        text="Select a restaurant: "
+        openDropDown={openDropDown}
+        selectedItem={selectedRestaurant}
+        setSelectedItem={setSelectedRestaurant}
+        setOpenDropDown={setOpenDropDown}
+        items={generateRestaurantItems()}
+        placeholder="Select a restaurant"
+        textStyle={{fontSize: 21}}
+      />
+      {errors ? <Text style={styles.errorMessage}>{errors}</Text> : null}
       <ScrollView
         style={styles.body}
         contentContainerStyle={{flexGrow: 1}}
@@ -107,24 +98,7 @@ const styles = StyleSheet.create({
   errorMessage: {
     fontSize: 12,
     color: '#A52630',
-    marginVertical: 10,
-  },
-  dropdownStyle: {
-    backgroundColor: 'transparent',
-    borderColor: '#0007',
-    borderWidth: 0.3,
-  },
-  selectedItemLabel: {
-    color: 'white',
-  },
-  dropdownContainer: {
-    backgroundColor: '#FFF1CA',
-    borderColor: '#0007',
-    borderWidth: 0.3,
-  },
-  restaurantContainer: {
-    marginHorizontal: 15,
-    zIndex: 1000,
+    marginLeft: 15,
   },
 });
 
