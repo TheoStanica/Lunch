@@ -9,16 +9,12 @@ import {
 import {ActivityIndicator, Appbar, Menu} from 'react-native-paper';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  createOrder,
-  getOrder,
-  updateOrder,
-} from '../../redux/thunks/orderThunks';
-import ActionButton from '../../components/actionButton';
+import {getOrder} from '../../redux/thunks/orderThunks';
 import AnimatedHeader from '../../components/animatedHeader';
 import {updateMenuAction} from '../../redux/actions/menuActions';
 import useMenuExpired from '../../hooks/useMenuExpired';
 import DisplayMenu from '../../components/displayMenu';
+import MenuDetailsButtons from '../../components/menuDetailsButtons';
 
 const MenuDetailsScreen = ({navigation, route}) => {
   const {menuId} = route.params;
@@ -82,119 +78,6 @@ const MenuDetailsScreen = ({navigation, route}) => {
     );
   };
 
-  const renderActiveOrderOptions = () => {
-    return (
-      <>
-        <ActionButton
-          text="cancel order"
-          disabled={menuExpired}
-          style={[
-            order.type === 'takeaway' ? styles.leftButton : {flex: 1},
-            styles.cancelButton(menuExpired),
-          ]}
-          onPress={cancelOrder}
-        />
-        {order.type === 'takeaway' ? (
-          <ActionButton
-            text="update order"
-            disabled={menuExpired}
-            style={styles.rightButton}
-            onPress={() => navigateToOrderScreen(menuId, order)}
-          />
-        ) : null}
-      </>
-    );
-  };
-
-  const renderOrderButtons = orderId => {
-    return (
-      <>
-        <ActionButton
-          text="Restaurant"
-          disabled={menuExpired}
-          style={styles.leftButton}
-          onPress={submitOrder}
-        />
-        <ActionButton
-          text="Takeaway"
-          disabled={menuExpired}
-          style={styles.rightButton}
-          onPress={() => navigateToOrderScreen(menuId, order)}
-        />
-      </>
-    );
-  };
-
-  const navigateToOrderScreen = (menuId, order) => {
-    navigation.navigate('MenuTakeawayOrderScreen', {menuId, order});
-  };
-
-  const renderOrderOptions = () => {
-    return (
-      <View style={styles.buttons}>
-        {order.status === 'active'
-          ? renderActiveOrderOptions()
-          : renderOrderButtons(order.id)}
-      </View>
-    );
-  };
-
-  const cancelOrder = () => {
-    dispatch(
-      updateOrder(
-        {
-          orderId: order.id,
-          status: 'cancelled',
-        },
-        () => {
-          if (order.type === 'restaurant') {
-            removeUserFromGoingList(id);
-          }
-          setOrder({...order, status: 'cancelled'});
-        },
-      ),
-    );
-  };
-
-  const submitOrder = () => {
-    if (!order) {
-      dispatch(
-        createOrder(
-          {
-            menuId: menuId,
-            userId: id,
-            type: 'restaurant',
-            menuOptions: undefined,
-          },
-          sendSuccessMessage,
-        ),
-      );
-    } else {
-      dispatch(
-        updateOrder(
-          {
-            orderId: order.id,
-            status: 'active',
-            type: 'restaurant',
-          },
-          sendSuccessMessage,
-        ),
-      );
-    }
-  };
-
-  const sendSuccessMessage = () => {
-    navigation.reset({
-      routes: [
-        {name: 'HomeScreen'},
-        {
-          name: 'MessageScreen',
-          params: {message: 'Order created!'},
-        },
-      ],
-    });
-  };
-
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
@@ -219,11 +102,20 @@ const MenuDetailsScreen = ({navigation, route}) => {
             )}>
             <View style={styles.body}>
               <DisplayMenu menuId={menuId} order={order} />
-              {!order.status ? (
-                <View style={styles.buttons}>{renderOrderButtons()}</View>
-              ) : (
-                renderOrderOptions()
-              )}
+              <MenuDetailsButtons
+                menuId={menuId}
+                foundOrder={order}
+                onCancelRestaurant={() => {
+                  console.log('removing from restaurant');
+                  removeUserFromGoingList(id);
+                }}
+                onCancelTakeaway={() => {
+                  setOrder({
+                    ...order,
+                    status: 'cancelled',
+                  });
+                }}
+              />
             </View>
           </ScrollView>
         ) : (
@@ -241,18 +133,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF1CA',
   },
-  buttons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  leftButton: {
-    flex: 1,
-    marginRight: 7.5,
-  },
-  rightButton: {
-    flex: 1,
-    marginLeft: 7.5,
-  },
   body: {
     flex: 1,
     flexGrow: 1,
@@ -268,9 +148,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  cancelButton: menuExpired => ({
-    backgroundColor: menuExpired ? '#A5263055' : '#A52630',
-  }),
 });
 
 export default MenuDetailsScreen;
