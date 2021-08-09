@@ -7,7 +7,8 @@ import {
   Animated,
 } from 'react-native';
 import {
-  Title,
+  List,
+  Text,
   Headline,
   Paragraph,
   ActivityIndicator,
@@ -22,15 +23,38 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionButton from '../../components/actionButton';
 import AnimatedHeader from '../../components/animatedHeader';
+import ProfileField from '../../components/profileField';
+import {updateMenuAction} from '../../redux/actions/menuActions';
+import moment from 'moment';
+import {useTimer} from 'react-timer-hook';
+
+const isMenuExpired = cancelAt =>
+  moment().isAfter(moment(cancelAt, 'LT').format());
+
+const getExpireTimestamp = cancelAt => {
+  return new Date(moment(cancelAt, 'LT').format());
+};
 
 const MenuDetailsScreen = ({navigation, route}) => {
   const {menuId} = route.params;
-  const {menusById} = useSelector(state => state.menuReducer);
-  const {id} = useSelector(state => state.userReducer);
+  const {menusById, id, email} = useSelector(state => ({
+    ...state.menuReducer,
+    ...state.userReducer,
+  }));
   const offset = useRef(new Animated.Value(0)).current;
   const [isFetchingOrder, setIsFetchingOrder] = useState(true);
   const [order, setOrder] = useState('');
+  const [menuExpired, setMenuExpired] = useState(
+    isMenuExpired(menusById[menuId].restaurantId.cancelAt),
+  );
   const dispatch = useDispatch();
+
+  useTimer({
+    expiryTimestamp: getExpireTimestamp(
+      menusById[menuId].restaurantId.cancelAt,
+    ),
+    onExpire: () => setMenuExpired(true),
+  });
 
   useEffect(() => {
     dispatch(
@@ -67,9 +91,7 @@ const MenuDetailsScreen = ({navigation, route}) => {
               style={styles.icon}
               size={24}
               name={
-                course.requiredType === 'takeaway'
-                  ? 'package-variant'
-                  : 'food-fork-drink'
+                course.requiredType === 'takeaway' ? 'package-variant' : 'run'
               }
               color="#4A6572"
             />
@@ -91,17 +113,36 @@ const MenuDetailsScreen = ({navigation, route}) => {
       </View>
     ));
 
+  const removeUserFromGoingList = id => {
+    dispatch(
+      updateMenuAction({
+        menuId,
+        updated: {
+          ...menusById[menuId],
+          usersGoing: menusById[menuId].usersGoing.filter(
+            user => user.id !== id,
+          ),
+        },
+      }),
+    );
+  };
+
   const renderActiveOrderOptions = () => {
     return (
       <>
         <ActionButton
           text="cancel order"
-          style={[styles.leftButton, {backgroundColor: 'red'}]}
+          disabled={menuExpired}
+          style={[
+            order.type === 'takeaway' ? styles.leftButton : {flex: 1},
+            styles.cancelButton(menuExpired),
+          ]}
           onPress={cancelOrder}
         />
         {order.type === 'takeaway' ? (
           <ActionButton
             text="update order"
+            disabled={menuExpired}
             style={styles.rightButton}
             onPress={() => navigateToOrderScreen(menuId, order)}
           />
@@ -115,11 +156,13 @@ const MenuDetailsScreen = ({navigation, route}) => {
       <>
         <ActionButton
           text="Restaurant"
+          disabled={menuExpired}
           style={styles.leftButton}
           onPress={submitOrder}
         />
         <ActionButton
           text="Takeaway"
+          disabled={menuExpired}
           style={styles.rightButton}
           onPress={() => navigateToOrderScreen(menuId, order)}
         />
@@ -141,6 +184,25 @@ const MenuDetailsScreen = ({navigation, route}) => {
     );
   };
 
+  const renderGoingList = () => {
+    return (
+      <List.Accordion
+        title="Going (Restaurant)"
+        style={styles.accordion}
+        theme={{colors: {primary: 'white', text: 'white'}}}>
+        {menusById[menuId].usersGoing.map(user => (
+          <ProfileField
+            key={user.email}
+            title={email === user.email ? 'You' : user.fullname}
+            paragraph={user.email}
+            iconColor="#4A6572"
+            icon="account-circle-outline"
+          />
+        ))}
+      </List.Accordion>
+    );
+  };
+
   const cancelOrder = () => {
     dispatch(
       updateOrder(
@@ -148,7 +210,12 @@ const MenuDetailsScreen = ({navigation, route}) => {
           orderId: order.id,
           status: 'cancelled',
         },
-        () => setOrder({...order, status: 'cancelled'}),
+        () => {
+          if (order.type === 'restaurant') {
+            removeUserFromGoingList(id);
+          }
+          setOrder({...order, status: 'cancelled'});
+        },
       ),
     );
   };
@@ -197,6 +264,12 @@ const MenuDetailsScreen = ({navigation, route}) => {
       <SafeAreaView style={styles.container}>
         <AnimatedHeader
           animatedValue={offset}
+          textContainerColor={menuExpired ? '#A52630' : undefined}
+          description={
+            menuExpired
+              ? 'Expired'
+              : `Expires at ${menusById[menuId].restaurantId.cancelAt}`
+          }
           title={menusById[menuId].restaurantId.name}
         />
         {!isFetchingOrder ? (
@@ -209,12 +282,9 @@ const MenuDetailsScreen = ({navigation, route}) => {
               {useNativeDriver: false},
             )}>
             <View style={styles.body}>
-              <View>
+              <View style={{marginBottom: 15}}>
                 {renderCourseTypes()}
-                <View style={styles.going}>
-                  <Title>Going</Title>
-                  <Icon name="information" size={30} />
-                </View>
+                {renderGoingList()}
               </View>
               {!order.status ? (
                 <View style={styles.buttons}>{renderOrderButtons()}</View>
@@ -288,6 +358,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  accordion: {
+    backgroundColor: '#4A6572',
+  },
+  accordionTitle: {
+    color: 'white',
+  },
+  cancelButton: menuExpired => ({
+    backgroundColor: menuExpired ? '#A5263055' : '#A52630',
+  }),
 });
 
 export default MenuDetailsScreen;
