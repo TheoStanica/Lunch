@@ -1,4 +1,4 @@
-import {SET_MENUS, DELETE_MENUS} from '../types';
+import {SET_MENUS, DELETE_MENUS, UPDATE_MENU} from '../types';
 
 const initialState = {
   menus: [],
@@ -17,6 +17,16 @@ const menusReducer = (state = initialState, action) => {
       });
 
       return {menus: _menus, menusById: _menusById};
+    }
+
+    case UPDATE_MENU: {
+      return {
+        ...state,
+        menusById: {
+          ...state.menusById,
+          [action.payload.menuId]: action.payload.updated,
+        },
+      };
     }
 
     case DELETE_MENUS: {

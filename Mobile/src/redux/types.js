@@ -13,6 +13,7 @@ export const UPDATE_RESTAURANT = 'UPDATE_RESTAURANT';
 export const DELETE_RESTAURANT = 'DELETE_RESTAURANT';
 
 export const SET_MENUS = 'SET_MENUS';
+export const UPDATE_MENU = 'UPDATE_MENU';
 export const DELETE_MENUS = 'DELETE_MENUS';
 
 export const SET_ALLMENUS = 'SET_ALLMENUS';
