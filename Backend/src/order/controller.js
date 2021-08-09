@@ -127,8 +127,8 @@ const handleOrderUpdate = async ({
 
   if (
     status === orderStatus.active &&
-    (type === courseRequiredType.restaurant ||
-      order.type === courseRequiredType.restaurant)
+    type === courseRequiredType.restaurant &&
+    order.type === courseRequiredType.restaurant
   ) {
     await Menu.findByIdAndUpdate(
       order.menuId.id,
