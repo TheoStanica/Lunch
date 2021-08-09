@@ -25,15 +25,7 @@ import ActionButton from '../../components/actionButton';
 import AnimatedHeader from '../../components/animatedHeader';
 import ProfileField from '../../components/profileField';
 import {updateMenuAction} from '../../redux/actions/menuActions';
-import moment from 'moment';
-import {useTimer} from 'react-timer-hook';
-
-const isMenuExpired = cancelAt =>
-  moment().isAfter(moment(cancelAt, 'LT').format());
-
-const getExpireTimestamp = cancelAt => {
-  return new Date(moment(cancelAt, 'LT').format());
-};
+import useMenuExpired from '../../hooks/useMenuExpired';
 
 const MenuDetailsScreen = ({navigation, route}) => {
   const {menuId} = route.params;
@@ -44,17 +36,8 @@ const MenuDetailsScreen = ({navigation, route}) => {
   const offset = useRef(new Animated.Value(0)).current;
   const [isFetchingOrder, setIsFetchingOrder] = useState(true);
   const [order, setOrder] = useState('');
-  const [menuExpired, setMenuExpired] = useState(
-    isMenuExpired(menusById[menuId].restaurantId.cancelAt),
-  );
+  const menuExpired = useMenuExpired({menuId});
   const dispatch = useDispatch();
-
-  useTimer({
-    expiryTimestamp: getExpireTimestamp(
-      menusById[menuId].restaurantId.cancelAt,
-    ),
-    onExpire: () => setMenuExpired(true),
-  });
 
   useEffect(() => {
     dispatch(
