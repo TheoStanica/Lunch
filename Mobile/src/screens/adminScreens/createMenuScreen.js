@@ -1,16 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {
-  StyleSheet,
-  SafeAreaView,
-  StatusBar,
-  Text,
-  ScrollView,
-} from 'react-native';
+import {StyleSheet, SafeAreaView, StatusBar, Text} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {getRestaurants} from '../../redux/thunks/restaurantThunks';
 import {createMenu} from '../../redux/thunks/menuThunks';
 import MenuCreator from '../../components/menuCreator';
 import CustomDropDownPicker from '../../components/customDropDownPicker';
+import HideKeyboard from '../../components/hideKeyboard';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const CreateMenuScreen = ({navigation}) => {
   const [openDropDown, setOpenDropDown] = useState(false);
@@ -42,46 +38,48 @@ const CreateMenuScreen = ({navigation}) => {
   }, [selectedRestaurant]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor="#FFF1CA" barStyle="dark-content" />
-      <CustomDropDownPicker
-        text="Select a restaurant: "
-        openDropDown={openDropDown}
-        selectedItem={selectedRestaurant}
-        setSelectedItem={setSelectedRestaurant}
-        setOpenDropDown={setOpenDropDown}
-        items={generateRestaurantItems()}
-        placeholder="Select a restaurant"
-        textStyle={{fontSize: 21}}
-      />
-      {errors ? <Text style={styles.errorMessage}>{errors}</Text> : null}
-      <ScrollView
-        style={styles.body}
-        contentContainerStyle={{flexGrow: 1}}
-        showsVerticalScrollIndicator={false}>
-        <MenuCreator
-          onSubmit={menu => {
-            if (!selectedRestaurant) {
-              setErrors('Please select a restaurant');
-            } else {
-              dispatch(
-                createMenu({menu, restaurantId: selectedRestaurant}, () =>
-                  navigation.reset({
-                    routes: [
-                      {name: 'HomeScreen'},
-                      {
-                        name: 'MessageScreen',
-                        params: {message: 'Menu created!'},
-                      },
-                    ],
-                  }),
-                ),
-              );
-            }
-          }}
+    <HideKeyboard>
+      <SafeAreaView style={styles.container}>
+        <StatusBar backgroundColor="#FFF1CA" barStyle="dark-content" />
+        <CustomDropDownPicker
+          text="Select a restaurant: "
+          openDropDown={openDropDown}
+          selectedItem={selectedRestaurant}
+          setSelectedItem={setSelectedRestaurant}
+          setOpenDropDown={setOpenDropDown}
+          items={generateRestaurantItems()}
+          placeholder="Select a restaurant"
+          textStyle={{fontSize: 21}}
         />
-      </ScrollView>
-    </SafeAreaView>
+        {errors ? <Text style={styles.errorMessage}>{errors}</Text> : null}
+        <KeyboardAwareScrollView
+          style={styles.body}
+          contentContainerStyle={{flexGrow: 1}}
+          showsVerticalScrollIndicator={false}>
+          <MenuCreator
+            onSubmit={menu => {
+              if (!selectedRestaurant) {
+                setErrors('Please select a restaurant');
+              } else {
+                dispatch(
+                  createMenu({menu, restaurantId: selectedRestaurant}, () =>
+                    navigation.reset({
+                      routes: [
+                        {name: 'HomeScreen'},
+                        {
+                          name: 'MessageScreen',
+                          params: {message: 'Menu created!'},
+                        },
+                      ],
+                    }),
+                  ),
+                );
+              }
+            }}
+          />
+        </KeyboardAwareScrollView>
+      </SafeAreaView>
+    </HideKeyboard>
   );
 };
 
