@@ -23,19 +23,21 @@ const ManageOrdersScreen = ({navigation}) => {
   );
   const [openDropDown, setOpenDropDown] = useState(false);
   const [openSecondDropDown, setOpenSecondDropDown] = useState(false);
-  const [selectedRestaurant, setSelectedRestaurant] = useState({});
-  const [selectedUser, setSelectedUser] = useState({});
+  const [selectedRestaurant, setSelectedRestaurant] = useState('');
+  const [selectedUser, setSelectedUser] = useState('');
   const [statistics, setStatistics] = useState({});
   const dispatch = useDispatch();
 
   const generateStatistics = () => {
     let restaurants = {},
+      users = {},
       statistics = {};
 
     Object.values(ordersById).forEach(order => {
       const restaurant = order.menuId.restaurantId;
+      const user = order.userId;
 
-      if (!restaurants[restaurant.name]) {
+      if (!restaurants[restaurant.name])
         restaurants[restaurant.name] = {
           totalOrders: 0,
           totalTakeawayOrders: 0,
@@ -43,7 +45,6 @@ const ManageOrdersScreen = ({navigation}) => {
           totalTakeawayCost: 0,
           totalCost: 0,
         };
-      }
 
       if (order.status === 'active') {
         restaurants[restaurant.name].totalOrders++;
@@ -53,9 +54,47 @@ const ManageOrdersScreen = ({navigation}) => {
           restaurants[restaurant.name].totalTakeawayCost += restaurant.cost;
         }
       }
+      Object.values(restaurants).forEach(restaurant => {
+        restaurant.totalRestaurantOrders =
+          restaurant.totalOrders - restaurant.totalTakeawayOrders;
+      });
+
+      if (selectedUser === '' || selectedUser === user.id) {
+        if (selectedRestaurant === '' || selectedRestaurant === restaurant.id) {
+          if (!users[user.email] || !users[user.email][restaurant.name])
+            users[user.email] = {
+              ...users[user.email],
+              [restaurant.name]: {
+                totalOrders: 0,
+                totalTakeawayOrders: 0,
+                totalRestaurantOrders: 0,
+                totalTakeawayCost: 0,
+                totalCost: 0,
+              },
+            };
+
+          if (order.status === 'active') {
+            users[user.email][restaurant.name].totalOrders++;
+            users[user.email][restaurant.name].totalCost += restaurant.cost;
+            if (order.type === 'takeaway') {
+              users[user.email][restaurant.name].totalTakeawayOrders++;
+              users[user.email][restaurant.name].totalTakeawayCost +=
+                restaurant.cost;
+            }
+          }
+
+          Object.values(users).forEach(user => {
+            Object.values(user).forEach(restaurant => {
+              restaurant.totalRestaurantOrders =
+                restaurant.totalOrders - restaurant.totalTakeawayOrders;
+            });
+          });
+        }
+      }
     });
 
     statistics.restaurants = restaurants;
+    statistics.users = users;
 
     return statistics;
   };
@@ -63,7 +102,7 @@ const ManageOrdersScreen = ({navigation}) => {
   const generateRestaurantItems = () => {
     const items = [];
 
-    items.push({label: 'All restaurants', value: {}});
+    items.push({label: 'All restaurants', value: ''});
     restaurants.forEach(restaurantId => {
       if (restaurantsById[restaurantId].status === 'active')
         items.push({
@@ -77,7 +116,7 @@ const ManageOrdersScreen = ({navigation}) => {
 
   const generateUsersItems = () => {
     const items = [];
-    items.push({label: 'All users', value: {}});
+    items.push({label: 'All users', value: ''});
     allUsers.forEach(userId => {
       if (allUsersById[userId].status === 'active')
         items.push({
@@ -108,7 +147,7 @@ const ManageOrdersScreen = ({navigation}) => {
         privilege: 'admin',
       }),
     );
-  }, [orderStart, orderEnd]);
+  }, [orderStart, orderEnd, selectedUser, selectedRestaurant]);
 
   useEffect(() => {
     const statistics = generateStatistics();
