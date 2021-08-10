@@ -86,11 +86,11 @@ const deleteMenu = async (req, res, next) => {
       await Order.updateMany(
         { menuId: menu._id },
         { deleted: true },
-        { session: session }
+        { session }
       );
 
       menu.deleted = true;
-      await menu.save({ session: session });
+      await menu.save({ session });
 
       await session.commitTransaction();
       session.endSession();

@@ -1,6 +1,10 @@
 const BadRequestError = require('../errors/badRequestError');
 const NotFoundError = require('../errors/notFoundError');
+const InternalServerError = require('../errors/internalServerError');
 const Restaurant = require('./model');
+const Menu = require('../menu/model');
+const Order = require('../order/model');
+const mongoose = require('mongoose');
 
 const createRestaurant = async (req, res, next) => {
   try {
@@ -74,16 +78,40 @@ const updateRestaurant = async (req, res, next) => {
 
 const deleteRestaurant = async (req, res, next) => {
   try {
-    const { _id } = req.params,
-      restaurant = await Restaurant.findOne({ _id });
+    const restaurant = await Restaurant.findOne({ _id: req.params._id });
 
     if (!restaurant || restaurant.deleted) {
       return next(new NotFoundError("Restaurant doesn't exist"));
     }
 
-    await Restaurant.findByIdAndUpdate(_id, { deleted: true });
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      const menus = await Menu.find({ restaurantId: restaurant._id }, null, {
+        session,
+      });
 
-    res.status(204).send();
+      for (let menu of menus) {
+        await Order.updateMany(
+          { menuId: menu._id },
+          { deleted: true },
+          { session }
+        );
+        menu.deleted = true;
+        await menu.save({ session });
+      }
+      restaurant.deleted = true;
+      await restaurant.save({ session });
+
+      await session.commitTransaction();
+      session.endSession();
+
+      res.sendStatus(204);
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+      return next(new InternalServerError());
+    }
   } catch (error) {
     return next(error);
   }
