@@ -1,5 +1,4 @@
-import {useState} from 'react';
-import {useTimer} from 'react-timer-hook';
+import {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
 
@@ -11,12 +10,19 @@ const useMenuExpired = ({menuId}) => {
     isMenuExpired(menusById[menuId].restaurantId.cancelAt),
   );
 
-  useTimer({
-    expiryTimestamp: getExpireTimestamp(
-      menusById[menuId].restaurantId.cancelAt,
-    ),
-    onExpire: () => setMenuExpired(true),
-  });
+  useEffect(() => {
+    const timeLeft = getTimeLeft(menusById[menuId].restaurantId.cancelAt);
+    let clear = null;
+    if (timeLeft > 0) {
+      clear = setTimeout(() => {
+        setMenuExpired(true);
+      }, timeLeft);
+    }
+
+    return () => {
+      if (clear) clearTimeout(clear);
+    };
+  }, [menuId]);
 
   return menuExpired;
 };
@@ -24,8 +30,10 @@ const useMenuExpired = ({menuId}) => {
 const isMenuExpired = cancelAt =>
   moment().isAfter(moment(cancelAt, 'LT').format());
 
-const getExpireTimestamp = cancelAt => {
-  return new Date(moment(cancelAt, 'LT').format());
+const getTimeLeft = cancelAt => {
+  const now = moment();
+  const expireDate = moment(cancelAt, 'LT');
+  return moment.duration(expireDate - now)._milliseconds;
 };
 
 export default useMenuExpired;
