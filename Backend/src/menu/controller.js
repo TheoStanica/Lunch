@@ -1,8 +1,10 @@
 const BadRequestError = require('../errors/badRequestError');
 const NotFoundError = require('../errors/notFoundError');
+const InternalServerError = require('../errors/internalServerError');
 const Restaurant = require('../restaurant/model');
 const Menu = require('./model');
 const Order = require('../order/model');
+const mongoose = require('mongoose');
 
 const { restaurantStatus } = require('../utils/enums');
 
@@ -73,23 +75,33 @@ const getMenus = async (req, res, next) => {
 
 const deleteMenu = async (req, res, next) => {
   try {
-    const { _id } = req.params,
-      menu = await Menu.findOne({ _id });
+    const menu = await Menu.findOne({ _id: req.params._id });
 
     if (!menu || menu.deleted) {
       return next(new NotFoundError("Menu doesn't exist"));
     }
 
-    const orders = await Order.find({ menuId: '6112424a1919bc14afbf516b' });
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+      await Order.updateMany(
+        { menuId: '6112424a1919bc14afbf516b' },
+        { deleted: true },
+        { session: session }
+      );
 
-    orders.forEach((order) => (order.deleted = true));
+      menu.deleted = true;
+      await menu.save({ session: session });
 
-    console.log(orders);
+      await session.commitTransaction();
+      session.endSession();
 
-    // menu.deleted = true;
-    // await menu.save();
-
-    res.sendStatus(204);
+      res.sendStatus(204);
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+      return next(new InternalServerError());
+    }
   } catch (error) {
     return next(error);
   }
