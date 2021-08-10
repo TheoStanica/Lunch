@@ -26,11 +26,9 @@ const TextInputField = ({
         onFocus={() => setIsFocused(true)}
         {...rest}
       />
-      <HelperText
-        type="error"
-        visible={errors && (isFocused || touched) ? true : false}>
-        {errors}
-      </HelperText>
+      {errors && (isFocused || touched) ? (
+        <HelperText type="error">{errors}</HelperText>
+      ) : null}
     </>
   );
 };
