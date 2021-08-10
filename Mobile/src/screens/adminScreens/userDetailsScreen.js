@@ -30,14 +30,19 @@ const UserDetailsScreen = ({route, navigation}) => {
             if (values.email === user.email) delete values.email;
 
             dispatch(
-              updateUser({
-                _userId: user.id,
-                email: values.email,
-                fullname: values.fullname,
-                role: values.role,
-              }),
+              updateUser(
+                {
+                  _userId: user.id,
+                  email: values.email,
+                  fullname: values.fullname,
+                  role: values.role,
+                },
+                () =>
+                  navigation.replace('MessageScreen', {
+                    message: 'User Updated!',
+                  }),
+              ),
             );
-            navigation.goBack();
           }}>
           {({
             values,
