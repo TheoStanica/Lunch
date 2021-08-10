@@ -27,7 +27,7 @@ const AdminField = ({
     onUpdatePrevOpenedRow(row[index]);
   };
 
-  const renderActions = () => {
+  const renderActions = index => {
     return (
       <>
         {onDelete ? (
@@ -37,7 +37,16 @@ const AdminField = ({
               Alert.alert(
                 'Delete',
                 `Are you sure you want to remove ${title}?`,
-                [{text: 'Yes', onPress: () => onDelete()}, {text: 'No'}],
+                [
+                  {
+                    text: 'Yes',
+                    onPress: () => {
+                      row[index].close();
+                      onDelete();
+                    },
+                  },
+                  {text: 'No'},
+                ],
               )
             }>
             <Animated.Text
@@ -48,7 +57,10 @@ const AdminField = ({
         ) : null}
         {onEdit ? (
           <RectButton
-            onPress={() => onEdit()}
+            onPress={() => {
+              onEdit();
+              row[index].close();
+            }}
             style={[styles.swipeableButton, styles.swipeableEdit]}>
             <Animated.Text
               style={[styles.actionText, styles.swipeableEditText]}>
@@ -62,7 +74,7 @@ const AdminField = ({
 
   return (
     <Swipeable
-      renderRightActions={renderActions}
+      renderRightActions={() => renderActions(index)}
       friction={1.5}
       ref={ref => {
         row[index] = ref;
