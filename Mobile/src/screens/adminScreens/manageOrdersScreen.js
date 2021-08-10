@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {StyleSheet, SafeAreaView, FlatList, Text, View} from 'react-native';
+import {StyleSheet, SafeAreaView, FlatList, View} from 'react-native';
 import {getOrder} from '../../redux/thunks/orderThunks';
 import {Title, Divider, List, Modal, Portal} from 'react-native-paper';
 import {getRestaurants} from '../../redux/thunks/restaurantThunks';
@@ -23,8 +23,6 @@ const ManageOrdersScreen = ({navigation}) => {
   const [orderEnd, setOrderEnd] = useState(
     moment(Date.now()).format('DD-MM-YYYY'),
   );
-  const [visible, setVisible] = useState(false);
-  const [user, setUser] = useState({});
   const [openDropDown, setOpenDropDown] = useState(false);
   const [openSecondDropDown, setOpenSecondDropDown] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState('');
@@ -164,37 +162,6 @@ const ManageOrdersScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Portal>
-        <Modal
-          visible={visible}
-          onDismiss={() => setVisible(false)}
-          contentContainerStyle={styles.containerStyle}>
-          <SafeAreaView>
-            <Title style={styles.fullnameTitle}>
-              {user.item ? user.item[0] : {}}
-            </Title>
-            <FlatList
-              data={Object.entries(user.item ? user.item[1] : {})}
-              keyExtractor={item => item}
-              renderItem={restaurant => (
-                <SafeAreaView>
-                  <Title style={styles.title}>{restaurant.item[0]}</Title>
-                  <Statistics
-                    totalOrders={restaurant.item[1].totalOrders}
-                    totalRestaurantOrders={
-                      restaurant.item[1].totalRestaurantOrders
-                    }
-                    totalTakeawayOrders={restaurant.item[1].totalTakeawayOrders}
-                    totalTakeawayCost={restaurant.item[1].totalTakeawayCost}
-                    totalCost={restaurant.item[1].totalCost}
-                  />
-                </SafeAreaView>
-              )}
-              showsVerticalScrollIndicator={false}
-            />
-          </SafeAreaView>
-        </Modal>
-      </Portal>
       <Title style={styles.title}>Select a period of time for statistics</Title>
       <DateTimePicker
         title="Start"
@@ -239,10 +206,9 @@ const ManageOrdersScreen = ({navigation}) => {
             style={styles.itemContainer('#fff7e0')}
             title={user.item[0]}
             titleStyle={styles.listTitle}
-            onPress={() => {
-              setVisible(true);
-              setUser(user);
-            }}
+            onPress={() =>
+              navigation.navigate('UserRestaurantOrdersScreen', {user: user})
+            }
             left={() => (
               <View style={styles.icon}>
                 <Icon size={30} name={'account'} color={'#4A6572'} />
@@ -267,10 +233,6 @@ const styles = StyleSheet.create({
   },
   title: {
     alignSelf: 'center',
-  },
-  fullnameTitle: {
-    alignSelf: 'center',
-    padding: 10,
   },
   listTitle: {
     fontSize: 18,

@@ -9,7 +9,7 @@ import CreateRestaurantScreen from '../../screens/adminScreens/createRestaurantS
 import MessageScreen from '../../screens/messageScreen';
 import ManageMenusScreen from '../../screens/adminScreens/manageMenusScreen';
 import MenuDetailsTab from '../tabNavigationRoutes/menuDetailsTab';
-import OrderDetailsTab from '../tabNavigationRoutes/orderDetailsTab';
+import OrdersStack from './ordersStack';
 
 const Stack = createStackNavigator();
 
@@ -59,10 +59,11 @@ const AdminStack = () => {
         }}
       />
       <Stack.Screen
-        name="OrderDetailsTab"
-        component={OrderDetailsTab}
+        name="OrdersStack"
+        component={OrdersStack}
         options={{
           title: 'Manage Orders',
+          headerShown: false,
         }}
       />
       <Stack.Screen
