@@ -8,10 +8,8 @@ const UerRestaurantOrdersScreen = ({route}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Title style={styles.fullnameTitle}>
-        {user.item ? user.item[0] : {}}
-      </Title>
-      <RestaurantOrders data={Object.entries(user.item ? user.item[1] : {})} />
+      <Title style={styles.fullnameTitle}>{user ? user[0] : {}}</Title>
+      <RestaurantOrders data={Object.entries(user ? user[1] : {})} />
     </SafeAreaView>
   );
 };

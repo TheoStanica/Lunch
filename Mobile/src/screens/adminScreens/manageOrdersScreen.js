@@ -180,7 +180,9 @@ const ManageOrdersScreen = ({navigation}) => {
             title={user.item[0]}
             titleStyle={styles.listTitle}
             onPress={() =>
-              navigation.navigate('UserRestaurantOrdersScreen', {user: user})
+              navigation.navigate('UserRestaurantOrdersScreen', {
+                user: user.item,
+              })
             }
             left={() => (
               <View style={styles.icon}>

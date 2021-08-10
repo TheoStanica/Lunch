@@ -2,6 +2,7 @@ const BadRequestError = require('../errors/badRequestError');
 const NotFoundError = require('../errors/notFoundError');
 const Restaurant = require('../restaurant/model');
 const Menu = require('./model');
+const Order = require('../order/model');
 
 const { restaurantStatus } = require('../utils/enums');
 
@@ -46,8 +47,8 @@ const createMenu = async (req, res, next) => {
       return next(new BadRequestError('Please provide an active restaurant.'));
     }
 
-    await Menu.create(req.body);
-
+    const menu = await Menu.create(req.body);
+    console.log(menu);
     res.sendStatus(201);
   } catch (error) {
     return next(error);
@@ -79,7 +80,14 @@ const deleteMenu = async (req, res, next) => {
       return next(new NotFoundError("Menu doesn't exist"));
     }
 
-    await Menu.findByIdAndUpdate(_id, { deleted: true });
+    const orders = await Order.find({ menuId: '6112424a1919bc14afbf516b' });
+
+    orders.forEach((order) => (order.deleted = true));
+
+    console.log(orders);
+
+    // menu.deleted = true;
+    // await menu.save();
 
     res.sendStatus(204);
   } catch (error) {
