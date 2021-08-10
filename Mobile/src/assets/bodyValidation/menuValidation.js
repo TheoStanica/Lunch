@@ -11,7 +11,9 @@ export const menuValidationSchema = yup.object({
           .of(
             yup.object({
               description: yup.string().required('Please enter a dish name'),
-              requiredType: yup.string().oneOf(['restaurant', 'takeaway']),
+              requiredType: yup
+                .string()
+                .oneOf(['restaurant', 'takeaway', 'both']),
             }),
           )
           .min(1, 'Please add at least one dish'),
