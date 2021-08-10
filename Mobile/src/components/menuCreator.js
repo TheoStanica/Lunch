@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Animated, Alert} from 'react-native';
+import {StyleSheet, View, Animated, Alert, SafeAreaView} from 'react-native';
 import {
   List,
   IconButton,
   Title,
   Subheading,
-  RadioButton,
   Text,
   Divider,
 } from 'react-native-paper';
@@ -15,9 +14,11 @@ import {menuValidationSchema} from '../assets/bodyValidation/menuValidation';
 import TextInputField from './textInputField';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import ActionButton from './actionButton';
+import MenuCreatorChip from './menuCreatorChip';
+import MenuCreatorInputField from './menuCreatorInputField';
 
 const EMPTY_COURSE = {courseCategory: '', courses: []};
-const EMPTY_DISH = {description: ''};
+const EMPTY_DISH = {description: '', requiredType: 'both'};
 
 const MenuCreator = ({onSubmit}) => {
   const [menuError, setMenuError] = useState('');
@@ -66,8 +67,8 @@ const MenuCreator = ({onSubmit}) => {
           <Divider style={styles.divider} />
           <View style={styles.dishContainer}>
             <View style={styles.flexGrowContainer}>
-              <TextInputField
-                label="Dish Name"
+              <MenuCreatorInputField
+                placeholder="Dish Name"
                 handleChange={handleChange}
                 handleBlur={handleBlur}
                 touched={
@@ -80,45 +81,45 @@ const MenuCreator = ({onSubmit}) => {
                   errors?.createdMenu?.[courseIdx]?.courses?.[idx]?.description
                 }
                 field={`createdMenu[${courseIdx}].courses[${idx}].description`}
-                theme={{colors: {primary: '#4A6572'}}}
-                underlineColor="#0002"
-                style={styles.dishInputField}
               />
-              <RadioButton.Group
-                value={values.createdMenu[courseIdx].courses[idx].requiredType}
-                onValueChange={newValue => {
-                  if (
-                    values.createdMenu[courseIdx].courses[idx].requiredType ===
-                    newValue
-                  ) {
-                    setFieldValue(
-                      `createdMenu[${courseIdx}].courses[${idx}].requiredType`,
-                      undefined,
-                    );
-                  } else {
-                    setFieldValue(
-                      `createdMenu[${courseIdx}].courses[${idx}].requiredType`,
-                      newValue,
-                    );
-                  }
-                }}>
-                <Text style={styles.radioText}>Only: </Text>
-                <View style={styles.radioGroupContainer}>
-                  <View style={styles.radioContainer}>
-                    <RadioButton value="restaurant" color="#4A6572" />
-                    <Text>Restaurant</Text>
-                  </View>
-                  <View style={styles.radioContainer}>
-                    <RadioButton value="takeaway" color="#4A6572" />
-                    <Text>Takeaway</Text>
-                  </View>
+
+              <View style={styles.radioGroupContainer}>
+                <View style={styles.wrapContainer}>
+                  <Text style={styles.radioText}>Type</Text>
+                  <MenuCreatorChip
+                    values={values}
+                    courseIdx={courseIdx}
+                    idx={idx}
+                    setFieldValue={setFieldValue}
+                    field="both"
+                    defaultField="both"
+                    text="All"
+                  />
+                  <MenuCreatorChip
+                    values={values}
+                    courseIdx={courseIdx}
+                    idx={idx}
+                    setFieldValue={setFieldValue}
+                    field="restaurant"
+                    defaultField="both"
+                    text="Restaurant"
+                  />
+                  <MenuCreatorChip
+                    values={values}
+                    courseIdx={courseIdx}
+                    idx={idx}
+                    setFieldValue={setFieldValue}
+                    field="takeaway"
+                    defaultField="both"
+                    text="Takeaway"
+                  />
                 </View>
-              </RadioButton.Group>
+              </View>
             </View>
 
             <IconButton
               icon="delete"
-              color="red"
+              color="#A52630"
               onPress={() =>
                 Alert.alert(
                   'Delete',
@@ -206,16 +207,14 @@ const MenuCreator = ({onSubmit}) => {
                         item.courseCategory ? item.courseCategory : 'New Course'
                       }>
                       <View style={styles.body}>
-                        <TextInputField
-                          label="Course Title"
+                        <MenuCreatorInputField
+                          placeholder="Course Title"
                           value={values.createdMenu[idx].courseCategory}
                           handleChange={handleChange}
                           handleBlur={handleBlur}
                           touched={touched?.createdMenu?.[idx]?.courseCategory}
                           errors={errors?.createdMenu?.[idx]?.courseCategory}
                           field={`createdMenu[${idx}].courseCategory`}
-                          style={styles.dishInputField}
-                          underlineColor="transparent"
                         />
 
                         <View style={styles.dishesContainer}>
@@ -301,7 +300,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   swipeableDelete: {
-    backgroundColor: 'red',
+    backgroundColor: '#A52630',
   },
   swipeableDeleteText: {
     color: 'white',
@@ -349,26 +348,23 @@ const styles = StyleSheet.create({
   },
   divider: {
     backgroundColor: '#4A6572',
-    borderWidth: 1,
+    borderWidth: 0.3,
   },
   dishContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingVertical: 5,
   },
   radioGroupContainer: {
     flexDirection: 'row',
-    marginLeft: 12,
+    alignItems: 'center',
   },
-  radioText: {
-    marginLeft: 12,
-  },
-  dishInputField: {
-    backgroundColor: 'transparent',
-    borderWidth: 0.3,
-    borderColor: '#0007',
-    fontSize: 12,
+  wrapContainer: {
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
   },
   inputField: {
     backgroundColor: 'transparent',
