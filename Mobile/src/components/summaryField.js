@@ -1,24 +1,23 @@
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {StyleSheet} from 'react-native';
+import {Card, Paragraph} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const SummaryField = ({text, icon, iconColor = '#4A6572'}) => {
+const SummaryField = ({
+  text,
+  iconName,
+  iconColor = '#4A6572',
+  iconSize = 20,
+}) => {
   return (
-    <View style={styles.flexDirectionRow}>
-      <Icon size={25} name={icon} color={iconColor} />
-      <Text style={styles.summary}>
-        {'  '}
-        {text}
-      </Text>
-    </View>
+    <Card.Content style={styles.flexDirectionRow}>
+      <Icon name={iconName} size={iconSize} color={iconColor} />
+      <Paragraph> {text}</Paragraph>
+    </Card.Content>
   );
 };
 
 const styles = StyleSheet.create({
-  summary: {
-    fontSize: 16,
-    marginVertical: 5,
-  },
   flexDirectionRow: {
     flexDirection: 'row',
   },

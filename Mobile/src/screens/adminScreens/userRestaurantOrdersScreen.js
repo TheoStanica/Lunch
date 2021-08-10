@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
   },
   fullnameTitle: {
     alignSelf: 'center',
-    padding: 10,
   },
 });
 

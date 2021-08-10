@@ -1,6 +1,5 @@
 import React from 'react';
 import {SafeAreaView, FlatList, StyleSheet} from 'react-native';
-import {Title} from 'react-native-paper';
 import Statistics from './statistics';
 
 const RestaurantOrders = ({data}) => {
@@ -10,8 +9,8 @@ const RestaurantOrders = ({data}) => {
       keyExtractor={item => item}
       renderItem={restaurant => (
         <SafeAreaView>
-          <Title style={styles.title}>{restaurant.item[0]}</Title>
           <Statistics
+            title={restaurant.item[0]}
             totalOrders={restaurant.item[1].totalOrders}
             totalRestaurantOrders={restaurant.item[1].totalRestaurantOrders}
             totalTakeawayOrders={restaurant.item[1].totalTakeawayOrders}
