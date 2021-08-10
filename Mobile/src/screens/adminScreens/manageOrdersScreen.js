@@ -2,14 +2,23 @@ import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {StyleSheet, SafeAreaView, FlatList, View} from 'react-native';
 import {getOrder} from '../../redux/thunks/orderThunks';
-import {Title, Divider, List, Modal, Portal} from 'react-native-paper';
+import {Title, Divider, List} from 'react-native-paper';
 import {getRestaurants} from '../../redux/thunks/restaurantThunks';
 import {getAllUsers} from '../../redux/thunks/userThunks';
 import DateTimePicker from '../../components/timePicker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Statistics from '../../components/statistics';
 import CustomDropDownPicker from '../../components/customDropDownPicker';
 import moment from 'moment';
+
+const emptyObject = () => {
+  return {
+    totalOrders: 0,
+    totalTakeawayOrders: 0,
+    totalRestaurantOrders: 0,
+    totalTakeawayCost: 0,
+    totalCost: 0,
+  };
+};
 
 const ManageOrdersScreen = ({navigation}) => {
   const {orders, ordersById} = useSelector(state => state.ordersReducer);
@@ -40,13 +49,7 @@ const ManageOrdersScreen = ({navigation}) => {
       const user = order.userId;
 
       if (!restaurants[restaurant.name])
-        restaurants[restaurant.name] = {
-          totalOrders: 0,
-          totalTakeawayOrders: 0,
-          totalRestaurantOrders: 0,
-          totalTakeawayCost: 0,
-          totalCost: 0,
-        };
+        restaurants[restaurant.name] = emptyObject();
 
       if (order.status === 'active') {
         restaurants[restaurant.name].totalOrders++;
@@ -68,13 +71,7 @@ const ManageOrdersScreen = ({navigation}) => {
           if (!users[key] || !users[key][restaurant.name])
             users[key] = {
               ...users[key],
-              [restaurant.name]: {
-                totalOrders: 0,
-                totalTakeawayOrders: 0,
-                totalRestaurantOrders: 0,
-                totalTakeawayCost: 0,
-                totalCost: 0,
-              },
+              [restaurant.name]: emptyObject(),
             };
 
           if (order.status === 'active') {
