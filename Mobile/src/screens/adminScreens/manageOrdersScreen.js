@@ -50,8 +50,7 @@ const ManageOrdersScreen = ({navigation}) => {
         }
       };
     let restaurants = {},
-      users = {},
-      statistics = {};
+      users = {};
 
     Object.values(ordersById).forEach(order => {
       const restaurant = order.menuId.restaurantId;
@@ -88,10 +87,7 @@ const ManageOrdersScreen = ({navigation}) => {
       }
     });
 
-    statistics.restaurants = restaurants;
-    statistics.users = users;
-
-    return statistics;
+    return {restaurants, users};
   };
 
   const generateRestaurantItems = () => {
