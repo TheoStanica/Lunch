@@ -50,7 +50,6 @@ const createMenu = async (req, res, next) => {
     }
 
     const menu = await Menu.create(req.body);
-    console.log(menu);
     res.sendStatus(201);
   } catch (error) {
     return next(error);
@@ -85,7 +84,7 @@ const deleteMenu = async (req, res, next) => {
     session.startTransaction();
     try {
       await Order.updateMany(
-        { menuId: '6112424a1919bc14afbf516b' },
+        { menuId: menu._id },
         { deleted: true },
         { session: session }
       );
