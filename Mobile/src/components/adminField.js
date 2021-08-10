@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FCBB00',
   },
   swipeableDelete: {
-    backgroundColor: 'red',
+    backgroundColor: '#A52630',
   },
   swipeableEditText: {
     color: 'black',
