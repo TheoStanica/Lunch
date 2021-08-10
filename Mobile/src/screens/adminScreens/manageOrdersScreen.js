@@ -10,16 +10,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomDropDownPicker from '../../components/customDropDownPicker';
 import moment from 'moment';
 
-const emptyObject = () => {
-  return {
-    totalOrders: 0,
-    totalTakeawayOrders: 0,
-    totalRestaurantOrders: 0,
-    totalTakeawayCost: 0,
-    totalCost: 0,
-  };
-};
-
 const ManageOrdersScreen = ({navigation}) => {
   const {orders, ordersById} = useSelector(state => state.ordersReducer);
   const {restaurants, restaurantsById} = useSelector(
@@ -40,6 +30,25 @@ const ManageOrdersScreen = ({navigation}) => {
   const dispatch = useDispatch();
 
   const generateStatistics = () => {
+    const emptyObject = () => {
+        return {
+          totalOrders: 0,
+          totalTakeawayOrders: 0,
+          totalRestaurantOrders: 0,
+          totalTakeawayCost: 0,
+          totalCost: 0,
+        };
+      },
+      updateStatistics = (order, restaurant, cost) => {
+        if (order.status === 'active') {
+          restaurant.totalOrders++;
+          restaurant.totalCost += cost;
+          if (order.type === 'takeaway') {
+            restaurant.totalTakeawayOrders++;
+            restaurant.totalTakeawayCost += cost;
+          }
+        }
+      };
     let restaurants = {},
       users = {},
       statistics = {};
@@ -50,15 +59,8 @@ const ManageOrdersScreen = ({navigation}) => {
 
       if (!restaurants[restaurant.name])
         restaurants[restaurant.name] = emptyObject();
+      updateStatistics(order, restaurants[restaurant.name], restaurant.cost);
 
-      if (order.status === 'active') {
-        restaurants[restaurant.name].totalOrders++;
-        restaurants[restaurant.name].totalCost += restaurant.cost;
-        if (order.type === 'takeaway') {
-          restaurants[restaurant.name].totalTakeawayOrders++;
-          restaurants[restaurant.name].totalTakeawayCost += restaurant.cost;
-        }
-      }
       Object.values(restaurants).forEach(restaurant => {
         restaurant.totalRestaurantOrders =
           restaurant.totalOrders - restaurant.totalTakeawayOrders;
@@ -73,15 +75,7 @@ const ManageOrdersScreen = ({navigation}) => {
               ...users[key],
               [restaurant.name]: emptyObject(),
             };
-
-          if (order.status === 'active') {
-            users[key][restaurant.name].totalOrders++;
-            users[key][restaurant.name].totalCost += restaurant.cost;
-            if (order.type === 'takeaway') {
-              users[key][restaurant.name].totalTakeawayOrders++;
-              users[key][restaurant.name].totalTakeawayCost += restaurant.cost;
-            }
-          }
+          updateStatistics(order, users[key][restaurant.name], restaurant.cost);
 
           Object.values(users).forEach(user => {
             Object.values(user).forEach(restaurant => {
