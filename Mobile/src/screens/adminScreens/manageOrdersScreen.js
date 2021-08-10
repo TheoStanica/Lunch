@@ -90,29 +90,15 @@ const ManageOrdersScreen = ({navigation}) => {
     return {restaurants, users};
   };
 
-  const generateRestaurantItems = () => {
+  const generateItems = (label, values, valuesById, name = 'name') => {
     const items = [];
 
-    items.push({label: 'All restaurants', value: ''});
-    restaurants.forEach(restaurantId => {
-      if (restaurantsById[restaurantId].status === 'active')
+    items.push({label: label, value: ''});
+    values.forEach(valueId => {
+      if (valuesById[valueId].status === 'active')
         items.push({
-          label: restaurantsById[restaurantId].name,
-          value: restaurantsById[restaurantId].id,
-        });
-    });
-
-    return items;
-  };
-
-  const generateUsersItems = () => {
-    const items = [];
-    items.push({label: 'All users', value: ''});
-    allUsers.forEach(userId => {
-      if (allUsersById[userId].status === 'active')
-        items.push({
-          label: allUsersById[userId].fullname,
-          value: allUsersById[userId].id,
+          label: valuesById[valueId][name],
+          value: valuesById[valueId].id,
         });
     });
 
@@ -170,7 +156,7 @@ const ManageOrdersScreen = ({navigation}) => {
         selectedItem={selectedRestaurant}
         setSelectedItem={setSelectedRestaurant}
         setOpenDropDown={setOpenDropDown}
-        items={generateRestaurantItems()}
+        items={generateItems('All restaurants', restaurants, restaurantsById)}
         placeholder="All restaurants"
         zIndex={2000}
       />
@@ -180,7 +166,7 @@ const ManageOrdersScreen = ({navigation}) => {
         selectedItem={selectedUser}
         setSelectedItem={setSelectedUser}
         setOpenDropDown={setOpenSecondDropDown}
-        items={generateUsersItems()}
+        items={generateItems('All Users', allUsers, allUsersById, 'fullname')}
         placeholder="All users"
       />
       <Divider style={styles.divider} />
