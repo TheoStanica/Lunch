@@ -1,11 +1,12 @@
 import React from 'react';
-import firestore from '@react-native-firebase/firestore';
 import {StyleSheet, SafeAreaView, Text} from 'react-native';
+import ActionButton from '../../components/actionButton';
 
-const ThreadsScreen = ({navigation}) => {
+const CreateThreadScreen = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Threads Screen</Text>
+      <Text>Create Thread Screen</Text>
+      <ActionButton text="Create" onPress={() => handleSubmit()} />
     </SafeAreaView>
   );
 };
@@ -17,4 +18,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ThreadsScreen;
+export default CreateThreadScreen;
