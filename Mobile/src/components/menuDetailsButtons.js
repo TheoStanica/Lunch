@@ -37,15 +37,27 @@ const MenuDetailsButtons = ({
     setHasOnlyRestaurant(restaurantOnly);
   }, [menuId]);
 
-  const submitOrder = () => {
+  const handleTakeaway = (menuId, order) => {
+    if (menusById[menuId].menu.every(menu => menu.courses.length === 1)) {
+      const menuOptions = {};
+      menusById[menuId].menu.forEach(
+        menu => (menuOptions[menu.courseCategory] = 0),
+      );
+      handleSubmit({menuId, type: 'takeaway', menuOptions});
+    } else {
+      navigateToOrderScreen(menuId, order);
+    }
+  };
+
+  const handleSubmit = ({menuId, type, menuOptions}) => {
     if (!order) {
       dispatch(
         createOrder(
           {
-            menuId: menuId,
+            menuId,
             userId: id,
-            type: 'restaurant',
-            menuOptions: undefined,
+            type,
+            menuOptions,
           },
           sendSuccessMessage,
         ),
@@ -56,13 +68,15 @@ const MenuDetailsButtons = ({
           {
             orderId: order.id,
             status: 'active',
-            type: 'restaurant',
+            type,
+            menuOptions,
           },
           sendSuccessMessage,
         ),
       );
     }
   };
+
   const cancelOrder = () => {
     dispatch(
       updateOrder(
@@ -122,7 +136,7 @@ const MenuDetailsButtons = ({
             text="update order"
             disabled={menuExpired}
             style={styles.rightButton}
-            onPress={() => navigateToOrderScreen(menuId, order)}
+            onPress={() => handleTakeaway(menuId, order)}
           />
         ) : null}
       </>
@@ -136,14 +150,14 @@ const MenuDetailsButtons = ({
           text="Restaurant"
           disabled={menuExpired}
           style={styles.leftButton}
-          onPress={submitOrder}
+          onPress={() => handleSubmit({menuId, type: 'restaurant'})}
         />
         {!hasOnlyRestaurant ? (
           <ActionButton
             text="Takeaway"
             disabled={menuExpired}
             style={styles.rightButton}
-            onPress={() => navigateToOrderScreen(menuId, order)}
+            onPress={() => handleTakeaway(menuId, order)}
           />
         ) : null}
       </>
