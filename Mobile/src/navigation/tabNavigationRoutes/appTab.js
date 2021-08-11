@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {Platform} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -6,11 +7,31 @@ import HomeStack from '../stackNavigationRoutes/homeStack';
 import AdminStack from '../stackNavigationRoutes/adminStack';
 import ProfileStack from '../stackNavigationRoutes/profileStack';
 import ThreadsStack from '../stackNavigationRoutes/threadsStack';
+import messaging from '@react-native-firebase/messaging';
 
 const Tab = createBottomTabNavigator();
 
 const AppTab = () => {
   const userReducer = useSelector(state => state.userReducer);
+
+  useEffect(() => {
+    if (Platform.OS === 'android') requestUserPermission();
+  }, []);
+
+  const requestUserPermission = async () => {
+    try {
+      const authStatus = await messaging().requestPermission();
+      const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+      if (enabled) {
+        getFcmToken();
+      }
+    } catch (error) {}
+  };
+  const getFcmToken = async () => {
+    const fcmToken = await messaging().getToken();
+  };
 
   return (
     <Tab.Navigator
