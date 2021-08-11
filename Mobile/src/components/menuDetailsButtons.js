@@ -5,6 +5,7 @@ import {createOrder, updateOrder} from '../redux/thunks/orderThunks';
 import ActionButton from './actionButton';
 import useMenuExpired from '../hooks/useMenuExpired';
 import {useNavigation} from '@react-navigation/native';
+import useOnlyRequiredType from '../hooks/useOnlyRequiredType';
 
 const MenuDetailsButtons = ({
   foundOrder,
@@ -16,7 +17,8 @@ const MenuDetailsButtons = ({
     ...state.userReducer,
     ...state.menuReducer,
   }));
-  const [hasOnlyRestaurant, setHasOnlyRestaurant] = useState(false);
+  const hasOnlyRestaurant = useOnlyRequiredType({type: 'restaurant', menuId});
+  const hasOnlyTakeaway = useOnlyRequiredType({type: 'takeaway', menuId});
   const menuExpired = useMenuExpired({menuId});
   const [order, setOrder] = useState(foundOrder);
   const navigation = useNavigation();
@@ -25,17 +27,6 @@ const MenuDetailsButtons = ({
   const navigateToOrderScreen = (menuId, order) => {
     navigation.navigate('MenuTakeawayOrderScreen', {menuId, order});
   };
-
-  useEffect(() => {
-    let restaurantOnly = false;
-    menusById[menuId].menu.forEach(menu => {
-      if (menu.courses.every(course => course.requiredType === 'restaurant')) {
-        restaurantOnly = true;
-        return;
-      }
-    });
-    setHasOnlyRestaurant(restaurantOnly);
-  }, [menuId]);
 
   const handleTakeaway = (menuId, order) => {
     if (menusById[menuId].menu.every(menu => menu.courses.length === 1)) {
@@ -146,12 +137,14 @@ const MenuDetailsButtons = ({
   const renderOrderButtons = orderId => {
     return (
       <>
-        <ActionButton
-          text="Restaurant"
-          disabled={menuExpired}
-          style={styles.leftButton}
-          onPress={() => handleSubmit({menuId, type: 'restaurant'})}
-        />
+        {!hasOnlyTakeaway ? (
+          <ActionButton
+            text="Restaurant"
+            disabled={menuExpired}
+            style={styles.leftButton}
+            onPress={() => handleSubmit({menuId, type: 'restaurant'})}
+          />
+        ) : null}
         {!hasOnlyRestaurant ? (
           <ActionButton
             text="Takeaway"
