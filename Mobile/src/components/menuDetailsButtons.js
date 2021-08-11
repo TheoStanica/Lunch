@@ -29,11 +29,19 @@ const MenuDetailsButtons = ({
   };
 
   const handleTakeaway = (menuId, order) => {
-    if (menusById[menuId].menu.every(menu => menu.courses.length === 1)) {
+    const filteredMenus = menusById[menuId].menu.map(menu => ({
+      ...menu,
+      courses: menu.courses.filter(
+        course => course.requiredType !== 'restaurant',
+      ),
+    }));
+
+    if (filteredMenus.every(menu => menu.courses.length === 1)) {
       const menuOptions = {};
       menusById[menuId].menu.forEach(
         menu => (menuOptions[menu.courseCategory] = 0),
       );
+
       handleSubmit({menuId, type: 'takeaway', menuOptions});
     } else {
       navigateToOrderScreen(menuId, order);
