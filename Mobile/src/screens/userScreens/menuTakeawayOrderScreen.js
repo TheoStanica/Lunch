@@ -117,6 +117,17 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
     });
   };
 
+  const generateMenuOptions = () => {
+    const menuOptions = {};
+
+    menusById[menuId].menu.forEach(menu => {
+      if (menu.courses.length === 1) {
+        menuOptions[menu.courseCategory] = 0;
+      }
+    });
+    return menuOptions;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <AnimatedHeader
@@ -134,7 +145,10 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
           menusById[menuId].menu.map(c => c.courseCategory),
         )}
         initialValues={{
-          selectedMenu: order?.status === 'active' ? order.menuOptions : {},
+          selectedMenu:
+            order?.status === 'active'
+              ? order.menuOptions
+              : generateMenuOptions(),
         }}
         validateOnBlur={isCheckingValidation}
         validateOnChange={isCheckingValidation}
