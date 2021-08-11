@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeStack from '../stackNavigationRoutes/homeStack';
 import AdminStack from '../stackNavigationRoutes/adminStack';
 import ProfileStack from '../stackNavigationRoutes/profileStack';
+import ThreadsStack from '../stackNavigationRoutes/threadsStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -43,6 +44,14 @@ const AppTab = () => {
       ) : (
         <></>
       )}
+      <Tab.Screen
+        name="ThreadsStack"
+        component={ThreadsStack}
+        options={{
+          tabBarLabel: 'Threads',
+          tabBarIcon: ({color}) => <Icon name="chat" size={25} color={color} />,
+        }}
+      />
       <Tab.Screen
         name="ProfileStack"
         component={ProfileStack}
