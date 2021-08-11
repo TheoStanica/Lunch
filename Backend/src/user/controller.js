@@ -40,11 +40,6 @@ const login = async (req, res, next) => {
     if (!user || user.deleted) {
       return next(new BadRequestError('Invalid credentials'));
     }
-
-    if (user.deleted) {
-      return next(new BadRequestError('Account is inactive.'));
-    }
-
     if (user.status === accountStatus.pending) {
       sendActivationEmail(user);
       return next(new AccountNotActivatedError());
@@ -60,7 +55,6 @@ const login = async (req, res, next) => {
         expiresIn: process.env.ACCESS_TOKEN_LIFE,
       }
     );
-
     const refreshToken = jwt.sign(
       { id: user.id, role: user.role },
       process.env.REFRESH_TOKEN_SECRET,
@@ -86,7 +80,7 @@ const activateAccount = async (req, res, next) => {
     }
 
     user.status = accountStatus.active;
-    user = await user.save();
+    await user.save();
 
     res.status(204).send();
   } catch (error) {
@@ -96,8 +90,10 @@ const activateAccount = async (req, res, next) => {
 
 const refreshTokens = async (req, res, next) => {
   try {
-    let { refreshToken } = req.body,
-      payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET),
+    const payload = jwt.verify(
+        req.body.refreshToken,
+        process.env.REFRESH_TOKEN_SECRET
+      ),
       user = await User.findOne({ _id: payload.id });
 
     if (!user || user.deleted) {
@@ -111,7 +107,7 @@ const refreshTokens = async (req, res, next) => {
         expiresIn: process.env.ACCESS_TOKEN_LIFE,
       }
     );
-    refreshToken = jwt.sign(
+    const refreshToken = jwt.sign(
       { id: payload.id, role: payload.role },
       process.env.REFRESH_TOKEN_SECRET,
       {
@@ -127,11 +123,10 @@ const refreshTokens = async (req, res, next) => {
 
 const forgotPassword = async (req, res, next) => {
   const forgotPasswordToken = req.params._token;
-  const { email, password } = req.body;
 
   try {
     if (!forgotPasswordToken) {
-      let user = await User.findOne({ email });
+      let user = await User.findOne({ email: req.body.email });
 
       if (!user) {
         return next(new BadRequestError('Invalid email'));
@@ -154,8 +149,8 @@ const forgotPassword = async (req, res, next) => {
         return next(new BadRequestError('Expired forgot password token'));
       }
 
-      user.password = bcrypt.hashSync(password);
-      user = await user.save();
+      user.password = bcrypt.hashSync(req.body.password);
+      await user.save();
 
       res.status(204).send();
     }
@@ -168,10 +163,9 @@ const getUser = async (req, res, next) => {
   try {
     const user = await User.findOne({ _id: req.params._userId || req.user.id });
 
-    if (!user) {
-      return next(new NotFoundError('User not found'));
+    if (!user || user.deleted) {
+      return next(new NotFoundError("User doesn't exist"));
     }
-
     if (req.user.role === accountRole.user && user.id !== req.user.id) {
       return next(new ForbiddenError());
     }
@@ -196,29 +190,24 @@ const updateUser = async (req, res, next) => {
   try {
     let user = await User.findOne({ _id: req.params._userId || req.user.id });
 
-    if (!user) {
-      return next(new NotFoundError('User not found'));
+    if (!user || user.deleted) {
+      return next(new NotFoundError("User doesn't exist"));
     }
-
     if (req.user.role === accountRole.user && user.id !== req.user.id) {
       return next(new ForbiddenError());
     }
-
     if (req.body.email && (await User.findOne({ email: req.body.email }))) {
       return next(new BadRequestError('Email in use'));
     }
 
     user.email = req.body.email || user.email;
     user.fullname = req.body.fullname || user.fullname;
-
     if (req.body.password)
       user.password = bcrypt.hashSync(req.body.password) || user.password;
-
     if (req.user.role === accountRole.admin) {
       user.role = req.body.role || user.role;
       user.status = req.body.status || user.status;
     }
-
     user = await user.save();
 
     res.send({ user });
@@ -231,8 +220,8 @@ const deleteUser = async (req, res, next) => {
   try {
     const user = await User.findOne({ _id: req.params._userId });
 
-    if (!user) {
-      return next(new NotFoundError('User not found'));
+    if (!user || user.deleted) {
+      return next(new NotFoundError("User doesn't exist"));
     }
 
     user.deleted = true;
