@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {createOrder, updateOrder} from '../redux/thunks/orderThunks';
@@ -12,7 +12,11 @@ const MenuDetailsButtons = ({
   onCancelRestaurant,
   onCancelTakeaway,
 }) => {
-  const {id} = useSelector(state => state.userReducer);
+  const {id, menusById} = useSelector(state => ({
+    ...state.userReducer,
+    ...state.menuReducer,
+  }));
+  const [hasOnlyRestaurant, setHasOnlyRestaurant] = useState(false);
   const menuExpired = useMenuExpired({menuId});
   const [order, setOrder] = useState(foundOrder);
   const navigation = useNavigation();
@@ -21,6 +25,17 @@ const MenuDetailsButtons = ({
   const navigateToOrderScreen = (menuId, order) => {
     navigation.navigate('MenuTakeawayOrderScreen', {menuId, order});
   };
+
+  useEffect(() => {
+    let restaurantOnly = false;
+    menusById[menuId].menu.forEach(menu => {
+      if (menu.courses.every(course => course.requiredType === 'restaurant')) {
+        restaurantOnly = true;
+        return;
+      }
+    });
+    setHasOnlyRestaurant(restaurantOnly);
+  }, [menuId]);
 
   const submitOrder = () => {
     if (!order) {
@@ -123,12 +138,14 @@ const MenuDetailsButtons = ({
           style={styles.leftButton}
           onPress={submitOrder}
         />
-        <ActionButton
-          text="Takeaway"
-          disabled={menuExpired}
-          style={styles.rightButton}
-          onPress={() => navigateToOrderScreen(menuId, order)}
-        />
+        {!hasOnlyRestaurant ? (
+          <ActionButton
+            text="Takeaway"
+            disabled={menuExpired}
+            style={styles.rightButton}
+            onPress={() => navigateToOrderScreen(menuId, order)}
+          />
+        ) : null}
       </>
     );
   };
