@@ -48,7 +48,7 @@ const getAllRestaurants = async (req, res, next) => {
 const updateRestaurant = async (req, res, next) => {
   try {
     const { name, cost, status, cancelAt, notifyAfter } = req.body;
-    const restaurant = await Restaurant.findById({ _id: req.params._id });
+    let restaurant = await Restaurant.findById({ _id: req.params._id });
 
     if (!restaurant || restaurant.deleted) {
       return next(new NotFoundError("Restaurant doesn't exist."));
@@ -59,7 +59,7 @@ const updateRestaurant = async (req, res, next) => {
     restaurant.status = status || restaurant.status;
     restaurant.notifyAfter = notifyAfter || restaurant.notifyAfter;
     restaurant.cancelAt = cancelAt || restaurant.cancelAt;
-    restaurant.save();
+    await restaurant.save();
 
     res.send(restaurant);
   } catch (error) {

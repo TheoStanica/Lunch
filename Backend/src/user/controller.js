@@ -23,7 +23,7 @@ const register = async (req, res, next) => {
 
     let user = new User(req.body);
     user.activationToken = activationToken;
-    use = await user.save();
+    user = await user.save();
 
     sendActivationEmail(user);
 
