@@ -19,23 +19,18 @@ const convertFilterToQuery = (filter) => {
   if (filter._id) {
     newFilter._id = filter._id;
   }
-
   if (filter.type) {
     newFilter.type = filter.type;
   }
-
   if (filter.status) {
     newFilter.status = filter.status;
   }
-
   if (filter.menuId) {
     newFilter.menuId = filter.menuId;
   }
-
   if (filter.userId) {
     newFilter.userId = filter.userId;
   }
-
   if (filter.createdAfter && filter.createdBefore) {
     newFilter.createdAt = {
       $gte: filter.createdAfter,
@@ -60,6 +55,7 @@ const checkIfUserCanProcessUserId = ({ userId, id, role }) =>
 const checkMenuTimeState = ({ date, time }) => {
   const day = moment(date).format('L');
   const _time = moment(time, 'h:mm a').format('LT');
+
   return moment().isAfter(
     moment(day + ' ' + _time, 'MM/DD/YYYY h:mm a').format()
   );
@@ -87,6 +83,7 @@ const handleOrderCreation = async ({
 
 const generateUpdateObject = ({ order, type, status, userId, menuOptions }) => {
   const obj = {};
+
   obj.type = type || order.type;
   obj.status = status || order.status;
   obj.userId = userId || order.userId.id;
@@ -124,7 +121,6 @@ const handleOrderUpdate = async ({
       { session: session }
     );
   }
-
   if (
     status === orderStatus.active &&
     type === courseRequiredType.restaurant &&
@@ -170,7 +166,6 @@ const getOrders = async (req, res, next) => {
     if (checkIfUserCanProcessUserId({ userId: query.userId, id, role })) {
       return next(new ForbiddenError());
     }
-
     if (req.user.role === accountRole.user) {
       query.userId = req.user.id;
     }
@@ -194,15 +189,15 @@ const createOrder = async (req, res, next) => {
   try {
     let { userId, menuId, type } = req.body;
     const { id, role } = req.user;
-
     const menu = await Menu.findOne({ _id: menuId }).populate('restaurantId');
+
     if (!menu || menu.deleted) {
       return next(new BadRequestError('Please provide a valid menu id.'));
     }
-
     if (checkIfUserCanProcessUserId({ userId, id, role })) {
       return next(new ForbiddenError());
     }
+
     const { notifyAfter, cancelAt } = menu.restaurantId;
     userId = userId ? userId : id;
 
@@ -211,11 +206,9 @@ const createOrder = async (req, res, next) => {
         new BadRequestError('You can no longer make orders for this menu')
       );
     }
-
     if (!(await User.findOne({ _id: userId }))) {
       return next(new BadRequestError('Please provide a valid user id.'));
     }
-
     if (await Order.findOne({ userId, menuId, deleted: false })) {
       return next(
         new BadRequestError("Can't create two orders for the same menu.")
@@ -255,11 +248,9 @@ const createOrder = async (req, res, next) => {
 
 const updateOrder = async (req, res, next) => {
   try {
-    const { _orderId } = req.params;
-    let { userId, menuId, status, type, menuOptions } = req.body;
     const { id, role } = req.user;
-
-    let order = await Order.findOne({ _id: _orderId })
+    let { userId, menuId, status, type, menuOptions } = req.body;
+    let order = await Order.findOne({ _id: req.params._orderId })
       .populate({
         path: 'menuId',
         populate: {
@@ -271,7 +262,6 @@ const updateOrder = async (req, res, next) => {
     if (!order || order.deleted) {
       return next(new NotFoundError('Order does not exist'));
     }
-
     if (
       checkIfUserCanProcessUserId({ userId, id, role }) ||
       checkIfUserCanProcessUserId({ userId: order.userId.id, id, role })
@@ -286,13 +276,11 @@ const updateOrder = async (req, res, next) => {
         new BadRequestError('You can no longer make orders for this menu')
       );
     }
-
     if (await checkIfAdminCanUpdateUser({ role, userId, menuId, order })) {
       return next(
         new BadRequestError('User already created and order for this menu.')
       );
     }
-
     if (userId && !(await User.findOne({ _id: userId }))) {
       return next(new BadRequestError('Please provide a valid user id.'));
     }
@@ -318,6 +306,7 @@ const updateOrder = async (req, res, next) => {
       ) {
         // send push notification to admins
       }
+
       res.send({ order: newOrder });
     } catch (error) {
       await session.abortTransaction();

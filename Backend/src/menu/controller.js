@@ -13,11 +13,9 @@ const convertFilterToQuery = (filter) => {
   if (filter._id) {
     newFilter._id = filter._id;
   }
-
   if (filter.restaurantId) {
     newFilter.restaurantId = filter.restaurantId;
   }
-
   if (filter.createdAfter && filter.createdBefore) {
     newFilter.createdAt = {
       $gte: filter.createdAfter,
@@ -32,23 +30,23 @@ const convertFilterToQuery = (filter) => {
       newFilter.createdAt = { $lte: filter.createdBefore };
     }
   }
+
   return newFilter;
 };
 
 const createMenu = async (req, res, next) => {
   try {
-    const { restaurantId } = req.body,
-      restaurant = await Restaurant.findById(restaurantId);
+    const restaurant = await Restaurant.findById(req.body.restaurantId);
 
     if (!restaurant || restaurant.deleted) {
       return next(new BadRequestError('Please provide a valid restaurantId.'));
     }
-
     if (restaurant.status === restaurantStatus.inactive) {
       return next(new BadRequestError('Please provide an active restaurant.'));
     }
 
-    const menu = await Menu.create(req.body);
+    await Menu.create(req.body);
+
     res.sendStatus(201);
   } catch (error) {
     return next(error);

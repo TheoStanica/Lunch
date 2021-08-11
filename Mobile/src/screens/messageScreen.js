@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const MessageScreen = ({route}) => {
   const {image, message} = route.params;
-  console.log(image);
+
   return (
     <View style={styles.container}>
       {Platform.OS !== 'ios' ? <StatusBar backgroundColor="#FBBC00" /> : null}

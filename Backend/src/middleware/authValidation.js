@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const ForbiddenError = require('../errors/forbiddenError');
 const UnauthorizedError = require('../errors/unauthorizedError');
-
 const { accountRole } = require('../utils/enums');
 
 const authValidation = (req, res, next) => {

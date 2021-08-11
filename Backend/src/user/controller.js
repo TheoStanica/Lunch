@@ -75,7 +75,7 @@ const activateAccount = async (req, res, next) => {
       activationToken: req.params._activationToken,
     });
 
-    if (!user) {
+    if (!user || user.deleted) {
       return next(new BadRequestError('Invalid activation token'));
     }
 
@@ -97,7 +97,7 @@ const refreshTokens = async (req, res, next) => {
       user = await User.findOne({ _id: payload.id });
 
     if (!user || user.deleted) {
-      return next(new NotFoundError('User not found'));
+      return next(new NotFoundError("User doesn't exist"));
     }
 
     const accessToken = jwt.sign(
@@ -128,7 +128,7 @@ const forgotPassword = async (req, res, next) => {
     if (!forgotPasswordToken) {
       let user = await User.findOne({ email: req.body.email });
 
-      if (!user) {
+      if (!user || user.deleted) {
         return next(new BadRequestError('Invalid email'));
       }
 
@@ -142,7 +142,7 @@ const forgotPassword = async (req, res, next) => {
     } else {
       let user = await User.findOne({ forgotPasswordToken });
 
-      if (!user) {
+      if (!user || user.deleted) {
         return next(new BadRequestError('Invalid forgot password token'));
       }
       if (user.forgotPasswordTokenExp > new Date()) {

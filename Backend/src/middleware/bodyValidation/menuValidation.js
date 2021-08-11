@@ -73,11 +73,8 @@ const menuIdValidationSchema = [
     .withMessage('Please provide a valid menu ID'),
 ];
 
-const getMenuValidationSchema = [];
-
 module.exports = {
   createMenuValidationSchema,
   menuIdValidationSchema,
-  getMenuValidationSchema,
   filterMenuValidationSchema,
 };

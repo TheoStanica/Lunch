@@ -39,6 +39,7 @@ const getRestaurant = async (req, res, next) => {
 const getAllRestaurants = async (req, res, next) => {
   try {
     const restaurants = await Restaurant.find({ deleted: false });
+
     res.send(restaurants);
   } catch (error) {
     return next(error);
