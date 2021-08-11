@@ -40,17 +40,21 @@ const DisplayMenu = ({menuId, order}) => {
       </View>
     ));
 
-  return menusById[menuId].menu.map((menuCourse, idx) => (
-    <View style={styles.courseTypeContainer} key={`${menuId}-${idx}`}>
-      <Headline style={styles.capitalizedText}>
-        {menuCourse.courseCategory}
-      </Headline>
-      {renderCourses({
-        courses: menuCourse.courses,
-        courseCategory: menuCourse.courseCategory,
-      })}
+  return (
+    <View>
+      {menusById[menuId].menu.map((menuCourse, idx) => (
+        <View style={styles.courseTypeContainer} key={`${menuId}-${idx}`}>
+          <Headline style={styles.capitalizedText}>
+            {menuCourse.courseCategory}
+          </Headline>
+          {renderCourses({
+            courses: menuCourse.courses,
+            courseCategory: menuCourse.courseCategory,
+          })}
+        </View>
+      ))}
     </View>
-  ));
+  );
 };
 
 const styles = StyleSheet.create({
