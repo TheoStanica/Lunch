@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const BadRequestError = require('../errors/badRequestError');
 const { courseRequiredType } = require('../utils/enums');
 
 const courseSchema = new mongoose.Schema({
@@ -65,5 +65,29 @@ menuSchema.options.toJSON = {
     return ret;
   },
 };
+
+menuSchema.pre('save', function (next) {
+  const menu = this.menu;
+
+  if (
+    menu
+      .map((item) => item.courseCategory)
+      .filter((value, index, self) => self.indexOf(value) === index).length !==
+    menu.length
+  )
+    next(new BadRequestError('A menu should have unique course titles.'));
+
+  menu.forEach((course) => {
+    if (
+      course.courses
+        .map((item) => item.description)
+        .filter((value, index, self) => self.indexOf(value) === index)
+        .length !== course.courses.length
+    )
+      next(new BadRequestError('Each course should have unique dishes.'));
+  });
+
+  next();
+});
 
 module.exports = mongoose.model('Menu', menuSchema);
