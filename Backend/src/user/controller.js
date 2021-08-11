@@ -2,10 +2,9 @@ const AccountNotActivatedError = require('../errors/accountNotActivatedError');
 const BadRequestError = require('../errors/badRequestError');
 const NotFoundError = require('../errors/notFoundError');
 const ForbiddenError = require('../errors/forbiddenError');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
-
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('./model');
 const {
   sendActivationEmail,

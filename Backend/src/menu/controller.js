@@ -1,11 +1,10 @@
+const mongoose = require('mongoose');
 const BadRequestError = require('../errors/badRequestError');
 const NotFoundError = require('../errors/notFoundError');
 const InternalServerError = require('../errors/internalServerError');
 const Restaurant = require('../restaurant/model');
 const Menu = require('./model');
 const Order = require('../order/model');
-const mongoose = require('mongoose');
-
 const { restaurantStatus } = require('../utils/enums');
 
 const convertFilterToQuery = (filter) => {

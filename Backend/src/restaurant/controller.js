@@ -1,10 +1,11 @@
+const mongoose = require('mongoose');
 const BadRequestError = require('../errors/badRequestError');
 const NotFoundError = require('../errors/notFoundError');
 const InternalServerError = require('../errors/internalServerError');
 const Restaurant = require('./model');
 const Menu = require('../menu/model');
 const Order = require('../order/model');
-const mongoose = require('mongoose');
+const { restaurantStatus } = require('../utils/enums');
 
 const createRestaurant = async (req, res, next) => {
   try {
@@ -20,15 +21,12 @@ const createRestaurant = async (req, res, next) => {
 
 const getRestaurant = async (req, res, next) => {
   try {
-    const { _id } = req.params;
-
-    const restaurant = await Restaurant.findById({ _id });
+    const restaurant = await Restaurant.findById({ _id: req.params._id });
 
     if (!restaurant || restaurant.deleted) {
       return next(new NotFoundError("Restaurant doesn't exist."));
     }
-
-    if (restaurant.deleted) {
+    if (restaurant.status === restaurantStatus.inactive) {
       return next(new BadRequestError('Restaurant is inactive.'));
     }
 
@@ -49,28 +47,21 @@ const getAllRestaurants = async (req, res, next) => {
 
 const updateRestaurant = async (req, res, next) => {
   try {
-    const { _id } = req.params;
     const { name, cost, status, cancelAt, notifyAfter } = req.body;
-
-    const restaurant = await Restaurant.findById(_id);
+    const restaurant = await Restaurant.findById({ _id: req.params._id });
 
     if (!restaurant || restaurant.deleted) {
       return next(new NotFoundError("Restaurant doesn't exist."));
     }
 
-    const updatedRestaurant = await Restaurant.findByIdAndUpdate(
-      restaurant.id,
-      {
-        name: name || restaurant.name,
-        cost: cost || restaurant.cost,
-        status: status || restaurant.status,
-        notifyAfter: notifyAfter || restaurant.notifyAfter,
-        cancelAt: cancelAt || restaurant.cancelAt,
-      },
-      { new: true }
-    );
+    restaurant.name = name || restaurant.name;
+    restaurant.cost = cost || restaurant.cost;
+    restaurant.status = status || restaurant.status;
+    restaurant.notifyAfter = notifyAfter || restaurant.notifyAfter;
+    restaurant.cancelAt = cancelAt || restaurant.cancelAt;
+    restaurant.save();
 
-    res.send(updatedRestaurant);
+    res.send(restaurant);
   } catch (error) {
     return next(error);
   }

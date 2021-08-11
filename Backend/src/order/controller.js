@@ -1,3 +1,6 @@
+const mongoose = require('mongoose');
+const ForbiddenError = require('../errors/forbiddenError');
+const InternalServerError = require('../errors/internalServerError');
 const NotFoundError = require('../errors/notFoundError');
 const BadRequestError = require('../errors/badRequestError');
 const Order = require('./model');
@@ -8,9 +11,6 @@ const {
   courseRequiredType,
   orderStatus,
 } = require('../utils/enums');
-const ForbiddenError = require('../errors/forbiddenError');
-const mongoose = require('mongoose');
-const InternalServerError = require('../errors/internalServerError');
 const moment = require('moment');
 
 const convertFilterToQuery = (filter) => {
