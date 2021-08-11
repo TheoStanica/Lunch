@@ -1,6 +1,7 @@
 import React from 'react';
-import {StyleSheet, View, SafeAreaView, ScrollView} from 'react-native';
+import {StyleSheet, SafeAreaView, ScrollView} from 'react-native';
 import {useSelector} from 'react-redux';
+import {Title} from 'react-native-paper';
 import ProfileField from '../../components/profileField';
 
 const UsersGoingScreen = ({route}) => {
@@ -11,8 +12,8 @@ const UsersGoingScreen = ({route}) => {
   }));
 
   return (
-    <View style={styles.container}>
-      <SafeAreaView style={styles.safeContainer}>
+    <SafeAreaView style={styles.container}>
+      {menusById[menuId].usersGoing.length !== 0 ? (
         <ScrollView showsVerticalScrollIndicator={false}>
           {menusById[menuId].usersGoing.map(user => (
             <ProfileField
@@ -24,8 +25,12 @@ const UsersGoingScreen = ({route}) => {
             />
           ))}
         </ScrollView>
-      </SafeAreaView>
-    </View>
+      ) : (
+        <SafeAreaView style={styles.nobodyGoingText}>
+          <Title>Nobody is going to the restaurant.</Title>
+        </SafeAreaView>
+      )}
+    </SafeAreaView>
   );
 };
 
@@ -35,8 +40,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     backgroundColor: '#fff1ca',
   },
-  safeContainer: {
+  nobodyGoingText: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
