@@ -8,6 +8,7 @@ import RestaurantDetailsScreen from '../../screens/adminScreens/restaurantDetail
 import CreateRestaurantScreen from '../../screens/adminScreens/createRestaurantScreen';
 import MessageScreen from '../../screens/messageScreen';
 import ManageMenusScreen from '../../screens/adminScreens/manageMenusScreen';
+import CreatePdfScreen from '../../screens/adminScreens/createPdfScreen';
 import MenuDetailsTab from '../tabNavigationRoutes/menuDetailsTab';
 import OrdersStack from './ordersStack';
 
@@ -64,6 +65,13 @@ const AdminStack = () => {
         options={{
           title: 'Manage Orders',
           headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="CreatePdfScreen"
+        component={CreatePdfScreen}
+        options={{
+          title: 'Create Pdf',
         }}
       />
       <Stack.Screen

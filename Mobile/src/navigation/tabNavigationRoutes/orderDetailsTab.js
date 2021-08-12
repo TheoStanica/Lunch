@@ -2,6 +2,7 @@ import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import ManageRestaurantOrdersScreen from '../../screens/adminScreens/manageRestaurantOrdersScreen';
 import ManageOrdersScreen from '../../screens/adminScreens/manageOrdersScreen';
+import PdfStack from '../stackNavigationRoutes/pdfStack';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -31,6 +32,14 @@ const OrderDetailsTab = () => {
         options={{
           unmountOnBlur: true,
           tabBarLabel: 'Restaurant Orders',
+        }}
+      />
+      <Tab.Screen
+        name="PdfStack"
+        component={PdfStack}
+        options={{
+          unmountOnBlur: true,
+          tabBarLabel: 'Orders PDF',
         }}
       />
     </Tab.Navigator>
