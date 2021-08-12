@@ -35,18 +35,26 @@ const CreatePdfScreen = () => {
     }
   };
 
-  const createPDF = async ({filename}) => {
+  const createPDF = async ({fileName}) => {
     if (await isPermitted()) {
       const options = {
         html: '<h1 style="text-align: center;"><strong>Hello Guys</strong></h1><p style="text-align: center;">Here is an example of pdf Print in React Native</p><p style="text-align: center;"><strong>Team About React</strong></p>',
-        fileName: filename,
+        fileName: fileName,
         directory: 'documents',
       };
 
       try {
         const file = await RNHTMLtoPDF.convert(options);
+        const RNFS = require('react-native-fs');
+        const path = RNFS.DocumentDirectoryPath + '/statistics';
 
-        console.log(file.filePath);
+        if (!(await RNFS.exists(path))) await RNFS.mkdir(path);
+        await RNFS.moveFile(file.filePath, path + '/' + fileName + '.pdf');
+
+        const result = await RNFS.readDir(path);
+
+        console.log(result);
+
         setFilePath(file.filePath);
       } catch (error) {
         dispatch(handleError(error));
@@ -61,7 +69,7 @@ const CreatePdfScreen = () => {
         icon="plus"
         color="white"
         animated={true}
-        onPress={() => createPDF({filename: 'statistics'})}
+        onPress={() => createPDF({fileName: 'statistics'})}
       />
     </SafeAreaView>
   );
