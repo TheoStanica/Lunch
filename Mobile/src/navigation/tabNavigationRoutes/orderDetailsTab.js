@@ -2,7 +2,7 @@ import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import ManageRestaurantOrdersScreen from '../../screens/adminScreens/manageRestaurantOrdersScreen';
 import ManageOrdersScreen from '../../screens/adminScreens/manageOrdersScreen';
-import PdfStack from '../stackNavigationRoutes/pdfStack';
+import ManagePdfScreen from '../../screens/adminScreens/managePdfScreen';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -35,8 +35,8 @@ const OrderDetailsTab = () => {
         }}
       />
       <Tab.Screen
-        name="PdfStack"
-        component={PdfStack}
+        name="ManagePdfScreen"
+        component={ManagePdfScreen}
         options={{
           unmountOnBlur: true,
           tabBarLabel: 'Orders PDF',
