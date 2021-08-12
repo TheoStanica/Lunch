@@ -37,6 +37,10 @@ const userSchema = new mongoose.Schema(
     forgotPasswordTokenExp: {
       type: Date,
     },
+    devices: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: 'Device',
+    },
     deleted: {
       type: Boolean,
       default: false,
