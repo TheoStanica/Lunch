@@ -4,6 +4,12 @@ const api = require('./src/index');
 const db = require('./databsaseConnection');
 const NotFoundError = require('./src/errors/notFoundError');
 const errorHandler = require('./src/middleware/errorHandler');
+const admin = require('firebase-admin');
+var serviceAccount = require('./firebaseCredentials.json');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 
 const app = express();
 
