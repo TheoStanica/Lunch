@@ -11,11 +11,11 @@ import {handleError} from '../../redux/thunks/errorThunks';
 import {FAB} from 'react-native-paper';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import AdminField from '../../components/adminField';
-import HideKeyboard from '../../components/hideKeyboard';
 import Moment from 'moment';
 
 const CreatePdfScreen = () => {
-  const [filePath, setFilePath] = useState('');
+  const RNFS = require('react-native-fs');
+  const docDirPath = RNFS.DocumentDirectoryPath + '/statistics';
   const [PDFs, setPDFs] = useState([]);
   const [row, setRow] = useState([]);
   const [previousOpenedRow, setPreviousOpenedRow] = useState(null);
@@ -23,11 +23,7 @@ const CreatePdfScreen = () => {
 
   useEffect(() => {
     const getPdfs = async () => {
-      const RNFS = require('react-native-fs');
-      const result = await RNFS.readDir(
-        RNFS.DocumentDirectoryPath + '/statistics',
-      );
-      setPDFs(result);
+      setPDFs(await RNFS.readDir(docDirPath));
     };
 
     getPdfs();
@@ -64,13 +60,14 @@ const CreatePdfScreen = () => {
 
       try {
         const file = await RNHTMLtoPDF.convert(options);
-        const RNFS = require('react-native-fs');
-        const path = RNFS.DocumentDirectoryPath + '/statistics';
 
-        if (!(await RNFS.exists(path))) await RNFS.mkdir(path);
-        await RNFS.moveFile(file.filePath, path + '/' + fileName + '.pdf');
+        if (!(await RNFS.exists(docDirPath))) await RNFS.mkdir(docDirPath);
+        await RNFS.moveFile(
+          file.filePath,
+          docDirPath + '/' + fileName + '.pdf',
+        );
 
-        setPDFs(await RNFS.readDir(path));
+        setPDFs(await RNFS.readDir(docDirPath));
       } catch (error) {
         dispatch(handleError(error));
       }
@@ -80,11 +77,8 @@ const CreatePdfScreen = () => {
   const deletePdf = async ({filePath}) => {
     if (await isPermitted()) {
       try {
-        const RNFS = require('react-native-fs');
-        const path = RNFS.DocumentDirectoryPath + '/statistics';
-
         await RNFS.unlink(filePath);
-        setPDFs(await RNFS.readDir(path));
+        setPDFs(await RNFS.readDir(docDirPath));
       } catch (error) {
         dispatch(handleError(error));
       }
@@ -93,29 +87,27 @@ const CreatePdfScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <HideKeyboard>
-        <FlatList
-          data={PDFs}
-          keyExtractor={pdf => pdf.name}
-          renderItem={pdf => (
-            <AdminField
-              index={pdf.index}
-              title={pdf.item.name}
-              description={`Created: ${Moment(pdf.item.mtime).format(
-                'DD-MM-YYYY',
-              )}`}
-              icon="pdf-box"
-              onDelete={() => deletePdf({filePath: pdf.item.path})}
-              onPress={() => console.log('pressed')}
-              row={row}
-              onUpdateRow={row => setRow(row)}
-              prevOpenedRow={previousOpenedRow}
-              onUpdatePrevOpenedRow={prevRow => setPreviousOpenedRow(prevRow)}
-            />
-          )}
-          showsVerticalScrollIndicator={false}
-        />
-      </HideKeyboard>
+      <FlatList
+        data={PDFs}
+        keyExtractor={pdf => pdf.name}
+        renderItem={pdf => (
+          <AdminField
+            index={pdf.index}
+            title={pdf.item.name}
+            description={`Created: ${Moment(pdf.item.mtime).format(
+              'DD-MM-YYYY',
+            )}`}
+            icon="pdf-box"
+            onDelete={() => deletePdf({filePath: pdf.item.path})}
+            onPress={() => console.log('pressed')}
+            row={row}
+            onUpdateRow={row => setRow(row)}
+            prevOpenedRow={previousOpenedRow}
+            onUpdatePrevOpenedRow={prevRow => setPreviousOpenedRow(prevRow)}
+          />
+        )}
+        showsVerticalScrollIndicator={false}
+      />
       <FAB
         style={styles.fab}
         icon="plus"
