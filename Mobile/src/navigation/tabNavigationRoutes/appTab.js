@@ -1,22 +1,32 @@
 import React, {useEffect} from 'react';
 import {Platform} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeStack from '../stackNavigationRoutes/homeStack';
 import AdminStack from '../stackNavigationRoutes/adminStack';
 import ProfileStack from '../stackNavigationRoutes/profileStack';
 import ThreadsStack from '../stackNavigationRoutes/threadsStack';
 import messaging from '@react-native-firebase/messaging';
+import {createDevice} from '../../redux/thunks/deviceThunks';
 
 const Tab = createBottomTabNavigator();
 
 const AppTab = () => {
-  const userReducer = useSelector(state => state.userReducer);
+  const {role} = useSelector(state => state.userReducer);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (Platform.OS === 'android') requestUserPermission();
-  }, []);
+    const firebase = async () => {
+      if (Platform.OS === 'android' && role === 'admin') {
+        requestUserPermission();
+        messaging().onTokenRefresh(fcmToken => {
+          //refresh token
+        });
+      }
+    };
+    firebase();
+  }, [role]);
 
   const requestUserPermission = async () => {
     try {
@@ -25,12 +35,13 @@ const AppTab = () => {
         authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
         authStatus === messaging.AuthorizationStatus.PROVISIONAL;
       if (enabled) {
-        getFcmToken();
+        const fcmToken = await getFcmToken();
+        dispatch(createDevice({fcmToken}));
       }
     } catch (error) {}
   };
   const getFcmToken = async () => {
-    const fcmToken = await messaging().getToken();
+    return await messaging().getToken();
   };
 
   return (
@@ -50,7 +61,7 @@ const AppTab = () => {
           tabBarIcon: ({color}) => <Icon name="home" size={25} color={color} />,
         }}
       />
-      {userReducer.role === 'admin' ? (
+      {role === 'admin' ? (
         <Tab.Screen
           name="AdminStack"
           component={AdminStack}

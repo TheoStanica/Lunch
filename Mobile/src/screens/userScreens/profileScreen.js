@@ -5,10 +5,20 @@ import {useDispatch} from 'react-redux';
 import {logoutUser} from '../../redux/thunks/userThunks';
 import ProfileField from '../../components/profileField';
 import ActionButton from '../../components/actionButton';
+import messaging from '@react-native-firebase/messaging';
 
 const ProfileScreen = ({navigation}) => {
   const userReducer = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
+
+  const handleLogout = async () => {
+    if (Platform.OS === 'android' && userReducer.role === 'admin') {
+      try {
+        await messaging().deleteToken();
+      } catch (error) {}
+    }
+    dispatch(logoutUser());
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -45,7 +55,7 @@ const ProfileScreen = ({navigation}) => {
           />
           <ActionButton
             text="Logout"
-            onPress={() => dispatch(logoutUser())}
+            onPress={handleLogout}
             style={styles.logoutButton}
           />
         </View>
