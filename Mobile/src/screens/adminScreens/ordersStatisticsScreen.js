@@ -184,7 +184,7 @@ const OrderStatisticsScreen = ({navigation}) => {
             style={styles.button}
             text="Generate Statistics"
             onPress={() =>
-              navigation.navigate('OrderDetailsTab', {
+              navigation.navigate('OrdersStatisticsStack', {
                 statistics: generateStatistics(),
               })
             }
@@ -205,15 +205,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF1CA',
   },
+  contentContainer: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
   title: {
     alignSelf: 'center',
   },
   button: {
     margin: 10,
-  },
-  contentContainer: {
-    flex: 1,
-    justifyContent: 'space-between',
   },
 });
 
