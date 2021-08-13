@@ -14,13 +14,16 @@ const OrdersStack = () => {
   };
 
   return (
-    <Stack.Navigator screenOptions={{...screenOptions}}>
+    <Stack.Navigator
+      screenOptions={{
+        ...screenOptions,
+        headerStyle: {backgroundColor: '#FFF1CA'},
+      }}>
       <Stack.Screen
         name="OrdersStatisticsScreen"
         component={OrdersStatisticsScreen}
         options={{
           title: 'Orders Statistics',
-          headerStyle: {backgroundColor: '#FFF1CA'},
         }}
       />
       <Stack.Screen
@@ -28,7 +31,6 @@ const OrdersStack = () => {
         component={OrderDetailsTab}
         options={{
           title: 'Order Statistics',
-          headerStyle: {backgroundColor: '#FFF1CA'},
         }}
       />
       <Stack.Screen
@@ -36,7 +38,6 @@ const OrdersStack = () => {
         component={UserRestaurantOrdersScreen}
         options={{
           title: 'User Orders',
-          headerStyle: {backgroundColor: '#FFF1CA'},
         }}
       />
       <Stack.Screen
@@ -44,7 +45,6 @@ const OrdersStack = () => {
         component={ManagePdfScreen}
         options={{
           title: 'PDF Statistics',
-          headerStyle: {backgroundColor: '#FFF1CA'},
         }}
       />
     </Stack.Navigator>
