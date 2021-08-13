@@ -10,6 +10,7 @@ import MessageScreen from '../../screens/messageScreen';
 import ManageMenusScreen from '../../screens/adminScreens/manageMenusScreen';
 import MenuDetailsTab from '../tabNavigationRoutes/menuDetailsTab';
 import OrdersStack from './ordersStack';
+import ManagePdfScreen from '../../screens/adminScreens/managePdfScreen';
 
 const Stack = createStackNavigator();
 
@@ -87,6 +88,13 @@ const AdminStack = () => {
           title: 'Create Restaurant',
           detachPreviousScreen: true,
           detachInactiveScreens: true,
+        }}
+      />
+      <Stack.Screen
+        name="ManagePdfScreen"
+        component={ManagePdfScreen}
+        options={{
+          title: 'Reports',
         }}
       />
       <Stack.Screen

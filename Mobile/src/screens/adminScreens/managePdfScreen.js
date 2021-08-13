@@ -1,18 +1,35 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
   PermissionsAndroid,
   Platform,
+  FlatList,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import {handleError} from '../../redux/thunks/errorThunks';
-import {FAB} from 'react-native-paper';
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import {ActivityIndicator} from 'react-native-paper';
+import AdminField from '../../components/adminField';
+import Moment from 'moment';
 
 const CreatePdfScreen = () => {
-  const [filePath, setFilePath] = useState('');
+  const RNFS = require('react-native-fs');
+  const docDirPath = RNFS.DocumentDirectoryPath + '/statistics';
+  const [PDFs, setPDFs] = useState([]);
+  const [row, setRow] = useState([]);
+  const [previousOpenedRow, setPreviousOpenedRow] = useState(null);
+  const [isFetching, setIsFetching] = useState(true);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const getPdfs = async () => {
+      setIsFetching(true);
+      setPDFs(await RNFS.readDir(docDirPath));
+      setIsFetching(false);
+    };
+
+    getPdfs();
+  }, []);
 
   const isPermitted = async () => {
     if (Platform.OS === 'android') {
@@ -35,41 +52,48 @@ const CreatePdfScreen = () => {
     }
   };
 
-  const createPDF = async ({fileName}) => {
+  const deletePdf = async ({filePath}) => {
+    setIsFetching(true);
     if (await isPermitted()) {
-      const options = {
-        html: '<h1 style="text-align: center;"><strong>Hello Guys</strong></h1><p style="text-align: center;">Here is an example of pdf Print in React Native</p><p style="text-align: center;"><strong>Team About React</strong></p>',
-        fileName: fileName,
-        directory: 'documents',
-      };
-
       try {
-        const file = await RNHTMLtoPDF.convert(options);
-        const RNFS = require('react-native-fs');
-        const path = RNFS.DocumentDirectoryPath + '/statistics';
-
-        if (!(await RNFS.exists(path))) await RNFS.mkdir(path);
-        await RNFS.moveFile(file.filePath, path + '/' + fileName + '.pdf');
-
-        const result = await RNFS.readDir(path);
-
-        console.log(result);
-
-        setFilePath(file.filePath);
+        await RNFS.unlink(filePath);
+        setPDFs(await RNFS.readDir(docDirPath));
+        setIsFetching(false);
       } catch (error) {
         dispatch(handleError(error));
+        setIsFetching(false);
       }
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <FAB
-        style={styles.fab}
-        icon="plus"
-        color="white"
-        animated={true}
-        onPress={() => createPDF({fileName: 'statistics'})}
+      {isFetching ? (
+        <SafeAreaView style={styles.loadingContainer}>
+          <ActivityIndicator color="#4A6572" />
+        </SafeAreaView>
+      ) : null}
+      <FlatList
+        data={PDFs}
+        keyExtractor={pdf => pdf.name}
+        renderItem={pdf => (
+          <AdminField
+            index={pdf.index}
+            title={pdf.item.name}
+            description={`Created: ${Moment(pdf.item.mtime).format(
+              'DD-MM-YYYY',
+            )}`}
+            icon="file-pdf-outline"
+            onDelete={() => deletePdf({filePath: pdf.item.path})}
+            onPress={() => console.log('pressed')}
+            row={row}
+            onUpdateRow={row => setRow(row)}
+            prevOpenedRow={previousOpenedRow}
+            onUpdatePrevOpenedRow={prevRow => setPreviousOpenedRow(prevRow)}
+          />
+        )}
+        refreshing={isFetching}
+        showsVerticalScrollIndicator={false}
       />
     </SafeAreaView>
   );
@@ -85,6 +109,9 @@ const styles = StyleSheet.create({
     margin: 40,
     right: 0,
     bottom: 0,
+  },
+  loadingContainer: {
+    margin: 10,
   },
 });
 
