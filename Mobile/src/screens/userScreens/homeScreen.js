@@ -11,7 +11,6 @@ import {FAB} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {getUser} from '../../redux/thunks/userThunks';
 import {getMenus} from '../../redux/thunks/menuThunks';
-import {GiftedChat} from 'react-native-gifted-chat';
 import MenuCard from '../../components/menuCard';
 import moment from 'moment';
 

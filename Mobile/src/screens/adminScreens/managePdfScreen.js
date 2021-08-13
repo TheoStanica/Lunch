@@ -131,7 +131,7 @@ const CreatePdfScreen = () => {
         onPress={() =>
           createPDF({
             fileName: `Statistics${Moment(Date.now()).format(
-              'DD-MM-YYYYThh-mm',
+              'DD-MM-YYYYThh-mm-ss',
             )}`,
           })
         }
