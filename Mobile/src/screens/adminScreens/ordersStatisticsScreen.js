@@ -11,7 +11,7 @@ import ActionButton from '../../components/actionButton';
 import moment from 'moment';
 
 const OrderStatisticsScreen = ({navigation}) => {
-  const {orders, ordersById} = useSelector(state => state.ordersReducer);
+  const {ordersById} = useSelector(state => state.ordersReducer);
   const {restaurants, restaurantsById} = useSelector(
     state => state.restaurantReducer,
   );
@@ -123,11 +123,7 @@ const OrderStatisticsScreen = ({navigation}) => {
         privilege: 'admin',
       }),
     );
-  }, [orderStart, orderEnd, selectedUser, selectedRestaurant]);
-
-  useEffect(() => {
-    navigation.setParams({statistics: generateStatistics()});
-  }, [orders]);
+  }, [orderStart, orderEnd]);
 
   return (
     <SafeAreaView style={styles.container}>
