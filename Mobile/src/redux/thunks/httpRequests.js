@@ -125,3 +125,7 @@ export const orderUpdateRequest = async ({
     menuOptions,
   });
 };
+
+export const createDeviceRequest = async ({fcmToken}) => {
+  return await api.post('/device', {fcmToken});
+};
