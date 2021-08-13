@@ -42,6 +42,7 @@
     "react-native-svg": "^12.1.1",
     "react-native-tab-view": "^2.16.0",
     "react-native-vector-icons": "^8.1.0",
+    "react-native-view-pdf": "^0.11.0",
     "react-redux": "^7.2.4",
     "react-timer-hook": "^3.0.4",
     "redux-devtools-extension": "^2.13.9",
