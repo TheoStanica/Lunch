@@ -1,13 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {StyleSheet, SafeAreaView, View} from 'react-native';
+import {
+  StyleSheet,
+  SafeAreaView,
+  View,
+  PermissionsAndroid,
+  Platform,
+} from 'react-native';
 import {getOrder} from '../../redux/thunks/orderThunks';
 import {Title} from 'react-native-paper';
 import {getRestaurants} from '../../redux/thunks/restaurantThunks';
 import {getAllUsers} from '../../redux/thunks/userThunks';
+import {handleError} from '../../redux/thunks/errorThunks';
 import DateTimePicker from '../../components/timePicker';
 import CustomDropDownPicker from '../../components/customDropDownPicker';
 import ActionButton from '../../components/actionButton';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from 'moment';
 
@@ -140,6 +148,52 @@ const OrderStatisticsScreen = ({navigation}) => {
     });
   }, []);
 
+  const isPermitted = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'External Storage Write Permission',
+            message: 'App needs access to Storage data',
+          },
+        );
+
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (error) {
+        dispatch(handleError(error));
+        return false;
+      }
+    } else {
+      return true;
+    }
+  };
+
+  const createPDF = async ({fileName}) => {
+    if (await isPermitted()) {
+      const options = {
+        html: '<h1 style="text-align: center;"><strong>Hello Guys</strong></h1><p style="text-align: center;">Here is an example of pdf Print in React Native</p><p style="text-align: center;"><strong>Team About React</strong></p>',
+        fileName: fileName,
+        directory: 'documents',
+      };
+
+      try {
+        const RNFS = require('react-native-fs');
+        const docDirPath = RNFS.DocumentDirectoryPath + '/statistics';
+        const file = await RNHTMLtoPDF.convert(options);
+
+        if (!(await RNFS.exists(docDirPath))) await RNFS.mkdir(docDirPath);
+        await RNFS.moveFile(
+          file.filePath,
+          docDirPath + '/' + fileName + '.pdf',
+        );
+        navigation.navigate('ManagePdfScreen');
+      } catch (error) {
+        dispatch(handleError(error));
+      }
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
@@ -203,7 +257,13 @@ const OrderStatisticsScreen = ({navigation}) => {
           <ActionButton
             style={styles.button}
             text="Generate PDF"
-            onPress={() => navigation.navigate('ManagePdfScreen')}
+            onPress={() =>
+              createPDF({
+                fileName: `Statistics${moment(Date.now()).format(
+                  'DD-MM-YYYYThh-mm-ss',
+                )}`,
+              })
+            }
           />
         </View>
       </View>

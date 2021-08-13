@@ -8,8 +8,7 @@ import {
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import {handleError} from '../../redux/thunks/errorThunks';
-import {FAB, ActivityIndicator} from 'react-native-paper';
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import {ActivityIndicator} from 'react-native-paper';
 import AdminField from '../../components/adminField';
 import Moment from 'moment';
 
@@ -53,33 +52,6 @@ const CreatePdfScreen = () => {
     }
   };
 
-  const createPDF = async ({fileName}) => {
-    setIsFetching(true);
-    if (await isPermitted()) {
-      const options = {
-        html: '<h1 style="text-align: center;"><strong>Hello Guys</strong></h1><p style="text-align: center;">Here is an example of pdf Print in React Native</p><p style="text-align: center;"><strong>Team About React</strong></p>',
-        fileName: fileName,
-        directory: 'documents',
-      };
-
-      try {
-        const file = await RNHTMLtoPDF.convert(options);
-
-        if (!(await RNFS.exists(docDirPath))) await RNFS.mkdir(docDirPath);
-        await RNFS.moveFile(
-          file.filePath,
-          docDirPath + '/' + fileName + '.pdf',
-        );
-
-        setPDFs(await RNFS.readDir(docDirPath));
-        setIsFetching(false);
-      } catch (error) {
-        setIsFetching(false);
-        dispatch(handleError(error));
-      }
-    }
-  };
-
   const deletePdf = async ({filePath}) => {
     setIsFetching(true);
     if (await isPermitted()) {
@@ -113,7 +85,7 @@ const CreatePdfScreen = () => {
             )}`}
             icon="file-pdf-outline"
             onDelete={() => deletePdf({filePath: pdf.item.path})}
-            onPress={() => console.log(pdf)}
+            onPress={() => console.log('pressed')}
             row={row}
             onUpdateRow={row => setRow(row)}
             prevOpenedRow={previousOpenedRow}
@@ -123,19 +95,6 @@ const CreatePdfScreen = () => {
         refreshing={isFetching}
         showsVerticalScrollIndicator={false}
       />
-      {/* <FAB
-        style={styles.fab}
-        icon="plus"
-        color="white"
-        animated={true}
-        onPress={() =>
-          createPDF({
-            fileName: `Statistics${Moment(Date.now()).format(
-              'DD-MM-YYYYThh-mm-ss',
-            )}`,
-          })
-        }
-      /> */}
     </SafeAreaView>
   );
 };
