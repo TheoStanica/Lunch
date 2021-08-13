@@ -99,7 +99,7 @@ const CreatePdfScreen = () => {
             )}`}
             icon="pdf-box"
             onDelete={() => deletePdf({filePath: pdf.item.path})}
-            onPress={() => console.log('pressed')}
+            onPress={() => console.log(pdf)}
             row={row}
             onUpdateRow={row => setRow(row)}
             prevOpenedRow={previousOpenedRow}
@@ -113,7 +113,13 @@ const CreatePdfScreen = () => {
         icon="plus"
         color="white"
         animated={true}
-        onPress={() => createPDF({fileName: 'statistics5'})}
+        onPress={() =>
+          createPDF({
+            fileName: `Statistics${Moment(Date.now()).format(
+              'DD-MM-YYYYThh-mm',
+            )}`,
+          })
+        }
       />
     </SafeAreaView>
   );
