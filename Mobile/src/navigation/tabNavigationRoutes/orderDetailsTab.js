@@ -5,7 +5,7 @@ import ManageOrdersScreen from '../../screens/adminScreens/manageOrdersScreen';
 
 const Tab = createMaterialTopTabNavigator();
 
-const OrderDetailsTab = () => {
+const OrderDetailsTab = ({route}) => {
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -20,6 +20,7 @@ const OrderDetailsTab = () => {
       <Tab.Screen
         name="ManageOrdersScreen"
         component={ManageOrdersScreen}
+        initialParams={{statistics: route.params.statistics}}
         options={{
           unmountOnBlur: true,
           tabBarLabel: 'User Orders',
@@ -28,6 +29,7 @@ const OrderDetailsTab = () => {
       <Tab.Screen
         name="ManageRestaurantOrdersScreen"
         component={ManageRestaurantOrdersScreen}
+        initialParams={{statistics: route.params.statistics}}
         options={{
           unmountOnBlur: true,
           tabBarLabel: 'Restaurant Orders',

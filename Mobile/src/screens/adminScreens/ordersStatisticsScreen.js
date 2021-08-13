@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {StyleSheet, SafeAreaView} from 'react-native';
+import {StyleSheet, SafeAreaView, View} from 'react-native';
 import {getOrder} from '../../redux/thunks/orderThunks';
 import {Title} from 'react-native-paper';
 import {getRestaurants} from '../../redux/thunks/restaurantThunks';
@@ -131,50 +131,71 @@ const OrderStatisticsScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Title style={styles.title}>Select a period of time for statistics</Title>
-      <DateTimePicker
-        title="Start"
-        description={orderStart}
-        date={new Date(moment(orderStart, 'DD-MM-YYYY').format())}
-        onConfirm={date => setOrderStart(moment(date).format('DD-MM-YYYY'))}
-        mode="date"
-      />
-      <DateTimePicker
-        title="End"
-        description={orderEnd}
-        date={new Date(moment(orderEnd, 'DD-MM-YYYY').format())}
-        onConfirm={date => setOrderEnd(moment(date).format('DD-MM-YYYY'))}
-        mode="date"
-      />
-      <CustomDropDownPicker
-        text="Restaurant"
-        openDropDown={openDropDown}
-        selectedItem={selectedRestaurant}
-        setSelectedItem={setSelectedRestaurant}
-        setOpenDropDown={setOpenDropDown}
-        items={generateItems('All restaurants', restaurants, restaurantsById)}
-        placeholder="All restaurants"
-        zIndex={2000}
-      />
-      <CustomDropDownPicker
-        text="User"
-        openDropDown={openSecondDropDown}
-        selectedItem={selectedUser}
-        setSelectedItem={setSelectedUser}
-        setOpenDropDown={setOpenSecondDropDown}
-        items={generateItems('All Users', allUsers, allUsersById, 'fullname')}
-        placeholder="All users"
-      />
-      <ActionButton
-        style={styles.button}
-        text="Generate Statistics"
-        onPress={() => navigation.navigate('OrderDetailsTab')}
-      />
-      <ActionButton
-        style={styles.button}
-        text="Generate PDF"
-        onPress={() => navigation.navigate('ManagePdfScreen')}
-      />
+      <View style={styles.contentContainer}>
+        <View>
+          <Title style={styles.title}>
+            Select a period of time for statistics
+          </Title>
+          <DateTimePicker
+            title="Start"
+            description={orderStart}
+            date={new Date(moment(orderStart, 'DD-MM-YYYY').format())}
+            onConfirm={date => setOrderStart(moment(date).format('DD-MM-YYYY'))}
+            mode="date"
+          />
+          <DateTimePicker
+            title="End"
+            description={orderEnd}
+            date={new Date(moment(orderEnd, 'DD-MM-YYYY').format())}
+            onConfirm={date => setOrderEnd(moment(date).format('DD-MM-YYYY'))}
+            mode="date"
+          />
+          <CustomDropDownPicker
+            text="Restaurant"
+            openDropDown={openDropDown}
+            selectedItem={selectedRestaurant}
+            setSelectedItem={setSelectedRestaurant}
+            setOpenDropDown={setOpenDropDown}
+            items={generateItems(
+              'All restaurants',
+              restaurants,
+              restaurantsById,
+            )}
+            placeholder="All restaurants"
+            zIndex={2000}
+          />
+          <CustomDropDownPicker
+            text="User"
+            openDropDown={openSecondDropDown}
+            selectedItem={selectedUser}
+            setSelectedItem={setSelectedUser}
+            setOpenDropDown={setOpenSecondDropDown}
+            items={generateItems(
+              'All Users',
+              allUsers,
+              allUsersById,
+              'fullname',
+            )}
+            placeholder="All users"
+          />
+        </View>
+        <View>
+          <ActionButton
+            style={styles.button}
+            text="Generate Statistics"
+            onPress={() =>
+              navigation.navigate('OrderDetailsTab', {
+                statistics: generateStatistics(),
+              })
+            }
+          />
+          <ActionButton
+            style={styles.button}
+            text="Generate PDF"
+            onPress={() => navigation.navigate('ManagePdfScreen')}
+          />
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
@@ -189,6 +210,10 @@ const styles = StyleSheet.create({
   },
   button: {
     margin: 10,
+  },
+  contentContainer: {
+    flex: 1,
+    justifyContent: 'space-between',
   },
 });
 
