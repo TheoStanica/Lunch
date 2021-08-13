@@ -1,18 +1,37 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
   PermissionsAndroid,
   Platform,
+  FlatList,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import {handleError} from '../../redux/thunks/errorThunks';
 import {FAB} from 'react-native-paper';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import AdminField from '../../components/adminField';
+import HideKeyboard from '../../components/hideKeyboard';
+import Moment from 'moment';
 
 const CreatePdfScreen = () => {
   const [filePath, setFilePath] = useState('');
+  const [PDFs, setPDFs] = useState([]);
+  const [row, setRow] = useState([]);
+  const [previousOpenedRow, setPreviousOpenedRow] = useState(null);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const getPdfs = async () => {
+      const RNFS = require('react-native-fs');
+      const result = await RNFS.readDir(
+        RNFS.DocumentDirectoryPath + '/statistics',
+      );
+      setPDFs(result);
+    };
+
+    getPdfs();
+  }, []);
 
   const isPermitted = async () => {
     if (Platform.OS === 'android') {
@@ -51,11 +70,21 @@ const CreatePdfScreen = () => {
         if (!(await RNFS.exists(path))) await RNFS.mkdir(path);
         await RNFS.moveFile(file.filePath, path + '/' + fileName + '.pdf');
 
-        const result = await RNFS.readDir(path);
+        setPDFs(await RNFS.readDir(path));
+      } catch (error) {
+        dispatch(handleError(error));
+      }
+    }
+  };
 
-        console.log(result);
+  const deletePdf = async ({filePath}) => {
+    if (await isPermitted()) {
+      try {
+        const RNFS = require('react-native-fs');
+        const path = RNFS.DocumentDirectoryPath + '/statistics';
 
-        setFilePath(file.filePath);
+        await RNFS.unlink(filePath);
+        setPDFs(await RNFS.readDir(path));
       } catch (error) {
         dispatch(handleError(error));
       }
@@ -64,12 +93,35 @@ const CreatePdfScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <HideKeyboard>
+        <FlatList
+          data={PDFs}
+          keyExtractor={pdf => pdf.name}
+          renderItem={pdf => (
+            <AdminField
+              index={pdf.index}
+              title={pdf.item.name}
+              description={`Created: ${Moment(pdf.item.mtime).format(
+                'DD-MM-YYYY',
+              )}`}
+              icon="pdf-box"
+              onDelete={() => deletePdf({filePath: pdf.item.path})}
+              onPress={() => console.log('pressed')}
+              row={row}
+              onUpdateRow={row => setRow(row)}
+              prevOpenedRow={previousOpenedRow}
+              onUpdatePrevOpenedRow={prevRow => setPreviousOpenedRow(prevRow)}
+            />
+          )}
+          showsVerticalScrollIndicator={false}
+        />
+      </HideKeyboard>
       <FAB
         style={styles.fab}
         icon="plus"
         color="white"
         animated={true}
-        onPress={() => createPDF({fileName: 'statistics'})}
+        onPress={() => createPDF({fileName: 'statistics5'})}
       />
     </SafeAreaView>
   );
