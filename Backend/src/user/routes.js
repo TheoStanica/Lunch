@@ -32,13 +32,16 @@ router.post(
   validationResults,
   userController.login
 );
+
 router.post(
   '/register',
   registerValidationSchema,
   validationResults,
   userController.register
 );
+
 router.post('/refresh', userController.refreshTokens);
+
 router.post(
   '/forgotpassword/:_token?',
   forgotPasswordValidationSchema,
