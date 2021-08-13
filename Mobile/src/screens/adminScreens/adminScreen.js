@@ -26,6 +26,11 @@ const AdminScreen = ({navigation}) => {
         text="Orders Statistics"
         onPress={() => navigation.navigate('OrdersStack')}
       />
+      <ActionButton
+        style={styles.button}
+        text="Reports"
+        onPress={() => navigation.navigate('ManagePdfScreen')}
+      />
     </SafeAreaView>
   );
 };
