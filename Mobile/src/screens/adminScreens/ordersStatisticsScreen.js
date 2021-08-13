@@ -184,7 +184,7 @@ const OrderStatisticsScreen = ({navigation}) => {
             style={styles.button}
             text="Generate Statistics"
             onPress={() =>
-              navigation.navigate('OrdersStatisticsStack', {
+              navigation.navigate('OrderDetailsTab', {
                 statistics: generateStatistics(),
               })
             }

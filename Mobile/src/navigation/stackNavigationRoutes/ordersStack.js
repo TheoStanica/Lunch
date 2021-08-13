@@ -2,7 +2,8 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import OrdersStatisticsScreen from '../../screens/adminScreens/ordersStatisticsScreen';
 import ManagePdfScreen from '../../screens/adminScreens/managePdfScreen';
-import OrdersStatisticsStack from './ordersStatisticsStack';
+import OrderDetailsTab from '../tabNavigationRoutes/orderDetailsTab';
+import UserRestaurantOrdersScreen from '../../screens/adminScreens/userRestaurantOrdersScreen';
 
 const Stack = createStackNavigator();
 
@@ -23,10 +24,18 @@ const OrdersStack = () => {
         }}
       />
       <Stack.Screen
-        name="OrdersStatisticsStack"
-        component={OrdersStatisticsStack}
+        name="OrderDetailsTab"
+        component={OrderDetailsTab}
         options={{
           title: 'Order Statistics',
+          headerStyle: {backgroundColor: '#FFF1CA'},
+        }}
+      />
+      <Stack.Screen
+        name="UserRestaurantOrdersScreen"
+        component={UserRestaurantOrdersScreen}
+        options={{
+          title: 'User Orders',
           headerStyle: {backgroundColor: '#FFF1CA'},
         }}
       />
@@ -34,7 +43,7 @@ const OrdersStack = () => {
         name="ManagePdfScreen"
         component={ManagePdfScreen}
         options={{
-          title: 'PDF',
+          title: 'PDF Statistics',
           headerStyle: {backgroundColor: '#FFF1CA'},
         }}
       />
