@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import {handleError} from '../../redux/thunks/errorThunks';
-import {FAB} from 'react-native-paper';
+import {FAB, ActivityIndicator} from 'react-native-paper';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import AdminField from '../../components/adminField';
 import Moment from 'moment';
@@ -19,11 +19,14 @@ const CreatePdfScreen = () => {
   const [PDFs, setPDFs] = useState([]);
   const [row, setRow] = useState([]);
   const [previousOpenedRow, setPreviousOpenedRow] = useState(null);
+  const [isFetching, setIsFetching] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
     const getPdfs = async () => {
+      setIsFetching(true);
       setPDFs(await RNFS.readDir(docDirPath));
+      setIsFetching(false);
     };
 
     getPdfs();
@@ -51,6 +54,7 @@ const CreatePdfScreen = () => {
   };
 
   const createPDF = async ({fileName}) => {
+    setIsFetching(true);
     if (await isPermitted()) {
       const options = {
         html: '<h1 style="text-align: center;"><strong>Hello Guys</strong></h1><p style="text-align: center;">Here is an example of pdf Print in React Native</p><p style="text-align: center;"><strong>Team About React</strong></p>',
@@ -68,25 +72,35 @@ const CreatePdfScreen = () => {
         );
 
         setPDFs(await RNFS.readDir(docDirPath));
+        setIsFetching(false);
       } catch (error) {
+        setIsFetching(false);
         dispatch(handleError(error));
       }
     }
   };
 
   const deletePdf = async ({filePath}) => {
+    setIsFetching(true);
     if (await isPermitted()) {
       try {
         await RNFS.unlink(filePath);
         setPDFs(await RNFS.readDir(docDirPath));
+        setIsFetching(false);
       } catch (error) {
         dispatch(handleError(error));
+        setIsFetching(false);
       }
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
+      {isFetching ? (
+        <SafeAreaView style={styles.loadingContainer}>
+          <ActivityIndicator color="#4A6572" />
+        </SafeAreaView>
+      ) : null}
       <FlatList
         data={PDFs}
         keyExtractor={pdf => pdf.name}
@@ -106,6 +120,7 @@ const CreatePdfScreen = () => {
             onUpdatePrevOpenedRow={prevRow => setPreviousOpenedRow(prevRow)}
           />
         )}
+        refreshing={isFetching}
         showsVerticalScrollIndicator={false}
       />
       <FAB
@@ -135,6 +150,9 @@ const styles = StyleSheet.create({
     margin: 40,
     right: 0,
     bottom: 0,
+  },
+  loadingContainer: {
+    margin: 10,
   },
 });
 
