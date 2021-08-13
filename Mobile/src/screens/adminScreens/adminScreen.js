@@ -24,7 +24,7 @@ const AdminScreen = ({navigation}) => {
         />
         <ActionButton
           style={styles.button}
-          text="Manage Orders"
+          text="Orders Statistics"
           onPress={() => navigation.navigate('OrdersStack')}
         />
       </View>

@@ -1,6 +1,6 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import UserRestaurantOrdersScreen from '../../screens/adminScreens/userRestaurantOrdersScreen';
+import OrderStatisticsScreen from '../../screens/adminScreens/ordersStatisticsScreen';
 import OrderDetailsTab from '../tabNavigationRoutes/orderDetailsTab';
 
 const Stack = createStackNavigator();
@@ -14,18 +14,18 @@ const OrdersStack = () => {
   return (
     <Stack.Navigator screenOptions={{...screenOptions}}>
       <Stack.Screen
-        name="OrderDetailsTab"
-        component={OrderDetailsTab}
+        name="OrderStatisticsScreen"
+        component={OrderStatisticsScreen}
         options={{
-          title: 'Manage Orders',
+          title: 'Orders Statistics',
           headerStyle: {backgroundColor: '#FFF1CA'},
         }}
       />
       <Stack.Screen
-        name="UserRestaurantOrdersScreen"
-        component={UserRestaurantOrdersScreen}
+        name="OrderDetailsTab"
+        component={OrderDetailsTab}
         options={{
-          title: 'User Restaurant Orders',
+          title: 'Order Details Tab',
           headerStyle: {backgroundColor: '#FFF1CA'},
         }}
       />
