@@ -12,6 +12,8 @@ const {
   orderStatus,
 } = require('../utils/enums');
 const moment = require('moment');
+const admin = require('firebase-admin');
+const { sendNotification } = require('../utils/notificationSender');
 
 const convertFilterToQuery = (filter) => {
   const newFilter = { deleted: false };
@@ -300,7 +302,18 @@ const updateOrder = async (req, res, next) => {
         role !== accountRole.admin &&
         checkMenuTimeState({ date: order.menuId.createdAt, time: notifyAfter })
       ) {
-        // send push notification to admins
+        const users = await User.find({ role: accountRole.admin }).populate(
+          'devices'
+        );
+
+        await sendNotification({
+          users,
+          notification: {
+            title: 'Luch App',
+            color: '#FBBC00',
+            body: 'Someone updated his options for a menu',
+          },
+        });
       }
 
       res.send({ order: newOrder });
