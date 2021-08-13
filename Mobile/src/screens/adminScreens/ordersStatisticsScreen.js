@@ -7,6 +7,7 @@ import {getRestaurants} from '../../redux/thunks/restaurantThunks';
 import {getAllUsers} from '../../redux/thunks/userThunks';
 import DateTimePicker from '../../components/timePicker';
 import CustomDropDownPicker from '../../components/customDropDownPicker';
+import ActionButton from '../../components/actionButton';
 import moment from 'moment';
 
 const OrderStatisticsScreen = ({navigation}) => {
@@ -164,6 +165,16 @@ const OrderStatisticsScreen = ({navigation}) => {
         items={generateItems('All Users', allUsers, allUsersById, 'fullname')}
         placeholder="All users"
       />
+      <ActionButton
+        style={styles.button}
+        text="Generate Statistics"
+        onPress={() => navigation.navigate('OrderDetailsTab')}
+      />
+      <ActionButton
+        style={styles.button}
+        text="Generate PDF"
+        onPress={() => navigation.navigate('ManagePdfScreen')}
+      />
     </SafeAreaView>
   );
 };
@@ -175,6 +186,9 @@ const styles = StyleSheet.create({
   },
   title: {
     alignSelf: 'center',
+  },
+  button: {
+    margin: 10,
   },
 });
 

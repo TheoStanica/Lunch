@@ -2,7 +2,6 @@ import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import ManageRestaurantOrdersScreen from '../../screens/adminScreens/manageRestaurantOrdersScreen';
 import ManageOrdersScreen from '../../screens/adminScreens/manageOrdersScreen';
-import ManagePdfScreen from '../../screens/adminScreens/managePdfScreen';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -23,7 +22,7 @@ const OrderDetailsTab = () => {
         component={ManageOrdersScreen}
         options={{
           unmountOnBlur: true,
-          tabBarLabel: 'Orders Summary',
+          tabBarLabel: 'User Orders',
         }}
       />
       <Tab.Screen
@@ -32,14 +31,6 @@ const OrderDetailsTab = () => {
         options={{
           unmountOnBlur: true,
           tabBarLabel: 'Restaurant Orders',
-        }}
-      />
-      <Tab.Screen
-        name="ManagePdfScreen"
-        component={ManagePdfScreen}
-        options={{
-          unmountOnBlur: true,
-          tabBarLabel: 'Orders PDF',
         }}
       />
     </Tab.Navigator>
