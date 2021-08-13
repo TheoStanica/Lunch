@@ -8,6 +8,7 @@ import {getAllUsers} from '../../redux/thunks/userThunks';
 import DateTimePicker from '../../components/timePicker';
 import CustomDropDownPicker from '../../components/customDropDownPicker';
 import ActionButton from '../../components/actionButton';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from 'moment';
 
 const OrderStatisticsScreen = ({navigation}) => {
@@ -124,6 +125,20 @@ const OrderStatisticsScreen = ({navigation}) => {
       }),
     );
   }, [orderStart, orderEnd]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Icon
+          name="file-pdf-outline"
+          size={35}
+          color="black"
+          style={{marginRight: 10}}
+          onPress={() => navigation.navigate('ManagePdfScreen')}
+        />
+      ),
+    });
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>

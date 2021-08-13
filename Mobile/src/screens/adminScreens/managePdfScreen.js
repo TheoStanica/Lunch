@@ -111,7 +111,7 @@ const CreatePdfScreen = () => {
             description={`Created: ${Moment(pdf.item.mtime).format(
               'DD-MM-YYYY',
             )}`}
-            icon="pdf-box"
+            icon="file-pdf-outline"
             onDelete={() => deletePdf({filePath: pdf.item.path})}
             onPress={() => console.log(pdf)}
             row={row}
@@ -123,7 +123,7 @@ const CreatePdfScreen = () => {
         refreshing={isFetching}
         showsVerticalScrollIndicator={false}
       />
-      <FAB
+      {/* <FAB
         style={styles.fab}
         icon="plus"
         color="white"
@@ -135,7 +135,7 @@ const CreatePdfScreen = () => {
             )}`,
           })
         }
-      />
+      /> */}
     </SafeAreaView>
   );
 };
