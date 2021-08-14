@@ -230,7 +230,18 @@ const createOrder = async (req, res, next) => {
         role !== accountRole.admin &&
         checkMenuTimeState({ date: menu.createdAt, time: notifyAfter })
       ) {
-        // send push notification to admins
+        const users = await User.find({ role: accountRole.admin }).populate(
+          'devices'
+        );
+
+        await sendNotification({
+          users,
+          notification: {
+            title: 'Luch App',
+            color: '#FBBC00',
+            body: 'Someone made a new order',
+          },
+        });
       }
 
       res.sendStatus(201);
