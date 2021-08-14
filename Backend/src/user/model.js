@@ -64,6 +64,7 @@ userSchema.options.toJSON = {
     delete ret.activationToken;
     delete ret.forgotPasswordToken;
     delete ret.forgotPasswordTokenExp;
+    delete ret.devices;
     delete ret.createdAt;
     delete ret.updatedAt;
     delete ret.deleted;
