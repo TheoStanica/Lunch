@@ -6,8 +6,12 @@ const Device = require('../device/model');
 const sendNotification = async ({ notification, users }) => {
   try {
     let fcmTokens = [];
+    let deviceIds = [];
     users.forEach((user) => {
-      user.devices.forEach((device) => fcmTokens.push(device.fcmToken));
+      user.devices.forEach((device) => {
+        fcmTokens.push(device.fcmToken);
+        deviceIds.push(device.id);
+      });
     });
 
     const { results } = await admin.messaging().sendToDevice(
@@ -20,30 +24,39 @@ const sendNotification = async ({ notification, users }) => {
         priority: 'high',
       }
     );
-    const fcmTokensToRemove = [];
+
+    const devicesToRemove = [];
     results.forEach((result, index) => {
       if (result.error) {
-        fcmTokensToRemove.push(fcmTokens[index]);
+        devicesToRemove.push(deviceIds[index]);
       }
     });
 
-    const session = await mongoose.startSession();
-    session.startTransaction();
-    try {
-      await Device.deleteMany(
-        {
-          fcmToken: { $in: fcmTokensToRemove },
-        },
-        { session: session }
-      );
+    if (devicesToRemove.length > 0) {
+      const session = await mongoose.startSession();
+      session.startTransaction();
+      try {
+        await Device.deleteMany(
+          {
+            _id: { $in: devicesToRemove },
+          },
+          { session: session }
+        );
 
-      // remove device ids from Users
+        await User.updateMany(
+          { devices: { $not: { $size: 0 } } },
+          {
+            $pull: { devices: { $in: devicesToRemove } },
+          },
+          { session: session }
+        );
 
-      await session.commitTransaction();
-      session.endSession();
-    } catch (error) {
-      await session.abortTransaction();
-      session.endSession();
+        await session.commitTransaction();
+        session.endSession();
+      } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
+      }
     }
   } catch (error) {
     throw error;
