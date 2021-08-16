@@ -1,48 +1,15 @@
-import React, {useEffect} from 'react';
-import {Platform} from 'react-native';
+import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeStack from '../stackNavigationRoutes/homeStack';
 import AdminStack from '../stackNavigationRoutes/adminStack';
 import ProfileStack from '../stackNavigationRoutes/profileStack';
-import ThreadsStack from '../stackNavigationRoutes/threadsStack';
-import messaging from '@react-native-firebase/messaging';
-import {createDevice} from '../../redux/thunks/deviceThunks';
 
 const Tab = createBottomTabNavigator();
 
 const AppTab = () => {
   const {role} = useSelector(state => state.userReducer);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const firebase = async () => {
-      if (Platform.OS === 'android' && role === 'admin') {
-        requestUserPermission();
-        messaging().onTokenRefresh(fcmToken => {
-          //refresh token
-        });
-      }
-    };
-    firebase();
-  }, [role]);
-
-  const requestUserPermission = async () => {
-    try {
-      const authStatus = await messaging().requestPermission();
-      const enabled =
-        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-      if (enabled) {
-        const fcmToken = await getFcmToken();
-        dispatch(createDevice({fcmToken}));
-      }
-    } catch (error) {}
-  };
-  const getFcmToken = async () => {
-    return await messaging().getToken();
-  };
 
   return (
     <Tab.Navigator
