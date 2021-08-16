@@ -17,7 +17,6 @@ const NotificationProvider = ({children}) => {
         channelName: 'Main channel for admin notifications',
       });
       unsubscribe = messaging().onMessage(message => {
-        console.log('got a message', message);
         PushNotification.localNotification({
           channelId: 'main',
           title: message.notification.title,
