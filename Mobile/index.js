@@ -8,21 +8,17 @@ import {name as appName} from './app.json';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification from 'react-native-push-notification';
 import messaging from '@react-native-firebase/messaging';
+import {store} from './src/redux/store';
+import {setNavigation} from './src/redux/actions/navigationActions';
+import {Linking} from 'react-native';
 
 if (Platform.OS === 'android') {
   messaging().setBackgroundMessageHandler(async remoteMessage => {});
 
   PushNotification.configure({
-    // (optional) Called when Token is generated (iOS and Android)
-    // onRegister: async function (token) {
-    //   console.log('updated token, it is ', token.token);
-    // },
-
     // (required) Called when a remote is received or opened, or local notification is opened
-    onNotification: function (notification) {
-      console.log('NOTIFICATION:', notification);
-
-      // process the notification
+    onNotification: async function (notification) {
+      Linking.openURL(notification.data.url);
 
       // (required) Called when a remote is received or opened, or local notification is opened
       notification.finish(PushNotificationIOS.FetchResult.NoData);
@@ -30,9 +26,6 @@ if (Platform.OS === 'android') {
 
     // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
     onAction: function (notification) {
-      console.log('ACTION:', notification.action);
-      console.log('NOTIFICATION:', notification);
-
       // process the action
     },
 
