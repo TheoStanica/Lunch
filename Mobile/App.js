@@ -9,6 +9,8 @@ import LoadingScreen from './src/screens/loadingScreen';
 import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 import DisplayErrors from './src/components/displayErrors';
 import NotificationProvider from './src/components/notificationProvider';
+import messaging from '@react-native-firebase/messaging';
+import {Linking, Platform} from 'react-native';
 
 const theme = {
   ...DefaultTheme,
@@ -19,31 +21,65 @@ const theme = {
   },
 };
 
-const config = {
-  screens: {
-    AuthStack: {
-      screens: {
-        ForgotPasswordScreen: 'forgotpassword/:_token',
-        ActivationScreen: 'activate/:_activationToken',
+const App = () => {
+  const config = {
+    screens: {
+      AuthStack: {
+        screens: {
+          ForgotPasswordScreen: 'forgotpassword/:_token',
+          ActivationScreen: 'activate/:_activationToken',
+        },
       },
-    },
-    AppTab: {
-      screens: {
-        AdminStack: {
-          screens: {
-            AdminScreen: 'admin',
+      AppTab: {
+        screens: {
+          AdminStack: {
+            screens: {
+              AdminScreen: 'admin',
+            },
           },
         },
       },
     },
-  },
-};
-const linking = {
-  prefixes: ['lunchapp://'],
-  config,
-};
+  };
+  const linking = {
+    prefixes: ['lunchapp://'],
+    config,
+    async getInitialURL() {
+      const url = await Linking.getInitialURL();
 
-const App = () => {
+      if (url != null) {
+        return url;
+      }
+      const message = await messaging().getInitialNotification();
+
+      return message?.data?.url;
+    },
+    subscribe(listener) {
+      let unsubscribeNotification;
+
+      if (Platform.OS === 'android') {
+        const onReceiveURL = ({url}) => listener(url);
+        Linking.addEventListener('url', onReceiveURL);
+
+        unsubscribeNotification = messaging().onNotificationOpenedApp(
+          message => {
+            const url = message?.data?.url;
+            if (url) {
+              listener(url);
+            }
+          },
+        );
+      }
+
+      return () => {
+        if (Platform.OS === 'android') {
+          Linking.removeEventListener('url', onReceiveURL);
+          unsubscribeNotification();
+        }
+      };
+    },
+  };
+
   return (
     <Provider store={store}>
       <PersistGate loading={<LoadingScreen />} persistor={persistor}>
