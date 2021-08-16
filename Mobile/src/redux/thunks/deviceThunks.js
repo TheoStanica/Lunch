@@ -1,7 +1,7 @@
 import {handleError} from './errorThunks';
 import {createDeviceRequest} from './httpRequests';
 
-export const createDevice =
+export const registerDevice =
   ({fcmToken}) =>
   async dispatch => {
     try {
