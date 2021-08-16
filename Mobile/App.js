@@ -8,6 +8,7 @@ import {PersistGate} from 'redux-persist/integration/react';
 import LoadingScreen from './src/screens/loadingScreen';
 import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 import DisplayErrors from './src/components/displayErrors';
+import NotificationProvider from './src/components/notificationProvider';
 
 const theme = {
   ...DefaultTheme,
@@ -39,8 +40,10 @@ const App = () => {
       <PersistGate loading={<LoadingScreen />} persistor={persistor}>
         <PaperProvider theme={theme}>
           <NavigationContainer linking={linking} fallback={<LoadingScreen />}>
-            <AppStack />
-            <DisplayErrors />
+            <NotificationProvider>
+              <AppStack />
+              <DisplayErrors />
+            </NotificationProvider>
           </NavigationContainer>
         </PaperProvider>
       </PersistGate>
