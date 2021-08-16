@@ -241,6 +241,7 @@ const createOrder = async (req, res, next) => {
             color: '#FBBC00',
             body: 'Someone made a new order',
           },
+          data: { url: 'lunchapp://admin' },
         });
       }
 
@@ -324,6 +325,7 @@ const updateOrder = async (req, res, next) => {
             color: '#FBBC00',
             body: 'Someone updated his options for a menu',
           },
+          data: { url: 'lunchapp://admin' },
         });
       }
 

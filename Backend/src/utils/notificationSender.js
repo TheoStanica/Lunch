@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const User = require('../user/model');
 const Device = require('../device/model');
 
-const sendNotification = async ({ notification, users }) => {
+const sendNotification = async ({ notification, users, data }) => {
   try {
     let fcmTokens = [];
     let deviceIds = [];
@@ -19,6 +19,7 @@ const sendNotification = async ({ notification, users }) => {
         fcmTokens,
         {
           notification,
+          data,
         },
         {
           contentAvailable: true,
