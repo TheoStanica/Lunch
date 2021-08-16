@@ -1,0 +1,45 @@
+import React, {useEffect} from 'react';
+import {Platform} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import messaging from '@react-native-firebase/messaging';
+import {registerDevice} from '../redux/thunks/deviceThunks';
+import PushNotification from 'react-native-push-notification';
+
+const NotificationProvider = ({children}) => {
+  const {role} = useSelector(state => state.userReducer);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    let unsubscribe = null;
+    if (Platform.OS === 'android' && role === 'admin') {
+      PushNotification.createChannel({
+        channelId: 'main',
+        channelName: 'Main channel for admin notifications',
+      });
+      unsubscribe = messaging().onMessage(message => {
+        console.log('got a message', message);
+        PushNotification.localNotification({
+          channelId: 'main',
+          title: message.notification.title,
+          message: message.notification.body,
+          data: message.data,
+        });
+      });
+
+      PushNotification.configure({
+        onRegister: function (token) {
+          dispatch(registerDevice({fcmToken: token.token}));
+        },
+      });
+    }
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, [role]);
+
+  return <>{children}</>;
+};
+
+export default NotificationProvider;
