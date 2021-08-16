@@ -27,8 +27,14 @@ const config = {
         ActivationScreen: 'activate/:_activationToken',
       },
     },
-    AdminStack: {
-      AdminScreen: 'admin',
+    AppTab: {
+      screens: {
+        AdminStack: {
+          screens: {
+            AdminScreen: 'admin',
+          },
+        },
+      },
     },
   },
 };
