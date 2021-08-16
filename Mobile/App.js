@@ -21,11 +21,14 @@ const theme = {
 
 const config = {
   screens: {
-    Auth: {
+    AuthStack: {
       screens: {
         ForgotPasswordScreen: 'forgotpassword/:_token',
         ActivationScreen: 'activate/:_activationToken',
       },
+    },
+    AdminStack: {
+      AdminScreen: 'admin',
     },
   },
 };
