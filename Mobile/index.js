@@ -8,8 +8,6 @@ import {name as appName} from './app.json';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification from 'react-native-push-notification';
 import messaging from '@react-native-firebase/messaging';
-import {store} from './src/redux/store';
-import {setNavigation} from './src/redux/actions/navigationActions';
 import {Linking} from 'react-native';
 
 if (Platform.OS === 'android') {
