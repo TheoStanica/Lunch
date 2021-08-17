@@ -88,6 +88,7 @@ const AnimatedHeader = ({
           style={[styles.titleContainer, {backgroundColor: titleBackground}]}
           ref={titleRef}>
           <Animated.Text
+            numberOfLines={1}
             style={[
               styles.title,
               {
