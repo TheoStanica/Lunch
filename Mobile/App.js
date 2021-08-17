@@ -45,38 +45,42 @@ const App = () => {
     prefixes: ['lunchapp://'],
     config,
     async getInitialURL() {
-      const url = await Linking.getInitialURL();
+      try {
+        const url = await Linking.getInitialURL();
 
-      if (url != null) {
-        return url;
-      }
-      const message = await messaging().getInitialNotification();
+        if (url != null) {
+          return url;
+        }
+        const message = await messaging().getInitialNotification();
 
-      return message?.data?.url;
+        return message?.data?.url;
+      } catch (error) {}
     },
     subscribe(listener) {
-      let unsubscribeNotification;
+      try {
+        let unsubscribeNotification;
 
-      if (Platform.OS === 'android') {
-        const onReceiveURL = ({url}) => listener(url);
-        Linking.addEventListener('url', onReceiveURL);
-
-        unsubscribeNotification = messaging().onNotificationOpenedApp(
-          message => {
-            const url = message?.data?.url;
-            if (url) {
-              listener(url);
-            }
-          },
-        );
-      }
-
-      return () => {
         if (Platform.OS === 'android') {
-          Linking.removeEventListener('url', onReceiveURL);
-          unsubscribeNotification();
+          const onReceiveURL = ({url}) => listener(url);
+          Linking.addEventListener('url', onReceiveURL);
+
+          unsubscribeNotification = messaging().onNotificationOpenedApp(
+            message => {
+              const url = message?.data?.url;
+              if (url) {
+                listener(url);
+              }
+            },
+          );
         }
-      };
+
+        return () => {
+          if (Platform.OS === 'android') {
+            Linking.removeEventListener('url', onReceiveURL);
+            unsubscribeNotification();
+          }
+        };
+      } catch (error) {}
     },
   };
 
