@@ -70,7 +70,7 @@ const handleOrderCreation = async ({
   menuId,
   userId,
 }) => {
-  await Order.create([data], { session: session });
+  const order = await Order.create([data], { session: session });
 
   if (orderType === courseRequiredType.restaurant) {
     await Menu.findByIdAndUpdate(
@@ -81,6 +81,7 @@ const handleOrderCreation = async ({
       { session: session }
     );
   }
+  return order[0];
 };
 
 const generateUpdateObject = ({ order, type, status, userId, menuOptions }) => {
@@ -216,7 +217,7 @@ const createOrder = async (req, res, next) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-      await handleOrderCreation({
+      const order = await handleOrderCreation({
         data: { ...req.body, userId },
         orderType: type,
         menuId,
@@ -241,7 +242,7 @@ const createOrder = async (req, res, next) => {
             color: '#FBBC00',
             body: 'Someone made a new order',
           },
-          data: { url: 'lunchapp://admin' },
+          data: { url: `lunchapp://admin/menu/${order.menuId}` },
         });
       }
 
@@ -325,7 +326,7 @@ const updateOrder = async (req, res, next) => {
             color: '#FBBC00',
             body: 'Someone updated his options for a menu',
           },
-          data: { url: 'lunchapp://admin' },
+          data: { url: `lunchapp://admin/menu/${newOrder.menuId}` },
         });
       }
 
