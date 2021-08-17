@@ -10,7 +10,7 @@ import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 import DisplayErrors from './src/components/displayErrors';
 import NotificationProvider from './src/components/notificationProvider';
 import messaging from '@react-native-firebase/messaging';
-import {Linking, Platform} from 'react-native';
+import {Linking, Platform, StatusBar} from 'react-native';
 
 const theme = {
   ...DefaultTheme,
@@ -93,6 +93,7 @@ const App = () => {
         <PaperProvider theme={theme}>
           <NavigationContainer linking={linking} fallback={<LoadingScreen />}>
             <NotificationProvider>
+              <StatusBar backgroundColor="#FFF1CA" barStyle="dark-content" />
               <AppStack />
               <DisplayErrors />
             </NotificationProvider>

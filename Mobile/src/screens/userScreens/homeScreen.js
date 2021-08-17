@@ -1,12 +1,5 @@
-import React, {useEffect, useCallback, useState} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  FlatList,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {SafeAreaView, StyleSheet, FlatList, View, Text} from 'react-native';
 import {FAB} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {getUser} from '../../redux/thunks/userThunks';
@@ -47,7 +40,6 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <>
-      <StatusBar backgroundColor="#FFF1CA" barStyle="dark-content" />
       <SafeAreaView style={styles.container}>
         <Text style={styles.title}>Menus</Text>
         <FlatList
