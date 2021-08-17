@@ -20,3 +20,4 @@ export const SET_ALLMENUS = 'SET_ALLMENUS';
 export const DELETE_MENU = 'DELETE_MENU';
 
 export const SET_ORDERS = 'SET_ORDERS';
+export const RESET_ORDERS = 'RESET_ORDERS';

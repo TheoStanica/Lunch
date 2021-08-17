@@ -1,4 +1,4 @@
-import {SET_ORDERS} from '../types';
+import {RESET_ORDERS, SET_ORDERS} from '../types';
 
 const initialState = {
   orders: [],
@@ -17,6 +17,12 @@ const ordersReducer = (state = initialState, action) => {
       });
 
       return {orders, ordersById};
+    }
+
+    case RESET_ORDERS: {
+      return {
+        ...initialState,
+      };
     }
 
     default:
