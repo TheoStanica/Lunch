@@ -33,8 +33,11 @@ const App = () => {
       AppTab: {
         screens: {
           AdminStack: {
+            path: 'admin',
+            initialRouteName: 'AdminScreen',
             screens: {
-              AdminScreen: 'admin',
+              AdminScreen: '/',
+              MenuDetailsTab: 'menu/:menuId',
             },
           },
         },
