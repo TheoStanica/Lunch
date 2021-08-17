@@ -5,8 +5,11 @@ import {Paragraph, Divider} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const MenuOrdersAdminScreen = ({route}) => {
-  const {orders, ordersById} = useSelector(state => state.ordersReducer);
-  const {menu} = route.params;
+  const {orders, ordersById, allMenusById} = useSelector(state => ({
+    ...state.ordersReducer,
+    ...state.allMenusReducer,
+  }));
+  const {menuId} = route.params;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -24,7 +27,7 @@ const MenuOrdersAdminScreen = ({route}) => {
               </Text>
             </SafeAreaView>
             <FlatList
-              data={menu.menu}
+              data={allMenusById[menuId].menu}
               keyExtractor={option => option.courseCategory}
               renderItem={option => (
                 <SafeAreaView style={styles.course}>

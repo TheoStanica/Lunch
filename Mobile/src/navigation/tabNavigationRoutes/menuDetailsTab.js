@@ -20,7 +20,7 @@ const MenuDetailsTab = ({route}) => {
       <Tab.Screen
         name="MenuDetailsAdminScreen"
         component={MenuDetailsAdminScreen}
-        initialParams={{menu: route.params.menu}}
+        initialParams={{menuId: route.params.menuId}}
         options={{
           unmountOnBlur: true,
           tabBarLabel: 'Menu Summary',
@@ -29,7 +29,7 @@ const MenuDetailsTab = ({route}) => {
       <Tab.Screen
         name="MenuOrdersAdminScreen"
         component={MenuOrdersAdminScreen}
-        initialParams={{menu: route.params.menu}}
+        initialParams={{menuId: route.params.menuId}}
         options={{
           unmountOnBlur: true,
           tabBarLabel: 'User Orders',

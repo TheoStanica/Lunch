@@ -1,18 +1,24 @@
-import React, {useCallback, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, SafeAreaView, Text, View} from 'react-native';
+import {ActivityIndicator, Divider} from 'react-native-paper';
 import {useSelector, useDispatch} from 'react-redux';
-import {StyleSheet, SafeAreaView, Text} from 'react-native';
-import {getOrder} from '../../redux/thunks/orderThunks';
-import {useFocusEffect} from '@react-navigation/native';
-import {Divider} from 'react-native-paper';
+import {resetOrdersAction} from '../../redux/actions/ordersActions';
 import ProfileField from '../../components/profileField';
-import Statistics from '../../components/statistics';
+import {getOrder} from '../../redux/thunks/orderThunks';
+import {getMenus} from '../../redux/thunks/menuThunks';
 import MenuOptions from '../../components/menuOptions';
+import Statistics from '../../components/statistics';
 import Moment from 'moment';
 
 const MenuDetailsAdminScreen = ({route}) => {
-  const {orders, ordersById} = useSelector(state => state.ordersReducer);
+  const {orders, ordersById, allMenusById} = useSelector(state => ({
+    ...state.ordersReducer,
+    ...state.allMenusReducer,
+  }));
+  const [hasFetchedOrders, setHasFetchedOrders] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
   const [summary, setSummary] = useState({});
-  const {menu} = route.params;
+  const {menuId} = route.params;
   const dispatch = useDispatch();
 
   const generateSummary = () => {
@@ -27,7 +33,7 @@ const MenuDetailsAdminScreen = ({route}) => {
     summary.totalTakeawayOrders =
       summary.totalOrders - summary.totalRestaurantOrders;
 
-    menu.menu.forEach(menu => {
+    allMenusById[menuId].menu.forEach(menu => {
       menu.courses.forEach((course, index) => {
         courses.push({
           description: course.description,
@@ -46,42 +52,70 @@ const MenuDetailsAdminScreen = ({route}) => {
 
     summary.totalMenuOptions = totalMenuOptions;
     summary.totalTakeawayCost =
-      menu.restaurantId.cost * summary.totalTakeawayOrders;
-    summary.totalCost = menu.restaurantId.cost * summary.totalOrders;
+      allMenusById[menuId].restaurantId.cost * summary.totalTakeawayOrders;
+    summary.totalCost =
+      allMenusById[menuId].restaurantId.cost * summary.totalOrders;
 
     return summary;
   };
 
-  const onRefresh = () => {
+  const fetchOrder = () => {
     dispatch(
-      getOrder({
-        filter: {menuId: menu.id},
+      getOrder(
+        {
+          filter: {menuId, status: 'active'},
+          privilege: 'admin',
+        },
+        () => setHasFetchedOrders(true),
+      ),
+    );
+  };
+
+  const fetchMenu = () => {
+    dispatch(
+      getMenus({
+        filter: {_id: menuId},
         privilege: 'admin',
       }),
     );
   };
 
   useEffect(() => {
-    setSummary(generateSummary());
-  }, [orders]);
+    if (!allMenusById?.[menuId]) {
+      fetchMenu();
+    } else {
+      if (!hasFetchedOrders && orders.length === 0) {
+        fetchOrder();
+      } else {
+        setSummary(generateSummary());
+        setIsFetching(false);
+      }
+    }
+  }, [allMenusById, orders]);
 
-  useFocusEffect(
-    useCallback(() => {
-      onRefresh();
-    }, []),
-  );
+  useEffect(() => {
+    return () => {
+      dispatch(resetOrdersAction());
+    };
+  }, []);
 
-  return (
+  return isFetching ? (
+    <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+      <ActivityIndicator color="#4A6572" />
+    </View>
+  ) : (
     <SafeAreaView style={styles.container}>
       <SafeAreaView style={styles.body}>
         <ProfileField
-          paragraph={menu.restaurantId.name}
+          paragraph={allMenusById[menuId]?.restaurantId.name}
           title="Restaurant"
           icon="food"
           iconColor="#4A6572"
         />
         <ProfileField
-          paragraph={Moment(menu.createdAt).format('DD-MM-YYYY')}
+          paragraph={Moment(allMenusById[menuId]?.createdAt).format(
+            'DD-MM-YYYY',
+          )}
           title="Created"
           icon="information-variant"
           iconColor="#4A6572"
