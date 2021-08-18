@@ -1,13 +1,14 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, View, Dimensions} from 'react-native';
 import {handleError} from '../../redux/thunks/errorThunks';
+import {useDispatch} from 'react-redux';
 import Pdf from 'react-native-pdf';
 import Share from 'react-native-share';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const PdfScreen = ({route, navigation}) => {
   const source = {uri: `file://${route.params.path}`};
-  const share = async () => {
+  const handleSharePdf = async () => {
     try {
       const shareResponse = await Share.open({
         title: 'This is my report ',
@@ -15,11 +16,11 @@ const PdfScreen = ({route, navigation}) => {
         url: `file://${route.params.path}`,
         subject: 'Report',
       });
-      console.log(shareResponse);
     } catch (error) {
       dispatch(handleError(error));
     }
   };
+  const dispatch = useDispatch();
 
   useEffect(() => {
     navigation.setOptions({
@@ -29,7 +30,7 @@ const PdfScreen = ({route, navigation}) => {
           size={30}
           color="black"
           style={{marginRight: 10}}
-          onPress={() => share()}
+          onPress={() => handleSharePdf()}
         />
       ),
     });
@@ -51,6 +52,7 @@ const styles = StyleSheet.create({
   pdf: {
     flex: 1,
     width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
 });
 
