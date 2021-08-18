@@ -10,7 +10,7 @@ import MessageScreen from '../../screens/messageScreen';
 import ManageMenusScreen from '../../screens/adminScreens/manageMenusScreen';
 import MenuDetailsTab from '../tabNavigationRoutes/menuDetailsTab';
 import OrdersStack from './ordersStack';
-import ManagePdfScreen from '../../screens/adminScreens/managePdfScreen';
+import PdfStack from './pdfStack';
 
 const Stack = createStackNavigator();
 
@@ -91,10 +91,11 @@ const AdminStack = () => {
         }}
       />
       <Stack.Screen
-        name="ManagePdfScreen"
-        component={ManagePdfScreen}
+        name="PdfStack"
+        component={PdfStack}
         options={{
           title: 'Reports',
+          headerShown: false,
         }}
       />
       <Stack.Screen

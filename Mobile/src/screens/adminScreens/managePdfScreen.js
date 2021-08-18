@@ -12,7 +12,7 @@ import {ActivityIndicator} from 'react-native-paper';
 import AdminField from '../../components/adminField';
 import Moment from 'moment';
 
-const CreatePdfScreen = () => {
+const CreatePdfScreen = ({navigation}) => {
   const RNFS = require('react-native-fs');
   const docDirPath = RNFS.DocumentDirectoryPath + '/statistics';
   const [PDFs, setPDFs] = useState([]);
@@ -24,6 +24,7 @@ const CreatePdfScreen = () => {
   useEffect(() => {
     const getPdfs = async () => {
       setIsFetching(true);
+      if (!(await RNFS.exists(docDirPath))) await RNFS.mkdir(docDirPath);
       setPDFs(await RNFS.readDir(docDirPath));
       setIsFetching(false);
     };
@@ -85,7 +86,11 @@ const CreatePdfScreen = () => {
             )}`}
             icon="file-pdf-outline"
             onDelete={() => deletePdf({filePath: pdf.item.path})}
-            onPress={() => console.log('pressed')}
+            onPress={() =>
+              navigation.navigate('PdfScreen', {
+                path: pdf.item.path,
+              })
+            }
             row={row}
             onUpdateRow={row => setRow(row)}
             prevOpenedRow={previousOpenedRow}

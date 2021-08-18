@@ -174,7 +174,6 @@ const OrderStatisticsScreen = ({navigation}) => {
       const options = {
         html: '<h1 style="text-align: center;"><strong>Hello Guys</strong></h1><p style="text-align: center;">Here is an example of pdf Print in React Native</p><p style="text-align: center;"><strong>Team About React</strong></p>',
         fileName: fileName,
-        directory: 'documents',
       };
 
       try {
@@ -187,7 +186,9 @@ const OrderStatisticsScreen = ({navigation}) => {
           file.filePath,
           docDirPath + '/' + fileName + '.pdf',
         );
-        navigation.navigate('ManagePdfScreen');
+        navigation.navigate('PdfStack', {
+          path: docDirPath + '/' + fileName + '.pdf',
+        });
       } catch (error) {
         dispatch(handleError(error));
       }
@@ -247,7 +248,7 @@ const OrderStatisticsScreen = ({navigation}) => {
         <View>
           <ActionButton
             style={styles.button}
-            text="Generate Statistics"
+            text="View Statistics"
             onPress={() =>
               navigation.navigate('OrderDetailsTab', {
                 statistics: generateStatistics(),
@@ -256,7 +257,7 @@ const OrderStatisticsScreen = ({navigation}) => {
           />
           <ActionButton
             style={styles.button}
-            text="Generate PDF"
+            text="Generate PDF Reports"
             onPress={() =>
               createPDF({
                 fileName: `Statistics${moment(Date.now()).format(

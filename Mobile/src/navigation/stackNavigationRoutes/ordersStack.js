@@ -1,9 +1,9 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import OrdersStatisticsScreen from '../../screens/adminScreens/ordersStatisticsScreen';
-import ManagePdfScreen from '../../screens/adminScreens/managePdfScreen';
 import OrderDetailsTab from '../tabNavigationRoutes/orderDetailsTab';
 import UserRestaurantOrdersScreen from '../../screens/adminScreens/userRestaurantOrdersScreen';
+import PdfStack from './pdfStack';
 
 const Stack = createStackNavigator();
 
@@ -41,10 +41,11 @@ const OrdersStack = () => {
         }}
       />
       <Stack.Screen
-        name="ManagePdfScreen"
-        component={ManagePdfScreen}
+        name="PdfStack"
+        component={PdfStack}
         options={{
           title: 'PDF Statistics',
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

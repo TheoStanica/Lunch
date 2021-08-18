@@ -29,7 +29,7 @@ const AdminScreen = ({navigation}) => {
       <ActionButton
         style={styles.button}
         text="Reports"
-        onPress={() => navigation.navigate('ManagePdfScreen')}
+        onPress={() => navigation.navigate('PdfStack')}
       />
     </SafeAreaView>
   );
