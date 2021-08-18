@@ -186,8 +186,13 @@ const OrderStatisticsScreen = ({navigation}) => {
           file.filePath,
           docDirPath + '/' + fileName + '.pdf',
         );
+
+        navigation.push('PdfStack');
         navigation.navigate('PdfStack', {
-          path: docDirPath + '/' + fileName + '.pdf',
+          screen: 'PdfScreen',
+          params: {
+            path: docDirPath + '/' + fileName + '.pdf',
+          },
         });
       } catch (error) {
         dispatch(handleError(error));
