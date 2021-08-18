@@ -142,7 +142,7 @@ const OrderStatisticsScreen = ({navigation}) => {
           size={35}
           color="black"
           style={{marginRight: 10}}
-          onPress={() => navigation.navigate('ManagePdfScreen')}
+          onPress={() => navigation.navigate('PdfStack')}
         />
       ),
     });
