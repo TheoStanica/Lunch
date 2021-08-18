@@ -29,7 +29,9 @@ const AdminStack = () => {
       <Stack.Screen
         name="AdminScreen"
         component={AdminScreen}
-        options={{title: 'Admin', headerShown: false}}
+        options={{
+          headerShown: false,
+        }}
       />
       <Stack.Screen
         name="MenuDetailsTab"
@@ -63,7 +65,6 @@ const AdminStack = () => {
         name="OrdersStack"
         component={OrdersStack}
         options={{
-          title: 'Manage Orders',
           headerShown: false,
         }}
       />
@@ -94,7 +95,6 @@ const AdminStack = () => {
         name="PdfStack"
         component={PdfStack}
         options={{
-          title: 'Reports',
           headerShown: false,
         }}
       />

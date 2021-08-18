@@ -17,7 +17,7 @@ const ProfileStack = () => {
       <Stack.Screen
         name="ProfileScreen"
         component={ProfileScreen}
-        options={{title: 'Profile', headerShown: false}}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="UpdateProfileScreen"

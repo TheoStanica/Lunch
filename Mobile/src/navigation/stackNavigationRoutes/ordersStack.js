@@ -44,7 +44,6 @@ const OrdersStack = () => {
         name="PdfStack"
         component={PdfStack}
         options={{
-          title: 'PDF Statistics',
           headerShown: false,
         }}
       />

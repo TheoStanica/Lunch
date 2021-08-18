@@ -16,7 +16,7 @@ const ThreadsStack = () => {
       <Stack.Screen
         name="ThreadsScreen"
         component={ThreadsScreen}
-        options={{title: 'Threads', headerShown: false}}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="CreateThreadScreen"
