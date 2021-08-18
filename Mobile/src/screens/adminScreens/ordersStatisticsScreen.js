@@ -262,6 +262,7 @@ const OrderStatisticsScreen = ({navigation}) => {
           />
           <ActionButton
             style={styles.button}
+            textStyle={styles.textStyle}
             text="Generate PDF Reports"
             onPress={() =>
               createPDF({
@@ -288,6 +289,9 @@ const styles = StyleSheet.create({
   },
   title: {
     alignSelf: 'center',
+  },
+  textStyle: {
+    textTransform: 'none',
   },
   button: {
     margin: 10,
