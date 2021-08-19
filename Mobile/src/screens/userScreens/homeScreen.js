@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {SafeAreaView, StyleSheet, FlatList, View, Text} from 'react-native';
 import {FAB} from 'react-native-paper';
+import {useFocusEffect} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {getUser} from '../../redux/thunks/userThunks';
 import {getMenus} from '../../redux/thunks/menuThunks';
 import MenuCard from '../../components/menuCard';
 import moment from 'moment';
@@ -16,7 +16,6 @@ const HomeScreen = ({navigation}) => {
 
   const onRefresh = () => {
     setIsFetching(true);
-    dispatch(getUser());
     dispatch(
       getMenus(
         {
@@ -34,9 +33,11 @@ const HomeScreen = ({navigation}) => {
     );
   };
 
-  useEffect(() => {
-    onRefresh();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      onRefresh();
+    }, []),
+  );
 
   return (
     <>
