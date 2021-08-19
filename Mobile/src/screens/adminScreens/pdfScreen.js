@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, View, Dimensions} from 'react-native';
-import {handleError} from '../../redux/thunks/errorThunks';
 import {useDispatch} from 'react-redux';
 import Pdf from 'react-native-pdf';
 import Share from 'react-native-share';
@@ -17,7 +16,7 @@ const PdfScreen = ({route, navigation}) => {
         subject: 'Report',
       });
     } catch (error) {
-      dispatch(handleError(error));
+      alert(error);
     }
   };
   const dispatch = useDispatch();

@@ -11,7 +11,6 @@ import {getOrder} from '../../redux/thunks/orderThunks';
 import {Title} from 'react-native-paper';
 import {getRestaurants} from '../../redux/thunks/restaurantThunks';
 import {getAllUsers} from '../../redux/thunks/userThunks';
-import {handleError} from '../../redux/thunks/errorThunks';
 import DateTimePicker from '../../components/timePicker';
 import CustomDropDownPicker from '../../components/customDropDownPicker';
 import ActionButton from '../../components/actionButton';
@@ -161,7 +160,7 @@ const OrderStatisticsScreen = ({navigation}) => {
 
         return granted === PermissionsAndroid.RESULTS.GRANTED;
       } catch (error) {
-        dispatch(handleError(error));
+        alert(error);
         return false;
       }
     } else {
@@ -195,7 +194,7 @@ const OrderStatisticsScreen = ({navigation}) => {
           },
         });
       } catch (error) {
-        dispatch(handleError(error));
+        alert(error);
       }
     }
   };
