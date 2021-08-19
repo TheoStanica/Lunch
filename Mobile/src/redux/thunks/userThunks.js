@@ -73,11 +73,12 @@ export const logoutUser = () => dispatch => {
   dispatch(resetUser());
 };
 
-export const getUser = () => async dispatch => {
+export const getUser = callback => async dispatch => {
   try {
     const response = await userGetRequest();
 
     dispatch(setUser(response.data.user));
+    if (typeof callback == 'function') callback();
   } catch (error) {
     dispatch(handleError(error));
   }
