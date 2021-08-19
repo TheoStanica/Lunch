@@ -84,7 +84,7 @@ const MenuDetailsAdminScreen = ({route}) => {
     if (!allMenusById?.[menuId]) {
       fetchMenu();
     } else {
-      if (!hasFetchedOrders && orders.length === 0) {
+      if (!hasFetchedOrders) {
         fetchOrder();
       } else {
         setSummary(generateSummary());
