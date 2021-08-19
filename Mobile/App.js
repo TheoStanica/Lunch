@@ -31,6 +31,8 @@ const App = () => {
         },
       },
       AppTab: {
+        path: '',
+        initialRouteName: 'HomeScreen',
         screens: {
           AdminStack: {
             path: 'admin',
