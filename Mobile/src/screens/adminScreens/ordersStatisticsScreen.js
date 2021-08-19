@@ -266,7 +266,7 @@ const OrderStatisticsScreen = ({navigation}) => {
             onPress={() =>
               createPDF({
                 fileName: `Statistics${moment(Date.now()).format(
-                  'DD-MM-YYYYThh-mm-ss',
+                  'DD-MM-YYYY hh-mm-ss',
                 )}`,
               })
             }

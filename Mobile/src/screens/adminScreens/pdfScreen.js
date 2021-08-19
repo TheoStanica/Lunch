@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, View, Dimensions} from 'react-native';
-import {useDispatch} from 'react-redux';
 import Pdf from 'react-native-pdf';
 import Share from 'react-native-share';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,11 +14,8 @@ const PdfScreen = ({route, navigation}) => {
         url: `file://${route.params.path}`,
         subject: 'Report',
       });
-    } catch (error) {
-      alert(error);
-    }
+    } catch (error) {}
   };
-  const dispatch = useDispatch();
 
   useEffect(() => {
     navigation.setOptions({
