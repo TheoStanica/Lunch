@@ -16,7 +16,7 @@ const MenuDetailsTab = ({route}) => {
       }}
       screenOptions={{unmountOnBlur: true}}
       sceneContainerStyle={{backgroundColor: '#FFF1CA'}}
-      initialRouteName="MenuDetailsAdminScreen">
+      lazy={true}>
       <Tab.Screen
         name="MenuDetailsAdminScreen"
         component={MenuDetailsAdminScreen}

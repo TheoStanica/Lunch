@@ -19,7 +19,8 @@ const AppTab = () => {
         inactiveTintColor: 'white',
         activeTintColor: '#FBBC00',
       }}
-      screenOptions={{unmountOnBlur: true}}>
+      initialRouteName="HomeStack"
+      lazy={true}>
       <Tab.Screen
         name="HomeStack"
         component={HomeStack}
@@ -33,16 +34,13 @@ const AppTab = () => {
           name="AdminStack"
           component={AdminStack}
           options={{
-            unmountOnBlur: true,
             tabBarLabel: 'Admin',
             tabBarIcon: ({color}) => (
               <Icon name="shield-account" size={25} color={color} />
             ),
           }}
         />
-      ) : (
-        <></>
-      )}
+      ) : null}
       {/* <Tab.Screen
         name="ThreadsStack"
         component={ThreadsStack}
@@ -55,7 +53,6 @@ const AppTab = () => {
         name="ProfileStack"
         component={ProfileStack}
         options={{
-          unmountOnBlur: true,
           tabBarLabel: 'Profile',
           tabBarIcon: ({color}) => (
             <Icon name="account" size={25} color={color} />
