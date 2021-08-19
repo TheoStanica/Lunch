@@ -1,17 +1,28 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {getUser} from '../../redux/thunks/userThunks';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeStack from '../stackNavigationRoutes/homeStack';
 import AdminStack from '../stackNavigationRoutes/adminStack';
 import ProfileStack from '../stackNavigationRoutes/profileStack';
+import LoadingScreen from '../../screens/loadingScreen';
 
 const Tab = createBottomTabNavigator();
 
 const AppTab = () => {
   const {role} = useSelector(state => state.userReducer);
+  const [fetchedUser, setFetchedUser] = useState(false);
+  const dispatch = useDispatch();
 
-  return (
+  useEffect(() => {
+    if (!fetchedUser)
+      setTimeout(() => {
+        dispatch(getUser(() => setFetchedUser(true)));
+      }, 1000);
+  }, []);
+
+  return fetchedUser ? (
     <Tab.Navigator
       tabBarOptions={{
         tabStyle: {backgroundColor: '#4A6572'},
@@ -19,7 +30,7 @@ const AppTab = () => {
         inactiveTintColor: 'white',
         activeTintColor: '#FBBC00',
       }}
-      initialRouteName="HomeStack"
+      // initialRouteName="ProfileStack"
       lazy={true}>
       <Tab.Screen
         name="HomeStack"
@@ -60,6 +71,8 @@ const AppTab = () => {
         }}
       />
     </Tab.Navigator>
+  ) : (
+    <LoadingScreen />
   );
 };
 
