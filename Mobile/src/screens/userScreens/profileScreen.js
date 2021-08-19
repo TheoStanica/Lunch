@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {SafeAreaView, StyleSheet, View, Text} from 'react-native';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
-import {logoutUser} from '../../redux/thunks/userThunks';
+import {useSelector, useDispatch} from 'react-redux';
+import {useFocusEffect} from '@react-navigation/native';
+import {getUser, logoutUser} from '../../redux/thunks/userThunks';
 import ProfileField from '../../components/profileField';
 import ActionButton from '../../components/actionButton';
 import messaging from '@react-native-firebase/messaging';
@@ -19,6 +19,12 @@ const ProfileScreen = ({navigation}) => {
     }
     dispatch(logoutUser());
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(getUser());
+    }, []),
+  );
 
   return (
     <SafeAreaView style={styles.container}>
