@@ -29,15 +29,21 @@ const MenuDetailsButtons = ({
     navigation.navigate('MenuTakeawayOrderScreen', {menuId, order});
   };
 
-  const handleTakeaway = (menuId, order) => {
-    const filteredMenus = menusById[menuId].menu.map(menu => ({
+  const removeRestaurantDishesFromMenu = () => {
+    return menusById[menuId].menu.map(menu => ({
       ...menu,
       courses: menu.courses.filter(
         course => course.requiredType !== 'restaurant',
       ),
     }));
+  };
+  const hasEveryCourseOnlyOneDish = inputMenu =>
+    inputMenu.every(menu => menu.courses.length === 1);
 
-    if (filteredMenus.every(menu => menu.courses.length === 1)) {
+  const handleTakeaway = (menuId, order) => {
+    const filteredMenus = removeRestaurantDishesFromMenu();
+
+    if (hasEveryCourseOnlyOneDish(filteredMenus)) {
       const menuOptions = {};
       menusById[menuId].menu.forEach(
         menu => (menuOptions[menu.courseCategory] = 0),
