@@ -32,21 +32,23 @@ const MenuDetailsButtons = ({
   const removeRestaurantDishesFromMenu = () => {
     return menusById[menuId].menu.map(menu => ({
       ...menu,
-      courses: menu.courses.filter(
-        course => course.requiredType !== 'restaurant',
-      ),
+      courses: menu.courses
+        .map((course, index) => ({...course, index: index}))
+        .filter(course => course.requiredType !== 'restaurant'),
     }));
   };
   const hasEveryCourseOnlyOneDish = inputMenu =>
     inputMenu.every(menu => menu.courses.length === 1);
 
   const handleTakeaway = (menuId, order) => {
-    const filteredMenus = removeRestaurantDishesFromMenu();
+    const filteredMenu = removeRestaurantDishesFromMenu();
 
-    if (hasEveryCourseOnlyOneDish(filteredMenus)) {
+    if (hasEveryCourseOnlyOneDish(filteredMenu)) {
       const menuOptions = {};
       menusById[menuId].menu.forEach(
-        menu => (menuOptions[menu.courseCategory] = 0),
+        (menu, idx) =>
+          (menuOptions[menu.courseCategory] =
+            filteredMenu[idx].courses[0].index),
       );
 
       handleSubmit({menuId, type: 'takeaway', menuOptions});
