@@ -4,7 +4,6 @@ import {List} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ManageOrdersScreen = ({route, navigation}) => {
-  console.log(route);
   const {statistics} = route.params;
 
   return (
