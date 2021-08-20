@@ -77,31 +77,45 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
       </View>
     ));
 
-  const submitOrder = menuOptions => {
+  const dispatchCreateOrder = ({menuOptions, actions}) => {
+    dispatch(
+      createOrder(
+        {
+          menuId,
+          userId: id,
+          type: 'takeaway',
+          menuOptions,
+        },
+        () => {
+          actions.setSubmitting(false);
+          sendSuccessMessage();
+        },
+      ),
+    );
+  };
+
+  const dispatchUpdateOrder = ({menuOptions, actions}) => {
+    dispatch(
+      updateOrder(
+        {
+          orderId: order.id,
+          status: 'active',
+          type: 'takeaway',
+          menuOptions,
+        },
+        () => {
+          actions.setSubmitting(false);
+          sendSuccessMessage();
+        },
+      ),
+    );
+  };
+
+  const submitOrder = ({menuOptions, actions}) => {
     if (!order) {
-      dispatch(
-        createOrder(
-          {
-            menuId,
-            userId: id,
-            type: 'takeaway',
-            menuOptions,
-          },
-          sendSuccessMessage,
-        ),
-      );
+      dispatchCreateOrder({menuOptions, actions});
     } else {
-      dispatch(
-        updateOrder(
-          {
-            orderId: order.id,
-            status: 'active',
-            type: 'takeaway',
-            menuOptions,
-          },
-          sendSuccessMessage,
-        ),
-      );
+      dispatchUpdateOrder({menuOptions, actions});
     }
   };
 
@@ -152,10 +166,11 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
         }}
         validateOnBlur={isCheckingValidation}
         validateOnChange={isCheckingValidation}
-        onSubmit={values => {
-          submitOrder(values.selectedMenu);
+        onSubmit={(values, actions) => {
+          actions.setSubmitting(true);
+          submitOrder({menuOptions: values.selectedMenu, actions});
         }}>
-        {({values, handleSubmit, errors, setFieldValue}) => (
+        {({values, handleSubmit, errors, setFieldValue, isSubmitting}) => (
           <>
             <ScrollView
               contentContainerStyle={styles.scrollViewContainer}
@@ -179,10 +194,15 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
               <ActionButton
                 text="Submit Order"
                 disabled={menuExpired}
+                loading={isSubmitting}
                 onPress={() => {
-                  handleSubmit();
-                  setCheckingValidation(true);
+                  if (!isSubmitting) {
+                    handleSubmit();
+                    setCheckingValidation(true);
+                  }
                 }}
+                theme={{colors: {primary: 'white'}}}
+                mode="dark"
               />
             </ScrollView>
           </>
