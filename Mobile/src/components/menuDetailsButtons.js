@@ -122,22 +122,12 @@ const MenuDetailsButtons = ({
     });
   };
 
-  const renderOrderOptions = () => {
-    return (
-      <View style={styles.buttons}>
-        {order.status === 'active'
-          ? renderActiveOrderOptions()
-          : renderOrderButtons(order.id)}
-      </View>
-    );
-  };
-
   const isButtonDisabled = type =>
     menuExpired || (isSubmittingType && isSubmittingType !== type);
 
   const isButtonLoading = type => isSubmittingType === type;
 
-  const renderActiveOrderOptions = () => {
+  const activeOrderOptions = () => {
     return (
       <>
         <ActionButton
@@ -165,7 +155,7 @@ const MenuDetailsButtons = ({
     );
   };
 
-  const renderOrderButtons = () => {
+  const inactiveOrderOptions = () => {
     return (
       <>
         {!hasOnlyTakeaway ? (
@@ -192,10 +182,12 @@ const MenuDetailsButtons = ({
     );
   };
 
-  return !order.status ? (
-    <View style={styles.buttons}>{renderOrderButtons()}</View>
-  ) : (
-    renderOrderOptions()
+  return (
+    <View style={styles.buttons}>
+      {order.status === 'active'
+        ? activeOrderOptions()
+        : inactiveOrderOptions(order.id)}
+    </View>
   );
 };
 
