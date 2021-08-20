@@ -49,39 +49,47 @@ const MenuDetailsButtons = ({
     }
   };
 
+  const dispatchCreateOrder = ({menuId, type, menuOptions}) => {
+    dispatch(
+      createOrder(
+        {
+          menuId,
+          userId: id,
+          type,
+          menuOptions,
+        },
+        () => {
+          setIsSubmittingType('');
+          sendSuccessMessage();
+        },
+      ),
+    );
+  };
+
+  const dispatchUpdateOrder = ({type, menuOptions}) => {
+    dispatch(
+      updateOrder(
+        {
+          orderId: order.id,
+          status: 'active',
+          type,
+          menuOptions,
+        },
+        () => {
+          setIsSubmittingType('');
+          sendSuccessMessage();
+        },
+      ),
+    );
+  };
+
   const handleSubmit = ({menuId, type, menuOptions}) => {
     if (!isSubmittingType) {
       setIsSubmittingType(type);
       if (!order) {
-        dispatch(
-          createOrder(
-            {
-              menuId,
-              userId: id,
-              type,
-              menuOptions,
-            },
-            () => {
-              setIsSubmittingType('');
-              sendSuccessMessage();
-            },
-          ),
-        );
+        dispatchCreateOrder({menuId, type, menuOptions});
       } else {
-        dispatch(
-          updateOrder(
-            {
-              orderId: order.id,
-              status: 'active',
-              type,
-              menuOptions,
-            },
-            () => {
-              setIsSubmittingType('');
-              sendSuccessMessage();
-            },
-          ),
-        );
+        dispatchUpdateOrder({type, menuOptions});
       }
     }
   };
