@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
+import useMenuExpired from '../hooks/useMenuExpired';
+import useOnlyRequiredType from '../hooks/useOnlyRequiredType';
 import {useDispatch, useSelector} from 'react-redux';
 import {createOrder, updateOrder} from '../redux/thunks/orderThunks';
-import ActionButton from './actionButton';
-import useMenuExpired from '../hooks/useMenuExpired';
 import {useNavigation} from '@react-navigation/native';
-import useOnlyRequiredType from '../hooks/useOnlyRequiredType';
+import ActionButton from './actionButton';
 
 const MenuDetailsButtons = ({
   foundOrder,
@@ -19,8 +19,9 @@ const MenuDetailsButtons = ({
   }));
   const hasOnlyRestaurant = useOnlyRequiredType({type: 'restaurant', menuId});
   const hasOnlyTakeaway = useOnlyRequiredType({type: 'takeaway', menuId});
-  const menuExpired = useMenuExpired({menuId});
+  const [isSubmittingType, setIsSubmittingType] = useState('');
   const [order, setOrder] = useState(foundOrder);
+  const menuExpired = useMenuExpired({menuId});
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -49,51 +50,64 @@ const MenuDetailsButtons = ({
   };
 
   const handleSubmit = ({menuId, type, menuOptions}) => {
-    if (!order) {
-      dispatch(
-        createOrder(
-          {
-            menuId,
-            userId: id,
-            type,
-            menuOptions,
-          },
-          sendSuccessMessage,
-        ),
-      );
-    } else {
-      dispatch(
-        updateOrder(
-          {
-            orderId: order.id,
-            status: 'active',
-            type,
-            menuOptions,
-          },
-          sendSuccessMessage,
-        ),
-      );
+    if (!isSubmittingType) {
+      setIsSubmittingType(type);
+      if (!order) {
+        dispatch(
+          createOrder(
+            {
+              menuId,
+              userId: id,
+              type,
+              menuOptions,
+            },
+            () => {
+              setIsSubmittingType('');
+              sendSuccessMessage();
+            },
+          ),
+        );
+      } else {
+        dispatch(
+          updateOrder(
+            {
+              orderId: order.id,
+              status: 'active',
+              type,
+              menuOptions,
+            },
+            () => {
+              setIsSubmittingType('');
+              sendSuccessMessage();
+            },
+          ),
+        );
+      }
     }
   };
 
   const cancelOrder = () => {
-    dispatch(
-      updateOrder(
-        {
-          orderId: order.id,
-          status: 'cancelled',
-        },
-        () => {
-          if (order.type === 'restaurant') {
-            onCancelRestaurant();
-          }
-          if (order.type === 'takeaway') {
-            onCancelTakeaway();
-          }
-          setOrder({...order, status: 'cancelled'});
-        },
-      ),
-    );
+    if (!isSubmittingType) {
+      setIsSubmittingType('cancel');
+      dispatch(
+        updateOrder(
+          {
+            orderId: order.id,
+            status: 'cancelled',
+          },
+          () => {
+            if (order.type === 'restaurant') {
+              onCancelRestaurant();
+            }
+            if (order.type === 'takeaway') {
+              onCancelTakeaway();
+            }
+            setOrder({...order, status: 'cancelled'});
+            setIsSubmittingType('');
+          },
+        ),
+      );
+    }
   };
 
   const sendSuccessMessage = () => {
@@ -118,47 +132,60 @@ const MenuDetailsButtons = ({
     );
   };
 
+  const isButtonDisabled = type =>
+    menuExpired || (isSubmittingType && isSubmittingType !== type);
+
+  const isButtonLoading = type => isSubmittingType === type;
+
   const renderActiveOrderOptions = () => {
     return (
       <>
         <ActionButton
           text="cancel order"
-          disabled={menuExpired}
           style={[
             order.type === 'takeaway' ? styles.leftButton : {flex: 1},
-            styles.cancelButton(menuExpired),
+            styles.cancelButton(isButtonDisabled),
           ]}
           onPress={cancelOrder}
+          disabled={isButtonDisabled('cancel')}
+          loading={isButtonLoading('cancel')}
+          dark={true}
         />
         {order.type === 'takeaway' ? (
           <ActionButton
             text="update order"
-            disabled={menuExpired}
             style={styles.rightButton}
             onPress={() => handleTakeaway(menuId, order)}
+            disabled={isButtonDisabled('takeaway')}
+            loading={isButtonLoading('takeaway')}
+            dark={true}
           />
         ) : null}
       </>
     );
   };
 
-  const renderOrderButtons = orderId => {
+  const renderOrderButtons = () => {
     return (
       <>
         {!hasOnlyTakeaway ? (
           <ActionButton
             text="Restaurant"
-            disabled={menuExpired}
             style={styles.leftButton}
             onPress={() => handleSubmit({menuId, type: 'restaurant'})}
+            disabled={isButtonDisabled('restaurant')}
+            loading={isButtonLoading('restaurant')}
+            dark={true}
           />
         ) : null}
         {!hasOnlyRestaurant ? (
           <ActionButton
             text="Takeaway"
-            disabled={menuExpired}
             style={styles.rightButton}
             onPress={() => handleTakeaway(menuId, order)}
+            disabled={isButtonDisabled('takeaway')}
+            loading={isButtonLoading('takeaway')}
+            dark={true}
           />
         ) : null}
       </>
@@ -185,8 +212,8 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 7.5,
   },
-  cancelButton: menuExpired => ({
-    backgroundColor: menuExpired ? '#A5263055' : '#A52630',
+  cancelButton: isButtonDisabled => ({
+    backgroundColor: isButtonDisabled('cancel') ? '#A5263055' : '#A52630',
   }),
 });
 
