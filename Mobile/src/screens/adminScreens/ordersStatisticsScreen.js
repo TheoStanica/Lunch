@@ -124,6 +124,7 @@ const OrderStatisticsScreen = ({navigation}) => {
           createdBefore: new Date(
             moment(orderEnd, 'DD-MM-YYYY').endOf('day').format(),
           ),
+          status: 'active',
         },
         privilege: 'admin',
       }),
