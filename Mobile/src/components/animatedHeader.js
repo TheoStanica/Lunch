@@ -1,13 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {
-  Animated,
-  StyleSheet,
-  Image,
-  Platform,
-  StatusBar,
-  Text,
-} from 'react-native';
+import {Animated, StyleSheet, Image, Platform, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const HEADER_HEIGHT = 220;
