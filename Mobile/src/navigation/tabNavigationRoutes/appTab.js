@@ -30,7 +30,6 @@ const AppTab = () => {
         inactiveTintColor: 'white',
         activeTintColor: '#FBBC00',
       }}
-      // initialRouteName="ProfileStack"
       lazy={true}>
       <Tab.Screen
         name="HomeStack"
