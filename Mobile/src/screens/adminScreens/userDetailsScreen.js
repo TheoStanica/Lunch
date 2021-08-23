@@ -4,7 +4,7 @@ import {updateUser} from '../../redux/thunks/userThunks';
 import {Formik} from 'formik';
 import {updateValidationSchema} from '../../assets/bodyValidation/userValidation';
 import {useDispatch} from 'react-redux';
-import DropDownPicker from 'react-native-dropdown-picker';
+import CustomDropDownPicker from '../../components/customDropDownPicker';
 import TextInputField from '../../components/textInputField';
 import ActionButton from '../../components/actionButton';
 import HideKeyboard from '../../components/hideKeyboard';
@@ -63,19 +63,20 @@ const UserDetailsScreen = ({route, navigation}) => {
                   touched={touched.email}
                   field="email"
                 />
-                <Text style={styles.roleText(openDropDown)}>Role</Text>
-                <DropDownPicker
-                  open={openDropDown}
-                  value={roleValue}
-                  setValue={setRoleValue}
-                  setOpen={setOpenDropDown}
+                <CustomDropDownPicker
+                  text="Role"
+                  textStyle={styles.textStyle}
+                  placeholder={{
+                    label: roleValue,
+                    value: roleValue,
+                  }}
+                  setSelectedItem={setRoleValue}
                   items={[
-                    {label: 'user', value: 'user'},
-                    {label: 'admin', value: 'admin'},
+                    roleValue === 'admin'
+                      ? {label: 'user', value: 'user'}
+                      : {label: 'admin', value: 'admin'},
                   ]}
-                  style={styles.dropDownPicker}
-                  dropDownContainerStyle={styles.dropDownContainerStyle}
-                  selectedItemContainerStyle={{backgroundColor: '#4A6572'}}
+                  containerStyle={{marginTop: 10}}
                 />
                 <TextInputField
                   label="Full Name"
@@ -106,21 +107,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF1CA',
     justifyContent: 'space-between',
   },
-  roleText: openDropDown => ({
-    paddingLeft: 12,
-    paddingRight: 12,
-    paddingBottom: 10,
-    color: openDropDown ? 'black' : 'gray',
+  textStyle: {
+    color: 'gray',
+    marginLeft: 10,
+    marginBottom: 5,
     fontSize: 12,
-  }),
-  dropDownPicker: {
-    marginBottom: 12,
-    backgroundColor: 'transparent',
-  },
-  dropDownContainerStyle: {
-    backgroundColor: '#FFF1CA',
-    borderColor: '#0007',
-    borderWidth: 0.3,
   },
 });
 
