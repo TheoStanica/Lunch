@@ -30,8 +30,6 @@ const OrderStatisticsScreen = ({navigation}) => {
   const [orderEnd, setOrderEnd] = useState(
     moment(Date.now()).format('DD-MM-YYYY'),
   );
-  const [openDropDown, setOpenDropDown] = useState(false);
-  const [openSecondDropDown, setOpenSecondDropDown] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
   const dispatch = useDispatch();
@@ -97,10 +95,9 @@ const OrderStatisticsScreen = ({navigation}) => {
     return {restaurants, users};
   };
 
-  const generateItems = (label, values, valuesById, name = 'name') => {
+  const generateItems = (values, valuesById, name = 'name') => {
     const items = [];
 
-    items.push({label: label, value: ''});
     values.forEach(valueId => {
       if (valuesById[valueId].status === 'active')
         items.push({
@@ -222,31 +219,21 @@ const OrderStatisticsScreen = ({navigation}) => {
           />
           <CustomDropDownPicker
             text="Restaurant"
-            openDropDown={openDropDown}
-            selectedItem={selectedRestaurant}
             setSelectedItem={setSelectedRestaurant}
-            setOpenDropDown={setOpenDropDown}
-            items={generateItems(
-              'All restaurants',
-              restaurants,
-              restaurantsById,
-            )}
-            placeholder="All restaurants"
-            zIndex={2000}
+            items={generateItems(restaurants, restaurantsById)}
+            placeholder={{
+              label: 'All restaurants',
+              value: '',
+            }}
           />
           <CustomDropDownPicker
             text="User"
-            openDropDown={openSecondDropDown}
-            selectedItem={selectedUser}
             setSelectedItem={setSelectedUser}
-            setOpenDropDown={setOpenSecondDropDown}
-            items={generateItems(
-              'All Users',
-              allUsers,
-              allUsersById,
-              'fullname',
-            )}
-            placeholder="All users"
+            items={generateItems(allUsers, allUsersById, 'fullname')}
+            placeholder={{
+              label: 'All Users',
+              value: '',
+            }}
           />
         </View>
         <View>

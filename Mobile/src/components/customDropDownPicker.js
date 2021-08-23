@@ -1,58 +1,66 @@
 import React from 'react';
-import {StyleSheet, Text, SafeAreaView} from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
+import {StyleSheet, Text, SafeAreaView, Platform} from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const CustomDropDownPicker = ({
   text,
-  openDropDown,
-  selectedItem,
   setSelectedItem,
-  setOpenDropDown,
   items,
   placeholder,
-  zIndex = 1000,
   textStyle = {},
 }) => {
   return (
-    <SafeAreaView style={styles.container(zIndex)}>
+    <SafeAreaView style={styles.container}>
       <Text style={textStyle}>{text} </Text>
-      <DropDownPicker
-        open={openDropDown}
-        value={selectedItem}
-        setValue={setSelectedItem}
-        setOpen={setOpenDropDown}
+      <RNPickerSelect
+        onValueChange={value => setSelectedItem(value)}
         items={items}
         placeholder={placeholder}
-        style={styles.dropDownStyle}
-        selectedItemContainerStyle={{backgroundColor: '#4A6572'}}
-        selectedItemLabelStyle={styles.selectedItemLabel}
-        dropDownContainerStyle={styles.dropdownContainer}
+        style={pickerSelectStyles}
+        useNativeAndroidPickerStyle={false}
+        Icon={() => {
+          return <Icon name="chevron-down" size={30} color="gray" />;
+        }}
       />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: zIndex => ({
+  container: {
     marginHorizontal: 15,
     marginVertical: 5,
-    zIndex: zIndex,
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-  }),
-  dropDownStyle: {
-    backgroundColor: 'transparent',
-    borderColor: '#0007',
-    borderWidth: 0.3,
   },
-  selectedItemLabel: {
-    color: 'white',
-  },
-  dropdownContainer: {
-    backgroundColor: '#FFF1CA',
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputAndroid: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
     borderColor: '#0007',
-    borderWidth: 0.3,
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#0007',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  iconContainer: {
+    top: Platform.OS === 'ios' ? 8 : 12,
+    right: 5,
+  },
+  placeholder: {
+    color: 'black',
   },
 });
 

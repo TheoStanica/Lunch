@@ -3,13 +3,12 @@ import {StyleSheet, SafeAreaView, StatusBar, Text} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {getRestaurants} from '../../redux/thunks/restaurantThunks';
 import {createMenu} from '../../redux/thunks/menuThunks';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import MenuCreator from '../../components/menuCreator';
 import CustomDropDownPicker from '../../components/customDropDownPicker';
 import HideKeyboard from '../../components/hideKeyboard';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const CreateMenuScreen = ({navigation}) => {
-  const [openDropDown, setOpenDropDown] = useState(false);
   const {restaurants, restaurantsById} = useSelector(
     state => state.restaurantReducer,
   );
@@ -43,12 +42,12 @@ const CreateMenuScreen = ({navigation}) => {
         <StatusBar backgroundColor="#FFF1CA" barStyle="dark-content" />
         <CustomDropDownPicker
           text="Select a restaurant: "
-          openDropDown={openDropDown}
-          selectedItem={selectedRestaurant}
           setSelectedItem={setSelectedRestaurant}
-          setOpenDropDown={setOpenDropDown}
           items={generateRestaurantItems()}
-          placeholder="Select a restaurant"
+          placeholder={{
+            label: 'Select a restaurant',
+            value: null,
+          }}
           textStyle={{fontSize: 21}}
         />
         {errors ? <Text style={styles.errorMessage}>{errors}</Text> : null}
