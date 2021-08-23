@@ -6,6 +6,7 @@ const NotFoundError = require('./src/errors/notFoundError');
 const errorHandler = require('./src/middleware/errorHandler');
 const admin = require('firebase-admin');
 var serviceAccount = require('./firebaseCredentials.json');
+require('./src/loaders/agenda');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
