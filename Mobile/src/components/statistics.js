@@ -22,11 +22,11 @@ const Statistics = ({
         iconName="run"
       />
       <SummaryField
-        text={`Total takeaway orders: ${totalTakeawayOrders}`}
+        text={`Total office orders: ${totalTakeawayOrders}`}
         iconName="package-variant"
       />
       <SummaryField
-        text={`Total takeaway cost: ${totalTakeawayCost}`}
+        text={`Total office orders cost: ${totalTakeawayCost}`}
         iconName="currency-usd"
       />
       <SummaryField text={`Total cost: ${totalCost}`} iconName="currency-usd" />

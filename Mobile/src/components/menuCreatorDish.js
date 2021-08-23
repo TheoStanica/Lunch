@@ -73,7 +73,7 @@ const MenuCreatorDish = ({
                   setFieldValue={setFieldValue}
                   field="takeaway"
                   defaultField="both"
-                  text="Takeaway"
+                  text="Office"
                 />
               </View>
             </View>

@@ -186,7 +186,7 @@ const MenuDetailsButtons = ({
         ) : null}
         {!hasOnlyRestaurant ? (
           <ActionButton
-            text="Takeaway"
+            text="Office"
             style={styles.rightButton}
             onPress={() => handleTakeaway(menuId, order)}
             disabled={isButtonDisabled('takeaway')}

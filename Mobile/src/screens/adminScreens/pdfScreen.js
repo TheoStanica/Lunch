@@ -8,7 +8,7 @@ const PdfScreen = ({route, navigation}) => {
   const source = {uri: `file://${route.params.path}`};
   const handleSharePdf = async () => {
     try {
-      const shareResponse = await Share.open({
+      await Share.open({
         title: 'This is my report ',
         message: 'Message:',
         url: `file://${route.params.path}`,
