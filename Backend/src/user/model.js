@@ -41,6 +41,14 @@ const userSchema = new mongoose.Schema(
       type: [mongoose.Schema.Types.ObjectId],
       ref: 'Device',
     },
+    remindAt: {
+      type: String,
+      default: '10:00 AM',
+    },
+    isReminderOn: {
+      type: Boolean,
+      default: true,
+    },
     deleted: {
       type: Boolean,
       default: false,
