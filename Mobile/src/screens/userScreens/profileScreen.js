@@ -12,7 +12,7 @@ const ProfileScreen = ({navigation}) => {
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
-    if (Platform.OS === 'android' && userReducer.role === 'admin') {
+    if (Platform.OS === 'android') {
       try {
         await messaging().deleteToken();
       } catch (error) {}

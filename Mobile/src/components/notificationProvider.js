@@ -6,15 +6,15 @@ import {registerDevice} from '../redux/thunks/deviceThunks';
 import PushNotification from 'react-native-push-notification';
 
 const NotificationProvider = ({children}) => {
-  const {role} = useSelector(state => state.userReducer);
+  const {accessToken} = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
 
   useEffect(() => {
     let unsubscribe = null;
-    if (Platform.OS === 'android' && role === 'admin') {
+    if (Platform.OS === 'android') {
       PushNotification.createChannel({
         channelId: 'main',
-        channelName: 'Main channel for admin notifications',
+        channelName: 'Main channel for notifications',
       });
       unsubscribe = messaging().onMessage(message => {
         PushNotification.localNotification({
@@ -25,18 +25,19 @@ const NotificationProvider = ({children}) => {
         });
       });
 
-      PushNotification.configure({
-        onRegister: function (token) {
-          dispatch(registerDevice({fcmToken: token.token}));
-        },
-      });
+      if (accessToken)
+        PushNotification.configure({
+          onRegister: function (token) {
+            dispatch(registerDevice({fcmToken: token.token}));
+          },
+        });
     }
     return () => {
       if (unsubscribe) {
         unsubscribe();
       }
     };
-  }, [role]);
+  }, [accessToken]);
 
   return <>{children}</>;
 };
