@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {SafeAreaView, StyleSheet, View, Text} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {updateUser} from '../../redux/thunks/userThunks';
 import {Formik} from 'formik';
 import {updateValidationSchema} from '../../assets/bodyValidation/userValidation';
@@ -11,7 +11,6 @@ import HideKeyboard from '../../components/hideKeyboard';
 
 const UserDetailsScreen = ({route, navigation}) => {
   const {user} = route.params;
-  const [openDropDown, setOpenDropDown] = useState(false);
   const [roleValue, setRoleValue] = useState(user.role);
   const dispatch = useDispatch();
 
