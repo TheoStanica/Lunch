@@ -9,9 +9,10 @@ const CustomDropDownPicker = ({
   items,
   placeholder,
   textStyle = {},
+  containerStyle = {marginHorizontal: 15, marginVertical: 5},
 }) => {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={containerStyle}>
       <Text style={textStyle}>{text} </Text>
       <RNPickerSelect
         onValueChange={value => setSelectedItem(value)}
@@ -26,13 +27,6 @@ const CustomDropDownPicker = ({
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginHorizontal: 15,
-    marginVertical: 5,
-  },
-});
 
 const pickerSelectStyles = StyleSheet.create({
   inputAndroid: {
