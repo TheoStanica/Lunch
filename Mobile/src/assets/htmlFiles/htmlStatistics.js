@@ -24,7 +24,7 @@ export const htmlStatistics = (
         <body style=" margin: 15px 15px 15px 15px;">
         <h3><p style="text-align: center;">Order Statistics</p></h3>
         <div class="my-header">
-          <span>PDF generate at:&nbsp&nbsp</span>
+          <span>PDF generated at:&nbsp&nbsp</span>
           <h4>02-02-2020</h4>
         </div>
         <div class="my-header">
@@ -36,12 +36,12 @@ export const htmlStatistics = (
         <h3 style="text-align: center;">Restaurants Orders</h3>
         <table style="width:100%">
           <tr>
-            <th>Restaurant </th>
-            <th>Total Orders:</th>
-            <th>Total restaurant orders:</th>
-            <th>Total office orders: </th>
-            <th>Total office cost:</th>
-            <th>Total cost: </th>
+            <th>Restaurant</th>
+            <th>Total Orders</th>
+            <th>At restaurant</th>
+            <th>At office</th>
+            <th>Total office cost</th>
+            <th>Total cost</th>
           </tr>
           ${Object.entries(statistics.restaurants)
             .map(
@@ -67,30 +67,32 @@ export const htmlStatistics = (
             .map(
               user =>
                 `<tr>
-                <td>${user[0]}</td>
+                <td>${user[0].split('(', 1)[0]}</br>(${
+                  user[0].split('(')[1]
+                }</td>
                 <td>
                   <table style="width:100%;
                      border-collapse: collapse;
                      border-style: hidden;">
                     <tr>
-                      <th>Restaurant </th>
-                      <th>Total Orders:</th>
-                      <th>Total restaurant orders:</th>
-                      <th>Total office orders: </th>
-                      <th>Total office cost:</th>
-                      <th>Total cost: </th>
+                      <th>Restaurant</th>
+                      <th>Total Orders</th>
+                      <th>At restaurant</th>
+                      <th>At office</th>
+                      <th>Total office cost</th>
+                      <th>Total cost</th>
                     </tr>
                     ${Object.entries(user[1])
                       .map(
                         restaurant =>
                           `<tr>
-                        <td>${restaurant[0]}</td>
-                        <td>${restaurant[1].totalOrders}</td>
-                        <td>${restaurant[1].totalRestaurantOrders}</td>
-                        <td>${restaurant[1].totalTakeawayOrders}</td>
-                        <td>${restaurant[1].totalTakeawayCost}</td>
-                        <td>${restaurant[1].totalCost}</td>
-                      </tr>`,
+                            <td>${restaurant[0]}</td>
+                            <td>${restaurant[1].totalOrders}</td>
+                            <td>${restaurant[1].totalRestaurantOrders}</td>
+                            <td>${restaurant[1].totalTakeawayOrders}</td>
+                            <td>${restaurant[1].totalTakeawayCost}</td>
+                            <td>${restaurant[1].totalCost}</td>
+                          </tr>`,
                       )
                       .join('')}
                   </table>
