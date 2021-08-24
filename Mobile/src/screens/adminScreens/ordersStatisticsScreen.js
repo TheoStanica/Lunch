@@ -11,6 +11,7 @@ import {getOrder} from '../../redux/thunks/orderThunks';
 import {Title} from 'react-native-paper';
 import {getRestaurants} from '../../redux/thunks/restaurantThunks';
 import {getAllUsers} from '../../redux/thunks/userThunks';
+import {htmlStatistics} from '../../assets/htmlFiles/htmlStatistics';
 import DateTimePicker from '../../components/timePicker';
 import CustomDropDownPicker from '../../components/customDropDownPicker';
 import ActionButton from '../../components/actionButton';
@@ -169,7 +170,7 @@ const OrderStatisticsScreen = ({navigation}) => {
   const createPDF = async ({fileName}) => {
     if (await isPermitted()) {
       const options = {
-        html: '<h1 style="text-align: center;"><strong>Hello Guys</strong></h1><p style="text-align: center;">Here is an example of pdf Print in React Native</p><p style="text-align: center;"><strong>Team About React</strong></p>',
+        html: htmlStatistics(generateStatistics()),
         fileName: fileName,
       };
 
