@@ -31,7 +31,7 @@ export const htmlStatistics = (
           <span>Time period of the statistics (orders):&nbsp&nbsp</span>
           <h4>02-02-2020 - 03-09-2020</h4>
         </div>
-        <div>Statistics realised for <strong>${selectedRestaurant}</strong> and <strong>${selectedUser}</strong>. </div>
+        <div>Statistics realised for <strong>${selectedRestaurant}</strong> and <strong>${selectedUser}</strong>. Currency: <strong>RON</strong>. </div>
         <div style="clear:both"></div>
         <h3 style="text-align: center;">Restaurants Orders</h3>
         <table style="width:100%">
@@ -40,8 +40,8 @@ export const htmlStatistics = (
             <th>Total Orders</th>
             <th>At restaurant</th>
             <th>At office</th>
-            <th>Total office cost</th>
-            <th>Total cost</th>
+            <th>Total office cost (RON)</th>
+            <th>Total cost (RON)</th>
           </tr>
           ${Object.entries(statistics.restaurants)
             .map(
@@ -79,8 +79,8 @@ export const htmlStatistics = (
                       <th>Total Orders</th>
                       <th>At restaurant</th>
                       <th>At office</th>
-                      <th>Total office cost</th>
-                      <th>Total cost</th>
+                      <th>Total office cost (RON)</th>
+                      <th>Total cost (RON)</th>
                     </tr>
                     ${Object.entries(user[1])
                       .map(
