@@ -12,21 +12,12 @@ export const htmlStatistics = (
             border: 1px solid black;
             border-collapse: collapse;
           }
-          th {
+          th, td {
             text-align: center;
           }
-         td{
-           text-align:center;
-          }
-         .my-header h2 { 
-           display: inline;
-         }
          .my-header span { 
             float: left;
          }
-         td div, th div{
-          page-break-inside: avoid;
-      }
         </style>
         <title>PDF Statistics</title>
         </head>
