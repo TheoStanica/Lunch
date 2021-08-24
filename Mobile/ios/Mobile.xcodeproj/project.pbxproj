@@ -114,7 +114,6 @@
 				F2A7EBAE2DCFDBB99F88E1FB /* Pods-Mobile-MobileTests.debug.xcconfig */,
 				8962822B57948A56E0DFC128 /* Pods-Mobile-MobileTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -123,7 +122,6 @@
 			children = (
 			);
 			name = Resources;
-			path = "";
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {

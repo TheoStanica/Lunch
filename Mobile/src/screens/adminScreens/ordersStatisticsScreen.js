@@ -11,6 +11,8 @@ import {getOrder} from '../../redux/thunks/orderThunks';
 import {Title} from 'react-native-paper';
 import {getRestaurants} from '../../redux/thunks/restaurantThunks';
 import {getAllUsers} from '../../redux/thunks/userThunks';
+import {htmlStatistics} from '../../assets/htmlFiles/htmlStatistics';
+import {ActivityIndicator} from 'react-native-paper';
 import DateTimePicker from '../../components/timePicker';
 import CustomDropDownPicker from '../../components/customDropDownPicker';
 import ActionButton from '../../components/actionButton';
@@ -30,9 +32,11 @@ const OrderStatisticsScreen = ({navigation}) => {
   const [orderEnd, setOrderEnd] = useState(
     moment(Date.now()).format('DD-MM-YYYY'),
   );
-  const [selectedRestaurant, setSelectedRestaurant] = useState('');
-  const [selectedUser, setSelectedUser] = useState('');
+  const [selectedRestaurant, setSelectedRestaurant] =
+    useState('all restaurants');
+  const [selectedUser, setSelectedUser] = useState('all users');
   const dispatch = useDispatch();
+  const [isFetching, setIsFetching] = useState(false);
 
   const generateStatistics = () => {
     const emptyObject = () => {
@@ -70,8 +74,11 @@ const OrderStatisticsScreen = ({navigation}) => {
           restaurant.totalOrders - restaurant.totalTakeawayOrders;
       });
 
-      if (selectedUser === '' || selectedUser === user.id) {
-        if (selectedRestaurant === '' || selectedRestaurant === restaurant.id) {
+      if (selectedUser === 'all users' || selectedUser === user.id) {
+        if (
+          selectedRestaurant === 'all restaurants' ||
+          selectedRestaurant === restaurant.id
+        ) {
           const key = user.fullname + ' (' + user.email + ')';
 
           if (!users[key] || !users[key][restaurant.name])
@@ -167,9 +174,21 @@ const OrderStatisticsScreen = ({navigation}) => {
   };
 
   const createPDF = async ({fileName}) => {
+    setIsFetching(true);
     if (await isPermitted()) {
       const options = {
-        html: '<h1 style="text-align: center;"><strong>Hello Guys</strong></h1><p style="text-align: center;">Here is an example of pdf Print in React Native</p><p style="text-align: center;"><strong>Team About React</strong></p>',
+        html: htmlStatistics(
+          generateStatistics(),
+          selectedRestaurant === 'all restaurants'
+            ? selectedRestaurant
+            : restaurantsById[selectedRestaurant].name,
+          selectedUser === 'all users'
+            ? selectedUser
+            : allUsersById[selectedUser].fullname +
+                ' (' +
+                allUsersById[selectedUser].fullname +
+                ')',
+        ),
         fileName: fileName,
       };
 
@@ -191,9 +210,13 @@ const OrderStatisticsScreen = ({navigation}) => {
             path: docDirPath + '/' + fileName + '.pdf',
           },
         });
+        setIsFetching(false);
       } catch (error) {
+        setIsFetching(false);
         alert(error);
       }
+    } else {
+      setIsFetching(false);
     }
   };
 
@@ -224,7 +247,7 @@ const OrderStatisticsScreen = ({navigation}) => {
             items={generateItems(restaurants, restaurantsById)}
             placeholder={{
               label: 'All restaurants',
-              value: '',
+              value: 'all restaurants',
             }}
           />
           <CustomDropDownPicker
@@ -233,7 +256,7 @@ const OrderStatisticsScreen = ({navigation}) => {
             items={generateItems(allUsers, allUsersById, 'fullname')}
             placeholder={{
               label: 'All Users',
-              value: '',
+              value: 'all users',
             }}
           />
         </View>
@@ -259,6 +282,11 @@ const OrderStatisticsScreen = ({navigation}) => {
               })
             }
           />
+          {isFetching ? (
+            <SafeAreaView style={styles.loadingContainer}>
+              <ActivityIndicator color="#4A6572" />
+            </SafeAreaView>
+          ) : null}
         </View>
       </View>
     </SafeAreaView>
@@ -281,6 +309,9 @@ const styles = StyleSheet.create({
     textTransform: 'none',
   },
   button: {
+    margin: 10,
+  },
+  loadingContainer: {
     margin: 10,
   },
 });
