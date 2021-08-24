@@ -51,7 +51,7 @@ const ManageRestaurantsScreen = ({navigation}) => {
                 title={restaurantsById[restaurant.item].name}
                 description={`Cost: ${
                   restaurantsById[restaurant.item].cost
-                } lei`}
+                } RON`}
                 icon="food"
                 onDelete={() =>
                   dispatch(deleteRestaurant({id: restaurant.item}))

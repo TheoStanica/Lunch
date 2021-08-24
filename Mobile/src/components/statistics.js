@@ -26,10 +26,13 @@ const Statistics = ({
         iconName="package-variant"
       />
       <SummaryField
-        text={`Total office orders cost: ${totalTakeawayCost}`}
+        text={`Total office orders cost (RON): ${totalTakeawayCost}`}
         iconName="currency-usd"
       />
-      <SummaryField text={`Total cost: ${totalCost}`} iconName="currency-usd" />
+      <SummaryField
+        text={`Total cost (RON): ${totalCost}`}
+        iconName="currency-usd"
+      />
     </Card>
   );
 };
