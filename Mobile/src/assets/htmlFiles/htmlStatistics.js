@@ -1,3 +1,4 @@
+// prettier-ignore
 export const htmlStatistics = statistics => {
   return `
         <!DOCTYPE html>
@@ -20,6 +21,9 @@ export const htmlStatistics = statistics => {
          .my-header span { 
             float: left;
          }
+         td div, th div{
+          page-break-inside: avoid;
+      }
         </style>
         <title>PDF Statistics</title>
         </head>
@@ -52,7 +56,45 @@ export const htmlStatistics = statistics => {
                 <td>${restaurant[1].totalTakeawayOrders}</td>
                 <td>${restaurant[1].totalTakeawayCost}</td>
                 <td>${restaurant[1].totalCost}</td>
-            </tr>`,
+              </tr>`
+          )}
+        </table></br>
+        <table style="width:100%">
+          <tr>
+            <th>User</th>
+            <th>Restaurants</th>
+          </tr>
+          ${Object.entries(statistics.users).map(
+            user =>
+              `<tr>
+                <td><div>${user[0]}</div></td>
+                <td><div>
+                  <table style="width:100%;
+                     border-collapse: collapse;
+                     border-style: hidden;">
+                    <tr>
+                      <th><div>Restaurant </div></th>
+                      <th><div>Total Orders:</div></th>
+                      <th><div>Total restaurant orders:</div></th>
+                      <th><div>Total office orders: </div></th>
+                      <th><div>Total office cost:</div></th>
+                      <th><div>Total cost:</div> </th>
+                    </tr>
+                    ${Object.entries(user[1]).map(
+                      restaurant =>
+                        `<tr>
+                        <td><div>${restaurant[0]}</div></td>
+                        <td><div>${restaurant[1].totalOrders}</div></td>
+                        <td><div>${restaurant[1].totalRestaurantOrders}</div></td>
+                        <td><div>${restaurant[1].totalTakeawayOrders}</div></td>
+                        <td><div>${restaurant[1].totalTakeawayCost}</div></td>
+                        <td><div>${restaurant[1].totalCost}</div></td>
+                      </tr>`
+                    )}
+                  </table>
+                  </div>
+                </td>
+              </tr>`
           )}
         </table>
         </html>
