@@ -72,8 +72,11 @@ const OrderStatisticsScreen = ({navigation}) => {
           restaurant.totalOrders - restaurant.totalTakeawayOrders;
       });
 
-      if (selectedUser === '' || selectedUser === user.id) {
-        if (selectedRestaurant === '' || selectedRestaurant === restaurant.id) {
+      if (selectedUser === 'all users' || selectedUser === user.id) {
+        if (
+          selectedRestaurant === 'all restaurants' ||
+          selectedRestaurant === restaurant.id
+        ) {
           const key = user.fullname + ' (' + user.email + ')';
 
           if (!users[key] || !users[key][restaurant.name])
