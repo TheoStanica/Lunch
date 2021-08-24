@@ -31,8 +31,9 @@ const OrderStatisticsScreen = ({navigation}) => {
   const [orderEnd, setOrderEnd] = useState(
     moment(Date.now()).format('DD-MM-YYYY'),
   );
-  const [selectedRestaurant, setSelectedRestaurant] = useState('');
-  const [selectedUser, setSelectedUser] = useState('');
+  const [selectedRestaurant, setSelectedRestaurant] =
+    useState('all restaurants');
+  const [selectedUser, setSelectedUser] = useState('all users');
   const dispatch = useDispatch();
 
   const generateStatistics = () => {
@@ -170,7 +171,18 @@ const OrderStatisticsScreen = ({navigation}) => {
   const createPDF = async ({fileName}) => {
     if (await isPermitted()) {
       const options = {
-        html: htmlStatistics(generateStatistics()),
+        html: htmlStatistics(
+          generateStatistics(),
+          selectedRestaurant === 'all restaurants'
+            ? selectedRestaurant
+            : restaurantsById[selectedRestaurant].name,
+          selectedUser === 'all users'
+            ? selectedUser
+            : allUsersById[selectedUser].fullname +
+                ' (' +
+                allUsersById[selectedUser].fullname +
+                ')',
+        ),
         fileName: fileName,
       };
 
@@ -225,7 +237,7 @@ const OrderStatisticsScreen = ({navigation}) => {
             items={generateItems(restaurants, restaurantsById)}
             placeholder={{
               label: 'All restaurants',
-              value: '',
+              value: 'all restaurants',
             }}
           />
           <CustomDropDownPicker
@@ -234,7 +246,7 @@ const OrderStatisticsScreen = ({navigation}) => {
             items={generateItems(allUsers, allUsersById, 'fullname')}
             placeholder={{
               label: 'All Users',
-              value: '',
+              value: 'all users',
             }}
           />
         </View>

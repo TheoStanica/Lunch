@@ -1,5 +1,8 @@
-// prettier-ignore
-export const htmlStatistics = statistics => {
+export const htmlStatistics = (
+  statistics,
+  selectedRestaurant,
+  selectedUser,
+) => {
   return `
         <!DOCTYPE html>
         <html>
@@ -30,14 +33,15 @@ export const htmlStatistics = statistics => {
         <body style=" margin: 15px 15px 15px 15px;">
         <h3><p style="text-align: center;">Order Statistics</p></h3>
         <div class="my-header">
-          <span>PDF Generate At:&nbsp&nbsp</span>
+          <span>PDF generate at:&nbsp&nbsp</span>
           <h4>02-02-2020</h4>
         </div>
         <div class="my-header">
           <span>Time period of the statistics (orders):&nbsp&nbsp</span>
           <h4>02-02-2020 - 03-09-2020</h4>
         </div>
-        <div style="clear:both"></div>
+        <div>Statistics realised for <strong>${selectedRestaurant}</strong> and <strong>${selectedUser}</strong>. </div>
+        <div style="clear:both"></div></br>
         <table style="width:100%">
           <tr>
             <th>Restaurant </th>
@@ -47,55 +51,61 @@ export const htmlStatistics = statistics => {
             <th>Total office cost:</th>
             <th>Total cost: </th>
           </tr>
-          ${Object.entries(statistics.restaurants).map(
-            restaurant =>
-              `<tr>
+          ${Object.entries(statistics.restaurants)
+            .map(
+              restaurant =>
+                `<tr>
                 <td>${restaurant[0]}</td>
                 <td>${restaurant[1].totalOrders}</td>
                 <td>${restaurant[1].totalRestaurantOrders}</td>
                 <td>${restaurant[1].totalTakeawayOrders}</td>
                 <td>${restaurant[1].totalTakeawayCost}</td>
                 <td>${restaurant[1].totalCost}</td>
-              </tr>`
-          )}
+              </tr>`,
+            )
+            .join('')}
         </table></br>
         <table style="width:100%">
           <tr>
             <th>User</th>
             <th>Restaurants</th>
           </tr>
-          ${Object.entries(statistics.users).map(
-            user =>
-              `<tr>
-                <td><div>${user[0]}</div></td>
-                <td><div>
+          ${Object.entries(statistics.users)
+            .map(
+              user =>
+                `<tr>
+                <td>${user[0]}</td>
+                <td>
                   <table style="width:100%;
                      border-collapse: collapse;
                      border-style: hidden;">
                     <tr>
-                      <th><div>Restaurant </div></th>
-                      <th><div>Total Orders:</div></th>
-                      <th><div>Total restaurant orders:</div></th>
-                      <th><div>Total office orders: </div></th>
-                      <th><div>Total office cost:</div></th>
-                      <th><div>Total cost:</div> </th>
+                      <th>Restaurant </th>
+                      <th>Total Orders:</th>
+                      <th>Total restaurant orders:</th>
+                      <th>Total office orders: </th>
+                      <th>Total office cost:</th>
+                      <th>Total cost: </th>
                     </tr>
-                    ${Object.entries(user[1]).map(
-                      restaurant =>
-                        `<tr>
-                        <td><div>${restaurant[0]}</div></td>
-                        <td><div>${restaurant[1].totalOrders}</div></td>
-                        <td><div>${restaurant[1].totalRestaurantOrders}</div></td>
-                        <td><div>${restaurant[1].totalTakeawayOrders}</div></td>
-                        <td><div>${restaurant[1].totalTakeawayCost}</div></td>
-                        <td><div>${restaurant[1].totalCost}</div></td>
-                      </tr>`
-                    )}
+                    ${Object.entries(user[1])
+                      .map(
+                        restaurant =>
+                          `<tr>
+                        <td>${restaurant[0]}</td>
+                        <td>${restaurant[1].totalOrders}</td>
+                        <td>${restaurant[1].totalRestaurantOrders}</td>
+                        <td>${restaurant[1].totalTakeawayOrders}</td>
+                        <td>${restaurant[1].totalTakeawayCost}</td>
+                        <td>${restaurant[1].totalCost}</td>
+                      </tr>`,
+                      )
+                      .join('')}
                   </table>
-                  </div>
                 </td>
-              </tr>`
-          )}
+              </tr>`,
+            )
+            .join('')}
+          </tbody>
         </table>
         </html>
         `;
