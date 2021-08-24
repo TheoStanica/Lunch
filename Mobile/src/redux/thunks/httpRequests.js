@@ -34,11 +34,27 @@ export const userPutRequest = async ({
   password,
   fullname,
   role,
+  isReminderOn,
+  remindAt,
 }) => {
   if (!_userId) {
-    return await api.put('user', {email, password, fullname, role});
+    return await api.put('user', {
+      email,
+      password,
+      fullname,
+      role,
+      isReminderOn,
+      remindAt,
+    });
   } else {
-    return await api.put(`/user/${_userId}`, {email, password, fullname, role});
+    return await api.put(`/user/${_userId}`, {
+      email,
+      password,
+      fullname,
+      role,
+      isReminderOn,
+      remindAt,
+    });
   }
 };
 

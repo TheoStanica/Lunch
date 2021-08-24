@@ -85,7 +85,10 @@ export const getUser = callback => async dispatch => {
 };
 
 export const updateUser =
-  ({_userId, email, password, fullname, role}, callback) =>
+  (
+    {_userId, email, password, fullname, role, isReminderOn, remindAt},
+    callback,
+  ) =>
   async dispatch => {
     try {
       const response = await userPutRequest({
@@ -94,6 +97,8 @@ export const updateUser =
         password,
         fullname,
         role,
+        isReminderOn,
+        remindAt,
       });
 
       if (!_userId) {
