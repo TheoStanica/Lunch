@@ -13,7 +13,6 @@ agenda
   .on('error', () => console.log('Agenda connection error'));
 
 const clear = async () => {
-  console.log('disconnecting agenda from mongo');
   await agenda.purge();
   await agenda.stop();
   process.exit(0);
