@@ -114,6 +114,16 @@ const updateValidationSchema = [
     .isIn([accountStatus.active, accountStatus.pending])
     .withMessage('Status should be active or pending.')
     .optional(),
+  check('remindAt')
+    .notEmpty()
+    .withMessage('RemindAt is required.')
+    .matches(/^((1[0-2]|[1-9]):([0-5][0-9]) ([AP][M]))$/)
+    .withMessage('RemindAt must match the HH:MM AM/PM format.')
+    .optional(),
+  check('isReminderOn')
+    .isBoolean()
+    .withMessage('IsReminderOn must be a boolean.')
+    .optional(),
 ];
 
 const userIdValidationSchema = [
