@@ -5,11 +5,12 @@ const db = require('./databsaseConnection');
 const NotFoundError = require('./src/errors/notFoundError');
 const errorHandler = require('./src/middleware/errorHandler');
 const admin = require('firebase-admin');
-var serviceAccount = require('./firebaseCredentials.json');
-// require('./src/loaders/agenda');
+require('./src/jobs/agenda');
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.cert(
+    JSON.parse(process.env.FIREBASE_CREDENTIALS)
+  ),
 });
 
 const app = express();
