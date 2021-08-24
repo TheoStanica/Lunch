@@ -11,6 +11,11 @@ const {
   sendForgotPasswordEmail,
 } = require('../utils/emailTemplates');
 const { accountStatus, accountRole } = require('../utils/enums');
+const {
+  cancelReminder,
+  setReminderSchedule,
+  setReminder,
+} = require('../jobs/agenda');
 
 const register = async (req, res, next) => {
   try {
@@ -81,6 +86,8 @@ const activateAccount = async (req, res, next) => {
 
     user.status = accountStatus.active;
     await user.save();
+
+    await setReminder({ userId: user.id, time: user.remindAt });
 
     res.status(204).send();
   } catch (error) {
@@ -208,6 +215,17 @@ const updateUser = async (req, res, next) => {
       user.role = req.body.role || user.role;
       user.status = req.body.status || user.status;
     }
+    user.remindAt = req.body.remindAt || user.remindAt;
+    if (req.body.isReminderOn !== undefined) {
+      user.isReminderOn = req.body.isReminderOn;
+    }
+
+    if (user.isReminderOn === false) {
+      await cancelReminder(user.id);
+    }
+    if (user.isReminderOn === true) {
+      await setReminderSchedule({ userId: user.id, time: user.remindAt });
+    }
     user = await user.save();
 
     res.send({ user });
@@ -226,6 +244,8 @@ const deleteUser = async (req, res, next) => {
 
     user.deleted = true;
     await user.save();
+
+    await cancelReminder(user.id);
 
     res.status(204).send();
   } catch (error) {
