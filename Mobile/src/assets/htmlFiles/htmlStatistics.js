@@ -32,7 +32,8 @@ export const htmlStatistics = (
           <h4>02-02-2020 - 03-09-2020</h4>
         </div>
         <div>Statistics realised for <strong>${selectedRestaurant}</strong> and <strong>${selectedUser}</strong>. </div>
-        <div style="clear:both"></div></br>
+        <div style="clear:both"></div>
+        <h3 style="text-align: center;">Restaurants Orders</h3>
         <table style="width:100%">
           <tr>
             <th>Restaurant </th>
@@ -46,16 +47,17 @@ export const htmlStatistics = (
             .map(
               restaurant =>
                 `<tr>
-                <td>${restaurant[0]}</td>
-                <td>${restaurant[1].totalOrders}</td>
-                <td>${restaurant[1].totalRestaurantOrders}</td>
-                <td>${restaurant[1].totalTakeawayOrders}</td>
-                <td>${restaurant[1].totalTakeawayCost}</td>
-                <td>${restaurant[1].totalCost}</td>
-              </tr>`,
+                  <td>${restaurant[0]}</td>
+                  <td>${restaurant[1].totalOrders}</td>
+                  <td>${restaurant[1].totalRestaurantOrders}</td>
+                  <td>${restaurant[1].totalTakeawayOrders}</td>
+                  <td>${restaurant[1].totalTakeawayCost}</td>
+                  <td>${restaurant[1].totalCost}</td>
+                </tr>`,
             )
             .join('')}
-        </table></br>
+        </table>
+        <h3 style="text-align: center;">Users Orders</h3>
         <table style="width:100%">
           <tr>
             <th>User</th>
