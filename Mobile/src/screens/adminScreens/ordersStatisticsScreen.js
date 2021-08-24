@@ -12,6 +12,7 @@ import {Title} from 'react-native-paper';
 import {getRestaurants} from '../../redux/thunks/restaurantThunks';
 import {getAllUsers} from '../../redux/thunks/userThunks';
 import {htmlStatistics} from '../../assets/htmlFiles/htmlStatistics';
+import {ActivityIndicator} from 'react-native-paper';
 import DateTimePicker from '../../components/timePicker';
 import CustomDropDownPicker from '../../components/customDropDownPicker';
 import ActionButton from '../../components/actionButton';
@@ -35,6 +36,7 @@ const OrderStatisticsScreen = ({navigation}) => {
     useState('all restaurants');
   const [selectedUser, setSelectedUser] = useState('all users');
   const dispatch = useDispatch();
+  const [isFetching, setIsFetching] = useState(false);
 
   const generateStatistics = () => {
     const emptyObject = () => {
@@ -172,6 +174,7 @@ const OrderStatisticsScreen = ({navigation}) => {
   };
 
   const createPDF = async ({fileName}) => {
+    setIsFetching(true);
     if (await isPermitted()) {
       const options = {
         html: htmlStatistics(
@@ -207,9 +210,13 @@ const OrderStatisticsScreen = ({navigation}) => {
             path: docDirPath + '/' + fileName + '.pdf',
           },
         });
+        setIsFetching(false);
       } catch (error) {
+        setIsFetching(false);
         alert(error);
       }
+    } else {
+      setIsFetching(false);
     }
   };
 
@@ -275,6 +282,11 @@ const OrderStatisticsScreen = ({navigation}) => {
               })
             }
           />
+          {isFetching ? (
+            <SafeAreaView style={styles.loadingContainer}>
+              <ActivityIndicator color="#4A6572" />
+            </SafeAreaView>
+          ) : null}
         </View>
       </View>
     </SafeAreaView>
@@ -297,6 +309,9 @@ const styles = StyleSheet.create({
     textTransform: 'none',
   },
   button: {
+    margin: 10,
+  },
+  loadingContainer: {
     margin: 10,
   },
 });
