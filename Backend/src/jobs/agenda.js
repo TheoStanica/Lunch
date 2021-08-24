@@ -4,6 +4,7 @@ const { sendNotification } = require('../utils/notificationSender');
 const moment = require('moment');
 const Order = require('../order/model');
 const Menu = require('../menu/model');
+const { orderStatus } = require('../utils/enums');
 
 const agenda = new Agenda({
   db: { address: process.env.MONGO_CONNECT, collection: 'Jobs' },
@@ -44,6 +45,7 @@ const defineReminder = async ({ userId }) => {
     if (menu.length > 0) {
       const order = await Order.find({
         userId: userId,
+        status: orderStatus.active,
         createdAt: { $gte: today },
       });
 
