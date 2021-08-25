@@ -12,7 +12,6 @@ import {Title} from 'react-native-paper';
 import {getRestaurants} from '../../redux/thunks/restaurantThunks';
 import {getAllUsers} from '../../redux/thunks/userThunks';
 import {htmlStatistics} from '../../assets/htmlFiles/htmlStatistics';
-import {ActivityIndicator} from 'react-native-paper';
 import DateTimePicker from '../../components/timePicker';
 import CustomDropDownPicker from '../../components/customDropDownPicker';
 import ActionButton from '../../components/actionButton';
@@ -276,6 +275,7 @@ const OrderStatisticsScreen = ({navigation}) => {
             style={styles.button}
             textStyle={styles.textStyle}
             text="Generate PDF Reports"
+            loading={isFetching}
             onPress={() =>
               createPDF({
                 fileName: `Statistics${moment(Date.now()).format(
@@ -284,11 +284,6 @@ const OrderStatisticsScreen = ({navigation}) => {
               })
             }
           />
-          {isFetching ? (
-            <SafeAreaView style={styles.loadingContainer}>
-              <ActivityIndicator color="#4A6572" />
-            </SafeAreaView>
-          ) : null}
         </View>
       </View>
     </SafeAreaView>
