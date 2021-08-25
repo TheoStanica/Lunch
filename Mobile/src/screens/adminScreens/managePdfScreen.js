@@ -25,7 +25,11 @@ const CreatePdfScreen = ({navigation}) => {
     const getPdfs = async () => {
       setIsFetching(true);
       if (!(await RNFS.exists(docDirPath))) await RNFS.mkdir(docDirPath);
-      setPDFs(await RNFS.readDir(docDirPath));
+      setPDFs(
+        (await RNFS.readDir(docDirPath)).sort((a, b) =>
+          a.ctime.getTime() < b.ctime.getTime() ? 1 : -1,
+        ),
+      );
       setIsFetching(false);
     };
 
