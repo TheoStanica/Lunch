@@ -60,7 +60,7 @@ const ProfileScreen = ({navigation}) => {
             </View>
           </CategoryContainer>
           <CategoryContainer title="Notifications">
-            <View style={{marginHorizontal: 15}}>
+            <View style={styles.categoryWrapper}>
               <Subheading>Place order</Subheading>
               <Divider style={styles.divider} />
               <ProfileField
@@ -121,6 +121,9 @@ const styles = StyleSheet.create({
   },
   divider: {
     backgroundColor: '#000',
+  },
+  categoryWrapper: {
+    marginHorizontal: 15,
   },
 });
 
