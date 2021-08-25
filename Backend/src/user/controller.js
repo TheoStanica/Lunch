@@ -195,6 +195,7 @@ const getAllUsers = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   try {
+    console.log(req.body);
     let user = await User.findOne({ _id: req.params._userId || req.user.id });
 
     if (!user || user.deleted) {
@@ -215,6 +216,11 @@ const updateUser = async (req, res, next) => {
       user.role = req.body.role || user.role;
       user.status = req.body.status || user.status;
     }
+
+    if (req.body.isOfficeNotificationOn !== undefined) {
+      user.isOfficeNotificationOn = req.body.isOfficeNotificationOn;
+    }
+
     user.remindAt = req.body.remindAt || user.remindAt;
     if (req.body.isReminderOn !== undefined) {
       user.isReminderOn = req.body.isReminderOn;

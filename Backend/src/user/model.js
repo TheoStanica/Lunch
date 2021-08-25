@@ -49,6 +49,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    isOfficeNotificationOn: {
+      type: Boolean,
+      default: true,
+    },
     deleted: {
       type: Boolean,
       default: false,
