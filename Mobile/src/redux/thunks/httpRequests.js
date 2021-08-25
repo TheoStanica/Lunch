@@ -36,6 +36,7 @@ export const userPutRequest = async ({
   role,
   isReminderOn,
   remindAt,
+  isOfficeNotificationOn,
 }) => {
   if (!_userId) {
     return await api.put('user', {
@@ -45,6 +46,7 @@ export const userPutRequest = async ({
       role,
       isReminderOn,
       remindAt,
+      isOfficeNotificationOn,
     });
   } else {
     return await api.put(`/user/${_userId}`, {
@@ -54,6 +56,7 @@ export const userPutRequest = async ({
       role,
       isReminderOn,
       remindAt,
+      isOfficeNotificationOn,
     });
   }
 };

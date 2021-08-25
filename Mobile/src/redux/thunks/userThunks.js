@@ -86,7 +86,16 @@ export const getUser = callback => async dispatch => {
 
 export const updateUser =
   (
-    {_userId, email, password, fullname, role, isReminderOn, remindAt},
+    {
+      _userId,
+      email,
+      password,
+      fullname,
+      role,
+      isReminderOn,
+      remindAt,
+      isOfficeNotificationOn,
+    },
     callback,
   ) =>
   async dispatch => {
@@ -99,6 +108,7 @@ export const updateUser =
         role,
         isReminderOn,
         remindAt,
+        isOfficeNotificationOn,
       });
 
       if (!_userId) {
