@@ -74,7 +74,7 @@ const ProfileScreen = ({navigation}) => {
             </CategoryContainer>
             <CategoryContainer title="Notifications">
               <View style={styles.categoryWrapper}>
-                <Subheading>Place order</Subheading>
+                <Subheading style={styles.subheading}>Place order</Subheading>
                 <Divider style={styles.divider} />
                 <ProfileField
                   paragraph={
@@ -92,6 +92,25 @@ const ProfileScreen = ({navigation}) => {
                   paragraph={userReducer.remindAt}
                   title="Remind me at"
                   icon={'clock-outline'}
+                  iconColor="#4A6572"
+                />
+
+                <Subheading style={[styles.subheading, styles.topSpace]}>
+                  Order arrived at office
+                </Subheading>
+                <Divider style={styles.divider} />
+                <ProfileField
+                  paragraph={
+                    userReducer.isOfficeNotificationOn
+                      ? 'Turned On'
+                      : 'Turned Off'
+                  }
+                  title="Status"
+                  icon={
+                    userReducer.isOfficeNotificationOn
+                      ? 'timer-outline'
+                      : 'timer-off-outline'
+                  }
                   iconColor="#4A6572"
                 />
               </View>
@@ -143,6 +162,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  subheading: {
+    fontSize: 17,
+  },
+  topSpace: {
+    marginTop: 10,
   },
 });
 

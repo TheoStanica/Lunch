@@ -48,6 +48,7 @@ const UpdateProfileScreen = ({navigation}) => {
                 fullname: userReducer.fullname,
                 isReminderOn: userReducer.isReminderOn,
                 remindAt: userReducer.remindAt,
+                isOfficeNotificationOn: userReducer.isOfficeNotificationOn,
               }}
               onSubmit={values => {
                 if (values.email === userReducer.email)
@@ -58,6 +59,7 @@ const UpdateProfileScreen = ({navigation}) => {
                   fullname: values.fullname,
                   isReminderOn: values.isReminderOn,
                   remindAt: values.remindAt,
+                  isOfficeNotificationOn: values.isOfficeNotificationOn,
                 };
                 dispatch(updateUser(data, sendSuccessMessage));
               }}
@@ -160,6 +162,25 @@ const UpdateProfileScreen = ({navigation}) => {
                           setFieldValue('remindAt', moment(date).format('LT'))
                         }
                       />
+                      <Subheading style={[styles.subheading, styles.topSpace]}>
+                        Order arrived at office
+                      </Subheading>
+                      <Divider style={styles.divider} />
+                      <List.Item
+                        title="Receive reminders"
+                        right={() => (
+                          <Switch
+                            value={values.isOfficeNotificationOn ? true : false}
+                            color="#4A6572"
+                            onValueChange={() =>
+                              setFieldValue(
+                                'isOfficeNotificationOn',
+                                !values.isOfficeNotificationOn,
+                              )
+                            }
+                          />
+                        )}
+                      />
                     </CategoryContainer>
                   </View>
                   <ActionButton text="Update" onPress={handleSubmit} />
@@ -194,10 +215,14 @@ const styles = StyleSheet.create({
   },
   subheading: {
     marginLeft: 15,
+    fontSize: 17,
   },
   divider: {
     backgroundColor: '#000',
     marginHorizontal: 15,
+  },
+  topSpace: {
+    marginTop: 10,
   },
 });
 
