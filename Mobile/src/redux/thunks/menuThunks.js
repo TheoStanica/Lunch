@@ -2,6 +2,7 @@ import {
   menuGetRequest,
   menuPostRequest,
   menuDeleteRequest,
+  notifyUsersRequest,
 } from './httpRequests';
 import {setMenusAction, deleteMenuAction} from '../actions/menuActions';
 import {setAllMenusAction, deleteMenusAction} from '../actions/allMenusActions';
@@ -50,6 +51,16 @@ export const deleteMenu =
 
       dispatch(deleteMenuAction({menu: _menuId}));
       dispatch(deleteMenusAction({menu: _menuId}));
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+
+export const notifyUsers =
+  ({menuId}) =>
+  async dispatch => {
+    try {
+      await notifyUsersRequest({menuId});
     } catch (error) {
       dispatch(handleError(error));
     }

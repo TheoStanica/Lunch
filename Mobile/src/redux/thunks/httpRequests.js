@@ -115,6 +115,10 @@ export const menuDeleteRequest = async ({_menuId}) => {
   return await api.delete(`/menu/${_menuId}`);
 };
 
+export const notifyUsersRequest = async ({menuId}) => {
+  return await api.post(`/menu/notify/${menuId}`);
+};
+
 export const orderCreateRequest = async ({
   menuId,
   userId,
