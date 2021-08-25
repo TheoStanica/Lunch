@@ -29,9 +29,13 @@ const CreateRestaurantScreen = ({navigation}) => {
               createRestaurant(
                 {name: values.name, cost: values.cost, notifyAfter, cancelAt},
                 () => {
-                  navigation.replace('MessageScreen', {
-                    message: 'Restaurant Created!',
+                  navigation.push('MessageScreen', {
+                    message: 'Restaurant created!',
                   });
+
+                  setTimeout(() => {
+                    navigation.pop(2);
+                  }, 1500);
                 },
               ),
             );

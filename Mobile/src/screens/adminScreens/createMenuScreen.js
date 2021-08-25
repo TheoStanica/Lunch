@@ -61,17 +61,15 @@ const CreateMenuScreen = ({navigation}) => {
                 setErrors('Please select a restaurant');
               } else {
                 dispatch(
-                  createMenu({menu, restaurantId: selectedRestaurant}, () =>
-                    navigation.reset({
-                      routes: [
-                        {name: 'HomeScreen'},
-                        {
-                          name: 'MessageScreen',
-                          params: {message: 'Menu created!'},
-                        },
-                      ],
-                    }),
-                  ),
+                  createMenu({menu, restaurantId: selectedRestaurant}, () => {
+                    navigation.push('MessageScreen', {
+                      message: 'Menu created!',
+                    });
+
+                    setTimeout(() => {
+                      navigation.popToTop();
+                    }, 1500);
+                  }),
                 );
               }
             }}

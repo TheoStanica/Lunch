@@ -20,15 +20,11 @@ const UpdateProfileScreen = ({navigation}) => {
   const dispatch = useDispatch();
 
   const sendSuccessMessage = () => {
-    navigation.reset({
-      routes: [
-        {name: 'ProfileScreen'},
-        {
-          name: 'MessageScreen',
-          params: {message: 'Account updated!'},
-        },
-      ],
-    });
+    navigation.push('MessageScreen', {message: 'Account updated!'});
+
+    setTimeout(() => {
+      navigation.pop(2);
+    }, 1500);
   };
 
   return (

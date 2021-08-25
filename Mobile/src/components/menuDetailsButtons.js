@@ -127,15 +127,11 @@ const MenuDetailsButtons = ({
   };
 
   const sendSuccessMessage = () => {
-    navigation.reset({
-      routes: [
-        {name: 'HomeScreen'},
-        {
-          name: 'MessageScreen',
-          params: {message: 'Order created!'},
-        },
-      ],
-    });
+    navigation.push('MessageScreen', {message: 'Order created!'});
+
+    setTimeout(() => {
+      navigation.pop(2);
+    }, 1500);
   };
 
   const isButtonDisabled = type =>

@@ -35,7 +35,11 @@ const HomeStack = () => {
       <Stack.Screen
         name="MessageScreen"
         component={MessageScreen}
-        options={{title: '', headerStyle: {backgroundColor: '#FCBB00'}}}
+        options={{
+          title: '',
+          headerLeft: null,
+          headerStyle: {backgroundColor: '#FCBB00'},
+        }}
       />
       <Stack.Screen
         name="CreateMenuScreen"
