@@ -53,6 +53,7 @@ const HomeScreen = ({navigation}) => {
             return (
               <MenuCard
                 title={menusById[_menuId].restaurantId?.name}
+                menuId={menusById[_menuId].id}
                 onPress={() =>
                   navigation.navigate('MenuDetailsScreen', {
                     menuId: _menuId,

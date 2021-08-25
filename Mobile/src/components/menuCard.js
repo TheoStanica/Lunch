@@ -1,8 +1,13 @@
 import React from 'react';
 import {Card} from 'react-native-paper';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Alert, View} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {notifyUsers} from '../redux/thunks/menuThunks';
+import {useDispatch} from 'react-redux';
 
-const MenuCard = ({onPress, title}) => {
+const MenuCard = ({onPress, title, menuId}) => {
+  const dispatch = useDispatch();
+
   return (
     <Card style={styles.container} onPress={onPress}>
       <Card.Cover
@@ -15,6 +20,26 @@ const MenuCard = ({onPress, title}) => {
         style={styles.title}
         titleStyle={styles.titleStyle}
       />
+      <View style={styles.alert}>
+        <Icon
+          name="bell-ring"
+          size={25}
+          color="white"
+          onPress={() =>
+            Alert.alert(
+              'Notify',
+              `Do you want to notify everyone that their order arrived at the office?`,
+              [
+                {
+                  text: 'Yes',
+                  onPress: () => dispatch(notifyUsers({menuId})),
+                },
+                {text: 'No'},
+              ],
+            )
+          }
+        />
+      </View>
     </Card>
   );
 };
@@ -37,6 +62,14 @@ const styles = StyleSheet.create({
   },
   titleStyle: {
     color: 'white',
+  },
+  alert: {
+    backgroundColor: '#4A6572',
+    position: 'absolute',
+    top: 15,
+    right: 15,
+    padding: 5,
+    borderRadius: 20,
   },
 });
 
