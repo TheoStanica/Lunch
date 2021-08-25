@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
   title: {
     marginLeft: 15,
     fontSize: 22,
+    marginBottom: 8,
   },
 });
 

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, ScrollView, StyleSheet} from 'react-native';
-import {TextInput, List, Switch} from 'react-native-paper';
+import {TextInput, List, Switch, Subheading, Divider} from 'react-native-paper';
 import {Formik} from 'formik';
 import {updateValidationSchema} from '../../assets/bodyValidation/userValidation';
 import {useSelector, useDispatch} from 'react-redux';
@@ -128,6 +128,10 @@ const UpdateProfileScreen = ({navigation}) => {
                       </View>
                     </CategoryContainer>
                     <CategoryContainer title="Notifications">
+                      <Subheading style={styles.subheading}>
+                        Place order
+                      </Subheading>
+                      <Divider style={styles.divider} />
                       <List.Item
                         title="Receive reminders"
                         right={() => (
@@ -144,7 +148,7 @@ const UpdateProfileScreen = ({navigation}) => {
                         )}
                       />
                       <DateTimePicker
-                        title="Remind At"
+                        title="Remind Me At"
                         description={values.remindAt}
                         mode="time"
                         date={new Date(`01/01/1970 ${values.remindAt}`)}
@@ -183,6 +187,13 @@ const styles = StyleSheet.create({
   },
   personalInformationContainer: {
     paddingHorizontal: 15,
+  },
+  subheading: {
+    marginLeft: 15,
+  },
+  divider: {
+    backgroundColor: '#000',
+    marginHorizontal: 15,
   },
 });
 
