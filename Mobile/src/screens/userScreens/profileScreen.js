@@ -8,6 +8,7 @@ import ActionButton from '../../components/actionButton';
 import messaging from '@react-native-firebase/messaging';
 import CategoryContainer from '../../components/categoryContainer';
 import {Subheading, Divider} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ProfileScreen = ({navigation}) => {
   const userReducer = useSelector(state => state.userReducer);
@@ -35,7 +36,16 @@ const ProfileScreen = ({navigation}) => {
         showsVerticalScrollIndicator={false}>
         <View style={styles.contentContainer}>
           <View>
-            <Text style={styles.title}>Profile</Text>
+            <View style={styles.header}>
+              <Text style={styles.title}>Profile</Text>
+              <Icon
+                name="logout"
+                size={25}
+                color="black"
+                style={{marginRight: 10}}
+                onPress={() => handleLogout()}
+              />
+            </View>
             <CategoryContainer title="Personal Information">
               <View style={{marginHorizontal: 15}}>
                 <ProfileField
@@ -128,6 +138,11 @@ const styles = StyleSheet.create({
   },
   categoryWrapper: {
     marginHorizontal: 15,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });
 
