@@ -5,7 +5,12 @@ const InternalServerError = require('../errors/internalServerError');
 const Restaurant = require('../restaurant/model');
 const Menu = require('./model');
 const Order = require('../order/model');
-const { restaurantStatus } = require('../utils/enums');
+const {
+  restaurantStatus,
+  orderStatus,
+  courseRequiredType,
+} = require('../utils/enums');
+const { sendNotification } = require('../utils/notificationSender');
 
 const convertFilterToQuery = (filter) => {
   const newFilter = { deleted: false };
@@ -69,6 +74,43 @@ const getMenus = async (req, res, next) => {
   }
 };
 
+const notifyMenu = async (req, res, next) => {
+  try {
+    const { _id } = req.params;
+
+    const orders = await Order.find({
+      status: orderStatus.active,
+      menuId: _id,
+      type: courseRequiredType.takeaway,
+    }).populate({
+      path: 'userId',
+      populate: {
+        path: 'devices',
+      },
+    });
+    if (orders.length > 0) {
+      let users = [];
+      orders.forEach((order) => {
+        users.push(order.userId);
+      });
+
+      sendNotification({
+        users,
+        notification: {
+          title: 'Luch',
+          color: '#FBBC00',
+          body: 'Your office order arrived!',
+        },
+        data: {},
+      });
+    }
+
+    res.sendStatus(202);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const deleteMenu = async (req, res, next) => {
   try {
     const menu = await Menu.findOne({ _id: req.params._id });
@@ -107,4 +149,5 @@ module.exports = {
   createMenu,
   deleteMenu,
   getMenus,
+  notifyMenu,
 };
