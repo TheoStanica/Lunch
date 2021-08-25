@@ -7,7 +7,7 @@ const ProfileField = ({title, paragraph, icon, iconColor = '#FBBC00'}) => {
   return (
     <View style={styles.container}>
       <View style={styles.icon}>
-        <Icon name={icon} size={40} color={iconColor} />
+        <Icon name={icon} size={35} color={iconColor} />
       </View>
       <View style={styles.content}>
         <Text style={styles.title}>{title}</Text>
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     textTransform: 'capitalize',
   },
 });
