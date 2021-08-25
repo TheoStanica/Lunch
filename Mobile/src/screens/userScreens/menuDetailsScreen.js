@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   Animated,
+  Alert,
 } from 'react-native';
 import {ActivityIndicator, Appbar, Menu} from 'react-native-paper';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -15,6 +16,8 @@ import {updateMenuAction} from '../../redux/actions/menuActions';
 import useMenuExpired from '../../hooks/useMenuExpired';
 import DisplayMenu from '../../components/displayMenu';
 import MenuDetailsButtons from '../../components/menuDetailsButtons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {notifyUsers} from '../../redux/thunks/menuThunks';
 
 const MenuDetailsScreen = ({navigation, route}) => {
   const {menuId} = route.params;
@@ -43,23 +46,49 @@ const MenuDetailsScreen = ({navigation, route}) => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <Menu
-          visible={isMenuHeaderVisible}
-          anchor={
-            <Appbar.Action
-              icon="dots-vertical"
-              onPress={() => setIsMenuHeaderVisible(true)}
-            />
-          }
-          onDismiss={() => setIsMenuHeaderVisible(false)}>
-          <Menu.Item
-            title="Going (Restaurant)"
-            onPress={() => {
-              setIsMenuHeaderVisible(false);
-              navigation.navigate('UsersGoingScreen', {menuId});
-            }}
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Icon
+            name="bell-ring"
+            size={25}
+            color="#4A6572"
+            onPress={() =>
+              Alert.alert(
+                'Notify',
+                `Do you want to notify everyone that their order arrived at the office?`,
+                [
+                  {
+                    text: 'Yes',
+                    onPress: () => dispatch(notifyUsers({menuId})),
+                  },
+                  {text: 'No'},
+                ],
+              )
+            }
           />
-        </Menu>
+          <Menu
+            visible={isMenuHeaderVisible}
+            anchor={
+              <Appbar.Action
+                icon="dots-vertical"
+                color="#4A6572"
+                onPress={() => setIsMenuHeaderVisible(true)}
+              />
+            }
+            onDismiss={() => setIsMenuHeaderVisible(false)}>
+            <Menu.Item
+              title="Going (Restaurant)"
+              onPress={() => {
+                setIsMenuHeaderVisible(false);
+                navigation.navigate('UsersGoingScreen', {menuId});
+              }}
+            />
+          </Menu>
+        </View>
       ),
     });
   }, [isMenuHeaderVisible]);
