@@ -36,10 +36,13 @@ const UserDetailsScreen = ({route, navigation}) => {
                   fullname: values.fullname,
                   role: values.role,
                 },
-                () =>
-                  navigation.replace('MessageScreen', {
-                    message: 'User Updated!',
-                  }),
+                () => {
+                  navigation.push('MessageScreen', {message: 'User updated!'});
+
+                  setTimeout(() => {
+                    navigation.pop(2);
+                  }, 1500);
+                },
               ),
             );
           }}>

@@ -12,7 +12,6 @@ import {Title} from 'react-native-paper';
 import {getRestaurants} from '../../redux/thunks/restaurantThunks';
 import {getAllUsers} from '../../redux/thunks/userThunks';
 import {htmlStatistics} from '../../assets/htmlFiles/htmlStatistics';
-import {ActivityIndicator} from 'react-native-paper';
 import DateTimePicker from '../../components/timePicker';
 import CustomDropDownPicker from '../../components/customDropDownPicker';
 import ActionButton from '../../components/actionButton';
@@ -65,20 +64,20 @@ const OrderStatisticsScreen = ({navigation}) => {
       const restaurant = order.menuId.restaurantId;
       const user = order.userId;
 
-      if (!restaurants[restaurant.name])
-        restaurants[restaurant.name] = emptyObject();
-      updateStatistics(order, restaurants[restaurant.name], restaurant.cost);
+      if (
+        selectedRestaurant === 'all restaurants' ||
+        selectedRestaurant === restaurant.id
+      ) {
+        if (!restaurants[restaurant.name])
+          restaurants[restaurant.name] = emptyObject();
+        updateStatistics(order, restaurants[restaurant.name], restaurant.cost);
 
-      Object.values(restaurants).forEach(restaurant => {
-        restaurant.totalRestaurantOrders =
-          restaurant.totalOrders - restaurant.totalTakeawayOrders;
-      });
+        Object.values(restaurants).forEach(restaurant => {
+          restaurant.totalRestaurantOrders =
+            restaurant.totalOrders - restaurant.totalTakeawayOrders;
+        });
 
-      if (selectedUser === 'all users' || selectedUser === user.id) {
-        if (
-          selectedRestaurant === 'all restaurants' ||
-          selectedRestaurant === restaurant.id
-        ) {
+        if (selectedUser === 'all users' || selectedUser === user.id) {
           const key = user.fullname + ' (' + user.email + ')';
 
           if (!users[key] || !users[key][restaurant.name])
@@ -188,6 +187,8 @@ const OrderStatisticsScreen = ({navigation}) => {
                 ' (' +
                 allUsersById[selectedUser].fullname +
                 ')',
+          orderStart,
+          orderEnd,
         ),
         fileName: fileName,
       };
@@ -274,6 +275,7 @@ const OrderStatisticsScreen = ({navigation}) => {
             style={styles.button}
             textStyle={styles.textStyle}
             text="Generate PDF Reports"
+            loading={isFetching}
             onPress={() =>
               createPDF({
                 fileName: `Statistics${moment(Date.now()).format(
@@ -282,11 +284,6 @@ const OrderStatisticsScreen = ({navigation}) => {
               })
             }
           />
-          {isFetching ? (
-            <SafeAreaView style={styles.loadingContainer}>
-              <ActivityIndicator color="#4A6572" />
-            </SafeAreaView>
-          ) : null}
         </View>
       </View>
     </SafeAreaView>

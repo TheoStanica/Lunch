@@ -1,7 +1,11 @@
+import moment from 'moment';
+
 export const htmlStatistics = (
   statistics,
   selectedRestaurant,
   selectedUser,
+  orderStart,
+  orderEnd,
 ) => {
   return `
         <!DOCTYPE html>
@@ -25,11 +29,11 @@ export const htmlStatistics = (
         <h3><p style="text-align: center;">Order Statistics</p></h3>
         <div class="my-header">
           <span>PDF generated at:&nbsp&nbsp</span>
-          <h4>02-02-2020</h4>
+          <h4>${moment(Date.now()).format('DD-MM-YYYY')}</h4>
         </div>
         <div class="my-header">
           <span>Time period of the statistics (orders):&nbsp&nbsp</span>
-          <h4>02-02-2020 - 03-09-2020</h4>
+          <h4>${orderStart} - ${orderEnd}</h4>
         </div>
         <div>Statistics realised for <strong>${selectedRestaurant}</strong> and <strong>${selectedUser}</strong>. Currency: <strong>RON</strong>. </div>
         <div style="clear:both"></div>

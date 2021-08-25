@@ -30,7 +30,11 @@ const ProfileStack = () => {
       <Stack.Screen
         name="MessageScreen"
         component={MessageScreen}
-        options={{title: '', headerStyle: {backgroundColor: '#FCBB00'}}}
+        options={{
+          title: '',
+          headerLeft: null,
+          headerStyle: {backgroundColor: '#FCBB00'},
+        }}
       />
     </Stack.Navigator>
   );

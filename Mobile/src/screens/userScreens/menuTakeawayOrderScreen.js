@@ -29,7 +29,6 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
     if (menuExpired) {
       navigation.reset({
         routes: [
-          {name: 'HomeScreen'},
           {
             name: 'MessageScreen',
             params: {
@@ -39,6 +38,16 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
           },
         ],
       });
+
+      setTimeout(() => {
+        navigation.reset({
+          routes: [
+            {
+              name: 'HomeScreen',
+            },
+          ],
+        });
+      }, 2000);
     }
   }, [menuExpired]);
 
@@ -120,15 +129,11 @@ const MenuTakeawayOrderScreen = ({route, navigation}) => {
   };
 
   const sendSuccessMessage = () => {
-    navigation.reset({
-      routes: [
-        {name: 'HomeScreen'},
-        {
-          name: 'MessageScreen',
-          params: {message: 'Order created!'},
-        },
-      ],
-    });
+    navigation.push('MessageScreen', {message: 'Order created!'});
+
+    setTimeout(() => {
+      navigation.popToTop();
+    }, 1500);
   };
 
   const generateMenuOptions = () => {

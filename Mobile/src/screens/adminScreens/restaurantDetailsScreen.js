@@ -56,11 +56,15 @@ const RestaurantDetailsScreen = ({route, navigation}) => {
               cancelAt,
             };
             dispatch(
-              updateRestaurant(data, () =>
-                navigation.replace('MessageScreen', {
-                  message: 'Restaurant Updated!',
-                }),
-              ),
+              updateRestaurant(data, () => {
+                navigation.push('MessageScreen', {
+                  message: 'Restaurant updated!',
+                });
+
+                setTimeout(() => {
+                  navigation.pop(2);
+                }, 1500);
+              }),
             );
           }}>
           {({
