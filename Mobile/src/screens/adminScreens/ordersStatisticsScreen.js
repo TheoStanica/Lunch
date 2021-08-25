@@ -65,14 +65,19 @@ const OrderStatisticsScreen = ({navigation}) => {
       const restaurant = order.menuId.restaurantId;
       const user = order.userId;
 
-      if (!restaurants[restaurant.name])
-        restaurants[restaurant.name] = emptyObject();
-      updateStatistics(order, restaurants[restaurant.name], restaurant.cost);
+      if (
+        selectedRestaurant === 'all restaurants' ||
+        selectedRestaurant === restaurant.id
+      ) {
+        if (!restaurants[restaurant.name])
+          restaurants[restaurant.name] = emptyObject();
+        updateStatistics(order, restaurants[restaurant.name], restaurant.cost);
 
-      Object.values(restaurants).forEach(restaurant => {
-        restaurant.totalRestaurantOrders =
-          restaurant.totalOrders - restaurant.totalTakeawayOrders;
-      });
+        Object.values(restaurants).forEach(restaurant => {
+          restaurant.totalRestaurantOrders =
+            restaurant.totalOrders - restaurant.totalTakeawayOrders;
+        });
+      }
 
       if (selectedUser === 'all users' || selectedUser === user.id) {
         if (
