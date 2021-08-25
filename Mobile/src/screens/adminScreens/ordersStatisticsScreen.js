@@ -188,6 +188,8 @@ const OrderStatisticsScreen = ({navigation}) => {
                 ' (' +
                 allUsersById[selectedUser].fullname +
                 ')',
+          orderStart,
+          orderEnd,
         ),
         fileName: fileName,
       };
