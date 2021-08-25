@@ -82,16 +82,20 @@ const notifyMenu = async (req, res, next) => {
       status: orderStatus.active,
       menuId: _id,
       type: courseRequiredType.takeaway,
+      userId: { $ne: req.user.id },
     }).populate({
       path: 'userId',
       populate: {
         path: 'devices',
       },
     });
+
     if (orders.length > 0) {
       let users = [];
       orders.forEach((order) => {
-        users.push(order.userId);
+        if (order.userId.isOfficeNotificationOn) {
+          users.push(order.userId);
+        }
       });
 
       sendNotification({

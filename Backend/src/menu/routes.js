@@ -37,7 +37,7 @@ router.delete(
 
 router.post(
   '/notify/:_id',
-  adminAuthValidation,
+  userAuthValidation,
   menuIdValidationSchema,
   validationResults,
   menuController.notifyMenu
