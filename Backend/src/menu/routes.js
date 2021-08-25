@@ -35,4 +35,12 @@ router.delete(
   menuController.deleteMenu
 );
 
+router.post(
+  '/notify/:_id',
+  adminAuthValidation,
+  menuIdValidationSchema,
+  validationResults,
+  menuController.notifyMenu
+);
+
 module.exports = router;
