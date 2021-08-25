@@ -124,6 +124,10 @@ const updateValidationSchema = [
     .isBoolean()
     .withMessage('IsReminderOn must be a boolean.')
     .optional(),
+  check('isOfficeNotificationOn')
+    .isBoolean()
+    .withMessage('IsOfficeNotificationOn must be a boolean.')
+    .optional(),
 ];
 
 const userIdValidationSchema = [
