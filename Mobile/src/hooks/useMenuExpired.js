@@ -13,10 +13,14 @@ const useMenuExpired = ({menuId}) => {
   useEffect(() => {
     const timeLeft = getTimeLeft(menusById[menuId].restaurantId.cancelAt);
     let clear = null;
+
     if (timeLeft > 0) {
-      clear = setTimeout(() => {
-        setMenuExpired(true);
-      }, timeLeft);
+      clear = setInterval(() => {
+        if (isMenuExpired(menusById[menuId].restaurantId.cancelAt)) {
+          setMenuExpired(true);
+          clearInterval(clear);
+        }
+      }, 1000);
     }
 
     return () => {

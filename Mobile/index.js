@@ -16,7 +16,9 @@ if (Platform.OS === 'android') {
   PushNotification.configure({
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification: async function (notification) {
-      Linking.openURL(notification.data.url);
+      try {
+        Linking.openURL(notification.data.url);
+      } catch (error) {}
 
       // (required) Called when a remote is received or opened, or local notification is opened
       notification.finish(PushNotificationIOS.FetchResult.NoData);
