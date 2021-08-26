@@ -13,6 +13,8 @@ import AdminField from '../../components/adminField';
 import Moment from 'moment';
 
 const CreatePdfScreen = ({navigation}) => {
+  const regex =
+    /^Statistics(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)\d\d\s(0[1-9]|1[012])-(0[1-9]|[1-5][0-9])-(0[1-9]|[1-5][0-9]).pdf$/g;
   const RNFS = require('react-native-fs');
   const docDirPath = RNFS.DocumentDirectoryPath + '/statistics';
   const [PDFs, setPDFs] = useState([]);
@@ -26,9 +28,9 @@ const CreatePdfScreen = ({navigation}) => {
       setIsFetching(true);
       if (!(await RNFS.exists(docDirPath))) await RNFS.mkdir(docDirPath);
       setPDFs(
-        (await RNFS.readDir(docDirPath)).sort((a, b) =>
-          a.mtime.getTime() < b.mtime.getTime() ? 1 : -1,
-        ),
+        (await RNFS.readDir(docDirPath))
+          .filter(a => a.name.match(regex) !== null)
+          .sort((a, b) => (a.mtime.getTime() < b.mtime.getTime() ? 1 : -1)),
       );
       setIsFetching(false);
     };
@@ -62,7 +64,11 @@ const CreatePdfScreen = ({navigation}) => {
     if (await isPermitted()) {
       try {
         await RNFS.unlink(filePath);
-        setPDFs(await RNFS.readDir(docDirPath));
+        setPDFs(
+          (await RNFS.readDir(docDirPath))
+            .filter(a => a.name.match(regex) !== null)
+            .sort((a, b) => (a.mtime.getTime() < b.mtime.getTime() ? 1 : -1)),
+        );
         setIsFetching(false);
       } catch (error) {
         dispatch(handleError(error));
