@@ -116,7 +116,7 @@ Install the dependencies as specified by the pod file in the Xcode project folde
   cd ios && pod install
 ```
 
-Start the application  
+#### Start the application  
 Android
 ```bash
   npm run android
