@@ -3,6 +3,9 @@
 
 Lunch is a React Native application used to better manage lunch orders for companies that have contracts with different restaurants.
 
+# Demo
+
+https://user-images.githubusercontent.com/64136568/131306049-ffd99ed6-0227-483a-9090-ccde2367ef77.mov
 
 
 ## Prerequisites
